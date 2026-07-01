@@ -1,0 +1,27 @@
+﻿p1_md1.docx  =  Parte 1 / Modulo 1 - Tecnicas imperativas y variables   [H1 1-7]  imagenes=5  marcadores_quitados=1
+p1_md2.docx  =  Parte 1 / Modulo 2 - Patch y formularios   [H1 8-11]  imagenes=3  marcadores_quitados=1
+p1_md3.docx  =  Parte 1 / Modulo 3 - Columnas de opcion (choices) con Power Fx   [H1 12-14]  imagenes=17  marcadores_quitados=1
+p1_md4.docx  =  Parte 1 / Modulo 4 - Datos relacionales   [H1 15-21]  imagenes=30  marcadores_quitados=1
+p1_md5.docx  =  Parte 1 / Modulo 5 - Expresiones de Power Fx   [H1 40-44]  imagenes=14  marcadores_quitados=2
+p2_md1.docx  =  Parte 2 / Modulo 1 - Delegacion y rendimiento   [H1 22-28]  imagenes=7  marcadores_quitados=2
+p2_md2.docx  =  Parte 2 / Modulo 2 - Monitor y Application Insights   [H1 29-39]  imagenes=41  marcadores_quitados=4
+p2_md3.docx  =  Parte 2 / Modulo 3 - Introduccion a Power Platform para desarrolladores   [H1 45-48]  imagenes=6  marcadores_quitados=1
+p2_md4.docx  =  Parte 2 / Modulo 4 - Herramientas de desarrollo (CLI, soluciones, Package Deployer)   [H1 49-53]  imagenes=17  marcadores_quitados=0
+p2_md5.docx  =  Parte 2 / Modulo 5 - Extender la plataforma (Custom API, configurar vs. codigo)   [H1 56-60]  imagenes=14  marcadores_quitados=2
+p3_md1.docx  =  Parte 3 / Modulo 1 - Client scripting basico   [H1 61-66]  imagenes=34  marcadores_quitados=1
+p3_md2.docx  =  Parte 3 / Modulo 2 - Client scripting avanzado   [H1 67-70]  imagenes=32  marcadores_quitados=1
+p3_md3.docx  =  Parte 3 / Modulo 3 - Fundamentos de PCF (Power Apps component framework)   [H1 71-74]  imagenes=6  marcadores_quitados=1
+p3_md4.docx  =  Parte 3 / Modulo 4 - Crear un componente de codigo   [H1 75-77]  imagenes=34  marcadores_quitados=2
+p4_md1.docx  =  Parte 4 / Modulo 1 - Desarrollar con Microsoft Dataverse   [H1 78-80]  imagenes=2  marcadores_quitados=1
+p4_md2.docx  =  Parte 4 / Modulo 2 - Plug-ins   [H1 81-84]  imagenes=49  marcadores_quitados=1
+p4_md3.docx  =  Parte 4 / Modulo 3 - Web API de Dataverse   [H1 85-92]  imagenes=18  marcadores_quitados=2
+p5_md1.docx  =  Parte 5 / Modulo 1 - Dataverse y Azure (Service Bus, Azure Functions)   [H1 93-96]  imagenes=31  marcadores_quitados=1
+p5_md2.docx  =  Parte 5 / Modulo 2 - Azure Functions: fundamentos   [H1 97-100]  imagenes=0  marcadores_quitados=1
+p5_md3.docx  =  Parte 5 / Modulo 3 - Azure Functions: desarrollo   [H1 101-105]  imagenes=0  marcadores_quitados=0
+p5_md4.docx  =  Parte 5 / Modulo 4 - Conectores personalizados: portal de creacion   [H1 106-110]  imagenes=39  marcadores_quitados=1
+p5_md5.docx  =  Parte 5 / Modulo 5 - Conectores personalizados: creacion (VS / APIM / OpenAPI)   [H1 111-119]  imagenes=54  marcadores_quitados=1
+p6_md1.docx  =  Parte 6 / Modulo 1 - Autenticacion de conectores   [H1 120-125]  imagenes=41  marcadores_quitados=1
+p6_md2.docx  =  Parte 6 / Modulo 2 - Directivas (policies) de conectores   [H1 126-131]  imagenes=42  marcadores_quitados=1
+p6_md3.docx  =  Parte 6 / Modulo 3 - Extensiones OpenAPI   [H1 132-136]  imagenes=46  marcadores_quitados=2
+p6_md4.docx  =  Parte 6 / Modulo 4 - Gestion de soluciones   [H1 137-142]  imagenes=26  marcadores_quitados=1
+p6_md5.docx  =  Parte 6 / Modulo 5 - Arquitectura de soluciones y ALM   [H1 143-146]  imagenes=4  marcadores_quitados=0
