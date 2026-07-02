@@ -80,3 +80,6 @@ sub-preguntas (area 'casefiles').
 - [x] Q50 yesno   extend-platform    (Custom API Action; No response prop obligatoria / aparece en $metadata=Si / user sin permiso=error Si)  src 112626
 - [x] Q51 yesno   extend-platform    (plug-in PreOperation con pre/post images; sync=Si / cols en ambas images=Si / PreEntityImages['telephone1']=No es alias)  src 112638
 - [x] Q52 single  integrations-alm   (Logic App gobernada por Managed Identity -> Application user)  src 112648
+- [x] Q53 hotspot automation         (canvas llama cloud flow: trigger When Power Apps calls a flow V2 / Respond action / Collect function)  src 112701/112708
+- [x] Q54 multi   integrations-alm   (app admin crea/busca/update users Entra -> Azure Functions + Custom connector + Microsoft Graph API)  src 112725/112730
+- [x] Q55 multi   design-dataverse   (Is Eligible solo sales manager + error en Qualify sin code -> Column-level security + Real-time workflow)  src 112742

@@ -1,0 +1,12 @@
+{
+  "n": 55,
+  "area": "design-dataverse",
+  "type": "multi",
+  "scenario": "You are implementing a sales pipeline for your organization. You have a custom Yes/No column named Is Eligible on the lead table that indicates whether the lead is eligible for qualification or not. This column's value should only be able to be updated by the sales manager. You need to ensure that a salesperson will receive an error message when they hit the Qualify button, from the command bar, for a lead unless the Is Eligible column value is set to True. Your solution should not involve customizing the system.",
+  "q": "Which two components should you use? Each correct answer presents part of the solution.",
+  "options": ["Plug-in", "Column-level security", "Business rule", "Real-time workflow", "Command designer", "JavaScript"],
+  "answer": ["Column-level security", "Real-time workflow"],
+  "why": "Use COLUMN-LEVEL (field) security on the Is Eligible column so that only the sales manager (granted by the field security profile) can update its value. Use a REAL-TIME (synchronous) WORKFLOW that runs on Qualify and, if Is Eligible is not True, stops the process and shows an error message (a real-time workflow can cancel the operation and display an error). Both are no-code Dataverse configuration, so they meet the 'no system customization/code' requirement. A Plug-in and JavaScript require code, a Business rule cannot block the Qualify command with an error, and Command designer would customize the command bar.",
+  "cs": null,
+  "src": ["Screenshot 2026-07-02 112742.png"]
+}

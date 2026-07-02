@@ -1,0 +1,15 @@
+{
+  "n": 53,
+  "area": "automation",
+  "type": "hotspot",
+  "scenario": "A company uses a canvas app to perform business logic and process multiple rows of data from a 3rd party SaaS, which provides a standard Power Platform connector. You decide to utilize a Power Automate cloud flow to retrieve the data. You need to call the cloud flow from the app and return multiple rows of data from the flow to the app.",
+  "q": "How should you configure the flow? Select the appropriate options from the drop-down menus.",
+  "rows": [
+    {"s": "The trigger to use when calling a cloud flow from a canvas app", "a": "When Power Apps calls a flow (V2)", "options": ["When Power Apps calls a flow (V2)", "Run a child flow", "Manually trigger a flow"]},
+    {"s": "The action to use when returning data back from the cloud flow to the canvas app", "a": "Respond", "options": ["Respond", "Respond to a Power App or a flow", "Compose"]},
+    {"s": "The function to use to capture the data returned from the cloud flow in the canvas app", "a": "Collect", "options": ["Collect", "Compose", "Concurrent"]}
+  ],
+  "why": "Use the 'When Power Apps calls a flow (V2)' instant trigger to call a cloud flow from a canvas app (it lets data be passed from the app and is initiated with the Run command). Use the 'Respond' action (from the Response connector) to return data - it passes back a JSON body that can contain an ARRAY of data (multiple rows); 'Respond to a Power App or a flow' can only return a single item, not multiple rows. In the canvas app, use the 'Collect' function to capture the returned array of data into a collection. 'Run a child flow'/'Manually trigger a flow' cannot be called from a canvas app, and Compose is a Power Automate data-operation action, not a Power Fx function.",
+  "cs": null,
+  "src": ["Screenshot 2026-07-02 112701.png", "Screenshot 2026-07-02 112708.png"]
+}

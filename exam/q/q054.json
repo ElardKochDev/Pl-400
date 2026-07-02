@@ -1,0 +1,12 @@
+{
+  "n": 54,
+  "area": "integrations-alm",
+  "type": "multi",
+  "scenario": "You are designing a mobile app for the Global admin of the organization. The organization wants to share this app with Microsoft 365 and Azure administrators to perform the following activities: 1) Create a user in Microsoft Entra ID/Microsoft 365; 2) Search for a user in Microsoft Entra ID/Microsoft 365; 3) Update user details in Microsoft Entra ID/Microsoft 365.",
+  "q": "Which three of the following components should you use to implement this requirement? Each correct answer presents part of the solution.",
+  "options": ["Azure Functions", "Office 365 Users connector", "Custom connector", "Microsoft Dataverse custom action", "Microsoft Dataverse plug-in", "Microsoft Graph API"],
+  "answer": ["Azure Functions", "Custom connector", "Microsoft Graph API"],
+  "why": "Creating/searching/updating users in Microsoft Entra ID requires the Microsoft Graph API (the API that performs these directory CRUD operations). Because a canvas/mobile app cannot call Graph directly, wrap the Graph calls in an Azure Function and expose that function to the app through a Custom connector. The Office 365 Users connector can read/search user profiles but cannot CREATE users, and Dataverse custom actions/plug-ins operate on Dataverse data, not Entra ID directory objects.",
+  "cs": null,
+  "src": ["Screenshot 2026-07-02 112725.png", "Screenshot 2026-07-02 112730.png"]
+}
