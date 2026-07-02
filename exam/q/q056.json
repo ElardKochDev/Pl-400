@@ -1,0 +1,12 @@
+{
+  "n": 56,
+  "area": "extend-ux",
+  "type": "multi",
+  "scenario": "You are working as a developer for a company that uses a model-driven app. You add a custom button to a form to validate values in some columns. You add a JavaScript function from the Ribbon Workbench. When testing the customization, you identify that you are not getting the executionContext class in your JavaScript code. You need to pass the executionContext from the Ribbon Workbench.",
+  "q": "Which two actions should you perform? Each correct answer presents part of the solution.",
+  "options": ["Add a string parameter to the custom JavaScript action from Ribbon Workbench.", "Add a Customer Relationship Management (CRM) parameter to the custom JavaScript action from Ribbon Workbench.", "Select PrimaryEntityTypeCode.", "Select PrimaryControl."],
+  "answer": ["Add a Customer Relationship Management (CRM) parameter to the custom JavaScript action from Ribbon Workbench.", "Select PrimaryControl."],
+  "why": "To pass the executionContext to your ribbon-button JavaScript, add a Customer Relationship Management (CRM) parameter to the command action in Ribbon Workbench, and set its value to PrimaryControl. The PrimaryControl CRM parameter passes the form/execution context object into your function's parameters, giving you the executionContext. A plain string parameter passes literal text (not the context), and PrimaryEntityTypeCode only passes the entity's type code, not the execution context.",
+  "cs": null,
+  "src": ["Screenshot 2026-07-02 112754.png"]
+}

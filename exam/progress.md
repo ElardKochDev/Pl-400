@@ -83,3 +83,5 @@ sub-preguntas (area 'casefiles').
 - [x] Q53 hotspot automation         (canvas llama cloud flow: trigger When Power Apps calls a flow V2 / Respond action / Collect function)  src 112701/112708
 - [x] Q54 multi   integrations-alm   (app admin crea/busca/update users Entra -> Azure Functions + Custom connector + Microsoft Graph API)  src 112725/112730
 - [x] Q55 multi   design-dataverse   (Is Eligible solo sales manager + error en Qualify sin code -> Column-level security + Real-time workflow)  src 112742
+- [x] Q56 multi   extend-ux          (pasar executionContext desde Ribbon Workbench -> CRM parameter + PrimaryControl)  src 112754
+- [x] Q57 match   integrations-alm   (Dataverse eventos Azure: sync=Azure Function / load balance externo=Service Bus / on-prem seguro=Azure Relay)  src 112806

@@ -1,0 +1,17 @@
+{
+  "n": 57,
+  "area": "integrations-alm",
+  "type": "match",
+  "scenario": "A company uses Microsoft Dataverse. You need to integrate with Azure services when events in Dataverse are triggered. You need to determine the appropriate option for listening to Dataverse events.",
+  "q": "Drag the appropriate option to each scenario. An option may be used once, more than once, or not at all.",
+  "options": ["Azure Function", "Azure Relay", "Azure Service Bus"],
+  "rows": ["To process event data synchronously.", "To load balance events with an external system.", "To connect securely with on-premises systems."],
+  "answer": {
+    "To process event data synchronously.": "Azure Function",
+    "To load balance events with an external system.": "Azure Service Bus",
+    "To connect securely with on-premises systems.": "Azure Relay"
+  },
+  "why": "Use an AZURE FUNCTION (via a webhook) to process event data synchronously - webhooks/functions support synchronous, real-time processing. Use AZURE SERVICE BUS to queue and load-balance events to an external system reliably (messages are buffered and distributed). Use AZURE RELAY to securely connect Dataverse to systems running on-premises behind a firewall without opening inbound ports. Azure Service Bus is asynchronous (queue-based), so it is not used for synchronous processing.",
+  "cs": null,
+  "src": ["Screenshot 2026-07-02 112806.png"]
+}
