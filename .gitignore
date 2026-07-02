@@ -37,3 +37,7 @@ Thumbs.db
 # Local logs / temp
 unity-*.log
 *.tmp
+
+# Python
+__pycache__/
+*.pyc
