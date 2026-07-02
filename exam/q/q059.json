@@ -1,0 +1,12 @@
+{
+  "n": 59,
+  "area": "apps-powerfx",
+  "type": "single",
+  "scenario": "You have created a canvas app to allow your company's users to manage their expenses. The app displays data from several tables in Dataverse, which you are caching using the ClearCollect function under the OnStart event. Users are reporting that the app is slow to load. You need to improve the app's performance.",
+  "q": "Which Power Fx formula should you use?",
+  "options": ["Concurrent", "Launch", "Acceleration", "Refresh"],
+  "answer": "Concurrent",
+  "why": "Wrap the multiple ClearCollect calls in the Concurrent function. By default the ClearCollect statements in OnStart run one after another (sequentially), so loading several tables is slow. Concurrent evaluates the formulas in PARALLEL, so all the caches load at the same time and OnStart finishes faster. Launch opens a URL/app, Refresh reloads a data source, and Acceleration is not a Power Fx function - none of them parallelize the data loading.",
+  "cs": null,
+  "src": ["Screenshot 2026-07-02 112857.png"]
+}

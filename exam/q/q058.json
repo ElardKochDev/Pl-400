@@ -1,0 +1,12 @@
+{
+  "n": 58,
+  "area": "design-dataverse",
+  "type": "single",
+  "scenario": "CompanyA is using model-driven apps and a customer portal integrated via Microsoft Dataverse Web API to manage orders. Orders are created in model-driven apps either by using the Sales Order form or the Finance Order form. Orders are also created from the customer portal. The company wants to check whether the tax number format provided is correct for the selected country when the order record is created through any of the available options. You need to create a business rule to validate the tax number format.",
+  "q": "How should you configure the scope of the business rule?",
+  "options": ["The scope should be set to the Finance Order form.", "The scope should be set to the Sales Order form.", "The scope should be set to Entity.", "The scope should be set to All Forms."],
+  "answer": "The scope should be set to Entity.",
+  "why": "Set the business rule scope to Entity. Orders are created from multiple channels - two different forms AND the customer portal via the Web API. Only the Entity (table) scope runs the business rule server-side, so it applies to every create regardless of the form used or whether the record comes through the portal/Web API. Scoping to a single form (Sales/Finance) or even 'All Forms' would only run the rule in the model-driven UI and would NOT validate records created through the portal/API.",
+  "cs": null,
+  "src": ["Screenshot 2026-07-02 112846.png"]
+}

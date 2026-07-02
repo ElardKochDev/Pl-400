@@ -1,0 +1,19 @@
+{
+  "n": 60,
+  "area": "apps-powerfx",
+  "type": "match",
+  "scenario": "You are designing a canvas app for a field service agent who often travels to customer locations for face-to-face meetings. You need to determine which canvas app component you should choose for each requirement.",
+  "q": "Drag the appropriate component to each requirement. A component may be used once, more than once, or not at all.",
+  "options": ["Collection", "SaveData", "Launch", "Patch", "Power Automate", "Navigate"],
+  "rows": ["To store configuration data", "To save data in the mobile's local memory when the mobile user is offline", "To open Google Maps to view the customer's location", "To save meeting notes in CRM", "To send email with attachments"],
+  "answer": {
+    "To store configuration data": "Collection",
+    "To save data in the mobile's local memory when the mobile user is offline": "SaveData",
+    "To open Google Maps to view the customer's location": "Launch",
+    "To save meeting notes in CRM": "Patch",
+    "To send email with attachments": "Power Automate"
+  },
+  "why": "Use a COLLECTION to store configuration data in the app's local in-memory table. Use SaveData to persist data to the device's LOCAL storage so it survives when the mobile user is offline. Use Launch to open an external URL such as Google Maps for the customer's location. Use Patch to create/update the meeting notes record in Dataverse (CRM). Use a Power Automate flow to send an email with attachments (the canvas app itself cannot attach files to email directly, so it calls a flow).",
+  "cs": null,
+  "src": ["Screenshot 2026-07-02 112909.png", "Screenshot 2026-07-02 112914.png"]
+}

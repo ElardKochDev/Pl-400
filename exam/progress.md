@@ -85,3 +85,6 @@ sub-preguntas (area 'casefiles').
 - [x] Q55 multi   design-dataverse   (Is Eligible solo sales manager + error en Qualify sin code -> Column-level security + Real-time workflow)  src 112742
 - [x] Q56 multi   extend-ux          (pasar executionContext desde Ribbon Workbench -> CRM parameter + PrimaryControl)  src 112754
 - [x] Q57 match   integrations-alm   (Dataverse eventos Azure: sync=Azure Function / load balance externo=Service Bus / on-prem seguro=Azure Relay)  src 112806
+- [x] Q58 single  design-dataverse   (validar tax number desde forms+portal -> business rule scope Entity)  src 112846
+- [x] Q59 single  apps-powerfx       (varios ClearCollect en OnStart lento -> Concurrent)  src 112857
+- [x] Q60 match   apps-powerfx       (config=Collection / offline=SaveData / Google Maps=Launch / notas CRM=Patch / email adjuntos=Power Automate)  src 112909/112914
