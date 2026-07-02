@@ -33,3 +33,5 @@ el header "Question X of 103". Cada pregunta ocupa 2-3 capturas consecutivas.
 - [x] Q10 single  extend-platform    (validar email en create real-time -> pre-operation synchronous plug-in)  src 102107
 - [x] Q11 code    extend-platform    (Organization Service optimistic concurrency: UpdateRequest/IfRowVersionMatches/FaultException)  src 102129/102141/102146
 - [x] Q12 yesno   design-dataverse   (rollup + field security: Recalculate/read rollup value)  src 102204/102214/102221
+- [x] Q13 hotspot extend-platform    (Custom API: Is Function false / Entity binding / None processing step)  src 102241/102248
+- [x] Q14 order   design-dataverse   (dar acceso a tabla via security role, 5 pasos PPAC)  src 102308/102314

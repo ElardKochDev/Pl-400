@@ -1,0 +1,15 @@
+{
+  "n": 13,
+  "area": "extend-platform",
+  "type": "hotspot",
+  "scenario": "A company uses custom API messages in Microsoft Dataverse. You are developing a custom API to meet the following requirements: The custom API must be able to be called from a Power Automate cloud flow. The custom API requires a single row from a specific table to be passed as a parameter. No other steps can be registered on the custom API message. You need to configure the custom API message.",
+  "q": "How should you configure the custom API? To answer, select the appropriate options from the drop-down menus.",
+  "rows": [
+    {"s": "To allow the custom API message to be called from a Power Automate cloud flow", "a": "Set Is Function to false", "options": ["Set Is Function to false", "Set Is Function to true"]},
+    {"s": "To require a single row from a specific table to be passed as a parameter", "a": "Select Entity for Binding type", "options": ["Select Entity for Binding type", "Select None for Binding type", "Select Entity Collection for Binding type"]},
+    {"s": "To prevent other steps from being registered on the custom API message", "a": "Select None for Custom processing step type", "options": ["Select None for Custom processing step type", "Select Async Only for Custom processing step type", "Select Sync and Async for Custom processing step type"]}
+  ],
+  "why": "Set Is Function to FALSE: a custom API defined as a Function must be invoked with GET and cannot be called as an action from a Power Automate cloud flow; keeping Is Function = false exposes it as an action (POST) that Power Automate can call. Set Binding type to ENTITY: an Entity binding requires a single row (record) of a specific table to be passed to the message; None means no table is bound and Entity Collection would bind to a collection rather than a single row. Set Custom processing step type to NONE: this prevents any additional plug-in steps from being registered on the custom API message (Async Only or Sync and Async would allow other steps to be registered).",
+  "cs": null,
+  "src": ["Screenshot 2026-07-02 102241.png", "Screenshot 2026-07-02 102248.png"]
+}

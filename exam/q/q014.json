@@ -1,0 +1,26 @@
+{
+  "n": 14,
+  "area": "design-dataverse",
+  "type": "order",
+  "scenario": "You are working as a developer for a company that reports that one of its users cannot access one of the custom tables in a model-driven app. You are provided only with the user's name. You need to modify permissions so that the user can access this table.",
+  "q": "Which five actions should you perform in sequence?",
+  "options": [
+    "Select the environment in the Power Platform Admin Center, and then select Security roles.",
+    "Select the environment in the Power Platform Admin Center, and then select Users.",
+    "Search for the custom table and set the custom table's Read permission to User access level.",
+    "Choose Column Security Profiles, and then select the name of the user.",
+    "Select the security role and click Edit.",
+    "Access Settings, then Security, and then Column Security Profiles.",
+    "Select the user, and then click on Manage security roles."
+  ],
+  "answer": [
+    "Select the environment in the Power Platform Admin Center, and then select Users.",
+    "Select the user, and then click on Manage security roles.",
+    "Select the environment in the Power Platform Admin Center, and then select Security roles.",
+    "Select the security role and click Edit.",
+    "Search for the custom table and set the custom table's Read permission to User access level."
+  ],
+  "why": "Because you are given only the user's name, first find the user: in the Power Platform Admin Center select the environment and then Users. Open the user and click Manage security roles to see which role(s) the user has. Then, to change what that role grants, go back to the environment and select Security roles. Open (Edit) that security role. Finally, on the role search for the custom table and grant the table's Read privilege at (at least) User access level so the user can access the table. Column Security Profiles are for field-level security on specific columns, not for granting access to a whole table, so those options are not used here.",
+  "cs": null,
+  "src": ["Screenshot 2026-07-02 102308.png", "Screenshot 2026-07-02 102314.png"]
+}
