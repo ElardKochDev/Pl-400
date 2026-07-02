@@ -1,0 +1,12 @@
+{
+  "n": 100,
+  "area": "extend-platform",
+  "type": "order",
+  "scenario": "A company uses custom API messages in Microsoft Dataverse. The company wants to configure a new custom API and run it from a Dataverse business event. A catalog exists as shown in the exhibit. You need to configure the custom API message and the business event.",
+  "q": "Which four actions should you perform in sequence? Move the appropriate actions from the list of possible actions to the answer area and arrange them in the correct order.",
+  "options": ["Set Is Function to true.", "Create a catalog.", "Select the Custom Business Events catalog.", "Register a step.", "Create a Custom API message.", "Create a catalog assignment."],
+  "answer": ["Create a Custom API message.", "Create a catalog.", "Select the Custom Business Events catalog.", "Create a catalog assignment."],
+  "why": "First create the Custom API message (the action that will run). Then create a catalog to group the custom API as a business event. Select the Custom Business Events catalog so the API is exposed as a Dataverse business event. Finally create a catalog assignment to add the custom API message to that catalog, making it available to run from the business event. You do not set Is Function to true (it is an action, not a function) or register a step for this business-event configuration.",
+  "cs": null,
+  "src": ["Screenshot 2026-07-02 114345.png", "Screenshot 2026-07-02 114350.png"]
+}

@@ -126,3 +126,5 @@ sub-preguntas (area 'casefiles').
 - [x] Q96 single  extend-platform    (sync master data con alternate key min load -> Upsert)  src 114212
 - [x] Q97 yesno   automation         (Catch scope run after 'has failed': 401=Si / 503=Si / timeout=No / success=No)  src 114226/114230
 - [x] Q98 code    extend-platform    (bulk import: ExecuteMultipleRequest / ContinueOnError=true / ReturnResponses=false)  src 114315
+- [x] Q99 multi   extend-ux          (optimizar form: controls en secondary tabs + async event handlers promise OnLoad)  src 114334
+- [x] Q100 order  extend-platform    (custom API como business event: Create Custom API message -> Create catalog -> Select Custom Business Events catalog -> Create catalog assignment)  src 114345/114350

@@ -1,0 +1,12 @@
+{
+  "n": 99,
+  "area": "extend-ux",
+  "type": "multi",
+  "scenario": "A company uses model-driven app forms. You are designing a form that needs to show data from related tables and access HTTPS endpoints with client scripting. You need to optimize the performance of the form.",
+  "q": "Which two actions should you take to meet the goal? Each correct answer presents part of the solution.",
+  "options": ["Place controls in secondary tabs instead of the default tab.", "Develop asynchronous event handlers to return a promise in the Onload event.", "Use the XMLHttpRequest object with False as a parameter.", "Place controls that are used the most at the top of your default tab."],
+  "answer": ["Place controls in secondary tabs instead of the default tab.", "Develop asynchronous event handlers to return a promise in the Onload event."],
+  "why": "To speed up form load, place controls (especially those bound to related-table data) on SECONDARY tabs - controls on non-default tabs are not rendered/loaded until the tab is opened, so the initial load is faster. And write ASYNCHRONOUS OnLoad event handlers that return a promise, so the HTTPS/related-data calls run without blocking form rendering. Using XMLHttpRequest with False makes the call SYNCHRONOUS (blocking) which hurts performance, and simply placing the most-used controls at the top of the default tab does not reduce the load work.",
+  "cs": null,
+  "src": ["Screenshot 2026-07-02 114334.png"]
+}
