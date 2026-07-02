@@ -52,3 +52,5 @@ sub-preguntas (area 'casefiles').
 - [x] Q22 single  automation         (long-running sequential enrichment con crecimiento -> Durable Functions)  src 102837
 - [x] Q23 match   automation         (thank-you email=Workflow / validar quote=Business Process flow / error input=Business rule)  src 102903/102912
 - [x] Q24 single  integrations-alm   (feed nightly delta a ERP -> Track changes / change tracking)  src 102924
+- [x] Q25 CASE STUDY cs2 casefiles  (Environmental Assessments MDA/PCF/client scripting; 5 secciones + 7 sub-preguntas: openErrorDialog / yesno JS exhibit No-No-Si / feature-usage / CountRows>0 / web resource dependency / code manifest AssessmentMapControl-standard-read-only / OnLoad)  -> exam/cs/cs2.json DONE  src 102952..103221
+- [x] Q26 single  automation         (CRUD desde boton canvas via Power Automate -> Instant cloud flow)  src 103421

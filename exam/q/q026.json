@@ -1,0 +1,12 @@
+{
+  "n": 26,
+  "area": "automation",
+  "type": "single",
+  "scenario": "CompanyA is using a canvas app for financial services and the data is stored in an Azure SQL Database. You need to design a solution using Power Automate that should perform create, read, update, and delete data operations at the click of a button from the canvas app.",
+  "q": "Which type of flow should you use?",
+  "options": ["Instant cloud flow", "Desktop flow", "Automated cloud flow", "Scheduled cloud flow"],
+  "answer": "Instant cloud flow",
+  "why": "Use an instant cloud flow. Instant flows are triggered manually/on-demand - for example from the OnSelect property of a Button control in Power Apps using the Power Apps connector/trigger - which is exactly 'at the click of a button'. An automated cloud flow runs when an event happens (e.g. a row is created), a scheduled cloud flow runs on a recurrence, and a desktop flow (Power Automate for desktop / RPA) automates the UI of desktop/legacy apps - none of these are triggered by a button click in the canvas app.",
+  "cs": null,
+  "src": ["Screenshot 2026-07-02 103421.png"]
+}

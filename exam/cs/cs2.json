@@ -1,0 +1,73 @@
+{
+  "cs": "cs2",
+  "n": 25,
+  "area": "casefiles",
+  "title": "Environmental Assessments (Model-driven app + PCF + client scripting)",
+  "status": "DONE",
+  "sections": [
+    {"title": "Background", "text": "You work as a Power Platform developer for an organization that performs regulatory assessments on the environmental impact of transport infrastructure for its clients.\n\nThe organization has three separate divisions:\n- Air\n- Soil\n- Water\n\nEach division performs part of the overall impact assessment."},
+    {"title": "Current Environment", "text": "The organization has adopted the Power Platform, with many canvas apps and Power Automate cloud flows built by citizen developers. The IT department has taken over many of these apps and flows, and it has converted them to use Microsoft Dataverse.\n\nDataverse has the following main tables:\n- Client\n- Infrastructure Project\n- Project Stage\n- Assessment\n- Assessment Type\n- Assessment Task\n- Assessment Task Type\n- Assessment Impact\n\nA global choice column, pl_assessmentstatus, is used to track assessment status and assessment task status, assigning the following values: Pending, In Progress, Passed, Failed, Canceled.\n\nPower BI is used to create visualizations of the data stored in Microsoft Dataverse to track how assessments are progressing and to identify trends and root causes. Azure Maps is used to diagram the details of the locations for the infrastructure project and to visualize the data to show how water, soil, and air are affected by the project."},
+    {"title": "Problems Identified", "text": "The multiple canvas apps and flows meet the needs of capturing the information required for assessments and for providing notifications, but the apps do not control the assessment process and so many steps crucial to generating the impact assessment are being missed.\n\nThe capture of location information and its associated data requires a lot of user input, but the users do not always enter all data correctly into the canvas app. Location-related data must then be further processed and added to Azure Maps."},
+    {"title": "Requirements", "text": "A new model-driven app has been proposed to show all information held in Microsoft Dataverse, in order to monitor the progress of the assessments. The model-driven app must meet the following requirements:\n- Users need to be able to view all data in the tables.\n- Each division should have a set of columns on the tables and the other divisions must not be able to change the contents of those columns.\n- Users must be able to view all assessment tasks and assessment task types added by users in their own division and in other divisions.\n- Users in each division should only be able to add assessment task types for their own division. The lookup control on the assessment task form must only show the list of assessment task types for a user's own division.\n- The Azure map must be displayed within the project form.\n- A command button that updates the project stage must be added to the action bar.\n- A ribbon button that executes an existing JavaScript function to cancel the selected project and all Pending and In Progress tasks must be added to the action bar. The JavaScript function must call a second JavaScript function in a different web resource.\n- Errors for actions performed by JavaScript must be shown in a popup dialog with a code and a message.\n- When an assessment task fails, the status of the assessment must be set to Failed immediately and automatically.\n\nThe canvas app must be able to:\n- Capture location-based information and store it directly in Azure Maps."},
+    {"title": "Testing Issues", "text": "The following issues were found during testing:\n- Users can click on the command button to update the project stage in project views when no projects are selected.\n- An error is shown when users click on the ribbon button to cancel the project."}
+  ],
+  "questions": [
+    {
+      "q": "You need to show errors in the model-driven app. Which Client API method should you use?",
+      "type": "single",
+      "options": ["Xrm.Navigation.openConfirmDialog", "Xrm.Navigation.openErrorDialog", "Xrm.Navigation.openWebResource", "Xrm.Navigation.openAlertDialog"],
+      "answer": "Xrm.Navigation.openErrorDialog",
+      "why": "Use Xrm.Navigation.openErrorDialog to display the error with both a code AND a message. Its errorOptions parameter lets you show the error message and, optionally, the error code, plus details the user can download. openAlertDialog only shows a simple message (no code). openConfirmDialog asks the user to confirm/cancel, and openWebResource opens a web resource - neither displays a structured error."
+    },
+    {
+      "q": "The JavaScript shown in the exhibit is registered against the event used for the assessment task status choice column on the Assessment Task form. For each statement, select Yes if it is true, otherwise No.",
+      "type": "yesno",
+      "rows": [
+        {"s": "If there is an error in the update, a notification is displayed at the top of the form.", "v": false},
+        {"s": "If the update succeeds, the alert dialog on line 09 is always displayed before the alert dialog on line 18.", "v": false},
+        {"s": "The user must save a new assessment task before setting the assessment task status to Failed.", "v": true}
+      ],
+      "why": "If there is an error in the update, the notification is displayed NEXT TO the control on the form, not at the top - to show a notification at the top you would use setFormNotification or addGlobalNotification, so the first statement is No. The update runs asynchronously (returns a promise), so the alert on line 09 is not guaranteed to appear before the alert on line 18; the ordering is not fixed, so the second statement is No. A new (unsaved) assessment task has no record id, so the code cannot update the related assessment until the task is saved - the user must save first, so the third statement is Yes."
+    },
+    {
+      "q": "You need to complete the manifest for the code component to allow the capture of location-based information. Which node should you configure in the manifest?",
+      "type": "single",
+      "options": ["property", "resources", "control", "feature-usage"],
+      "answer": "feature-usage",
+      "why": "Capturing location (device geolocation) requires declaring the device capability in the feature-usage node of the PCF manifest (uses-feature for Location). Without declaring it under feature-usage, the component cannot access the location API. property defines bound/input values, resources lists code/CSS/RESX files, and control is the root element - none of them grant access to device features."
+    },
+    {
+      "q": "You need to resolve the issue with the project stage command button (it can be clicked when no projects are selected). Which Power Fx formula should you use?",
+      "type": "single",
+      "options": ["CountRows(Self.Selected.AllItems) > 0", "Self.Selected.Item", "Count(Self.Selected.AllItems) > 0", "DataSourceInfo"],
+      "answer": "CountRows(Self.Selected.AllItems) > 0",
+      "why": "Set the command button's visibility/enablement rule so it is only active when at least one row is selected: CountRows(Self.Selected.AllItems) > 0. CountRows counts records in a table (the selected items). Count only counts numeric columns, not records, so Count(Self.Selected.AllItems) is invalid here. Self.Selected.Item returns a single record (not a boolean condition), and DataSourceInfo returns metadata, not a selection count."
+    },
+    {
+      "q": "You need to resolve the issue with the cancel project ribbon button (an error is shown because the function calls a second function in a different web resource). What should you do?",
+      "type": "single",
+      "options": ["In the JavaScript web resource, add the other web resource as a dependency.", "Add &ribbondebug=true to the app URL and run the Command Checker tool.", "Add the other JavaScript web resource to the form.", "Add a ribbon action to the custom action for the button."],
+      "answer": "In the JavaScript web resource, add the other web resource as a dependency.",
+      "why": "Because the first JavaScript function calls a second function that lives in a DIFFERENT web resource, that second web resource must be loaded. Add the other web resource as a DEPENDENCY of the JavaScript web resource so it is loaded and the function is available when the ribbon button runs. Adding &ribbondebug=true just helps diagnose ribbon issues; adding the web resource to the form only loads it on that form (not for a ribbon/view command); and a ribbon action to a custom action does not resolve the missing dependency between the two web resources."
+    },
+    {
+      "q": "You need to complete the manifest for the code component that displays the map on the project form. You create the class AssessmentMapControl in the TypeScript file called index_ts and create a style sheet called AzureMap_css. How should you complete the manifest? Select the correct parts from the drop-down menus.",
+      "type": "code",
+      "code": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<manifest>\n  <control namespace=\"Assessment\" constructor=\"[[1]]\"\n    version=\"0.0.1\" display-name-key=\"AssessmentMapControl\"\n    description-key=\"AssessmentMapControl description\"\n    control-type=\"[[2]]\">\n    <property name=\"name\" display-name-key=\"Name column\"\n      description-key=\"Name column description\"\n      of-type=\"SingleLine.Text\" usage=\"[[3]]\" required=\"true\"/>\n    <resources>\n      <code path=\"index.ts\" order=\"1\"/>\n    </resources>\n    <feature-usage>\n    </feature-usage>\n  </control>\n</manifest>",
+      "blanks": [
+        {"id": 1, "a": "AssessmentMapControl", "options": ["AssessmentMapControl", "index_ts", "project"]},
+        {"id": 2, "a": "standard", "options": ["standard", "data-set", "type-group"]},
+        {"id": 3, "a": "read-only", "options": ["read-only", "bound", "data-set"]}
+      ],
+      "why": "constructor must be the CLASS name defined in index_ts, i.e. AssessmentMapControl (not the file itself, and not the table name project - code controls are reusable and not tied to a table). control-type must be standard (the alternative virtual uses React; data-set is for controls that display a list of table data - this control shows an external Azure map; type-group allows multiple data types for a property). usage must be read-only because the map's data lives in Azure and the control does not need to write back to the form column; bound is only used when the control must update column values, and data-set is not a valid usage value."
+    },
+    {
+      "q": "You need to filter the Assessment Task Type lookup column when creating new Assessment Tasks. Which event should you add the JavaScript to when configuring forms using client scripting?",
+      "type": "single",
+      "options": ["OnSave", "OnLoad", "OnChange"],
+      "answer": "OnLoad",
+      "why": "Add the addCustomFilter/addPreSearch logic in the form's OnLoad event so the lookup is filtered as soon as a new Assessment Task form is opened - before the user opens the lookup. OnSave runs when the record is saved (too late to filter the lookup), and OnChange runs only after another field's value changes, which is not guaranteed to occur when creating a new task."
+    }
+  ],
+  "src": ["Screenshot 2026-07-02 102952.png", "Screenshot 2026-07-02 103005.png", "Screenshot 2026-07-02 103011.png", "Screenshot 2026-07-02 103023.png", "Screenshot 2026-07-02 103037.png", "Screenshot 2026-07-02 103046.png", "Screenshot 2026-07-02 103056.png", "Screenshot 2026-07-02 103110.png", "Screenshot 2026-07-02 103122.png", "Screenshot 2026-07-02 103134.png", "Screenshot 2026-07-02 103147.png", "Screenshot 2026-07-02 103200.png", "Screenshot 2026-07-02 103209.png", "Screenshot 2026-07-02 103221.png"]
+}
