@@ -1,0 +1,12 @@
+{
+  "n": 52,
+  "area": "integrations-alm",
+  "type": "single",
+  "scenario": "You have created an Azure Logic App that synchronizes data between Dataverse and a third-party web app. Your company has updated its security policies to require custom applications to be governed by Azure Managed Identity.",
+  "q": "Which Power Platform user type should you create for the correct authentication of users of your logic application?",
+  "options": ["Regular", "Application", "Non-interactive", "Support"],
+  "answer": "Application",
+  "why": "Create an Application user in Dataverse. An application user is a non-licensed, non-interactive identity linked to an Azure app registration / managed identity, and it is the correct user type for a service (such as an Azure Logic App governed by Azure Managed Identity) to authenticate and call Dataverse. Regular, Non-interactive, and Support are user access modes for human/system accounts and are not the identity used for a managed-identity governed application.",
+  "cs": null,
+  "src": ["Screenshot 2026-07-02 112648.png"]
+}

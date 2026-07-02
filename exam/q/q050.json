@@ -1,0 +1,15 @@
+{
+  "n": 50,
+  "area": "extend-platform",
+  "type": "yesno",
+  "scenario": "You are configuring a Custom API message named 'Custom API Example' using the plug-in registration tool, as shown in the exhibit. It is configured as an Action (not a Function), it is not marked as Private, and it runs plug-in logic that creates contact records. You need to evaluate the statements below.",
+  "q": "For each statement, select Yes if it is true, otherwise No.",
+  "rows": [
+    {"s": "You must configure at least one response property.", "v": false},
+    {"s": "'Custom API Example' will appear in the $metadata service document.", "v": true},
+    {"s": "If the calling user does not have the permissions to create contact records, they will receive an error.", "v": true}
+  ],
+  "why": "Response properties are NOT mandatory: because this Custom API is an Action (it performs an action) rather than a Function (which retrieves data), the POST request does not have to return anything, so you do not need to configure a response property (statement 1 = No). Because the Custom API is not marked as Private, its name 'Custom API Example' WILL appear in the $metadata service document (…/api/data/v9.2/$metadata) and be usable by code-generation tools (statement 2 = Yes). The Custom API's plug-in runs in the CONTEXT of the calling user, so if that user lacks the Create privilege on contact, the create fails and they receive an error (statement 3 = Yes).",
+  "cs": null,
+  "src": ["Screenshot 2026-07-02 112626.png"]
+}

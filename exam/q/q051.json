@@ -1,0 +1,15 @@
+{
+  "n": 51,
+  "area": "extend-platform",
+  "type": "yesno",
+  "scenario": "You have written a plug-in which uses values held in a configuration table called Area Codes. You use the plugin to validate that the value of the Phone Number column of the Contact table, which is updated by the user, has an area code consistent with either a current or a previous value of the Address 1: City column. You have registered your plug-in in an update message against the Contact table. The step is registered to the PreOperation pipeline stage. You have also registered both a Pre and a Post Image of the Contact table without specifying parameters. You need to evaluate the statements below.",
+  "q": "For each statement, select Yes if it is True, otherwise No.",
+  "rows": [
+    {"s": "The execution mode needs to be synchronous.", "v": true},
+    {"s": "The Address 1: City and the Phone number column values will be available in both images.", "v": true},
+    {"s": "(string)context.PreEntityImages[\"telephone1\"]; will return the value of a phone number prior to the user update.", "v": false}
+  ],
+  "why": "The execution mode must be SYNCHRONOUS because the step is registered to the PreOperation pipeline stage (which runs before the operation, inside the transaction); asynchronous plug-ins can only be registered on PostOperation (statement 1 = Yes). Because the images were registered WITHOUT specifying particular attributes, all columns - including Address 1: City and the Phone Number - are included, so those values are available in both the pre- and post-images (statement 2 = Yes). The third statement is FALSE because context.PreEntityImages is keyed by the IMAGE ALIAS name you gave the image, not by a column name: the correct syntax is (string)context.PreEntityImages[\"<imageAlias>\"][\"telephone1\"]. Indexing PreEntityImages directly with \"telephone1\" does not return the prior phone number (statement 3 = No).",
+  "cs": null,
+  "src": ["Screenshot 2026-07-02 112638.png"]
+}

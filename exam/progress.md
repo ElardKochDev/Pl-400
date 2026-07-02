@@ -77,3 +77,6 @@ sub-preguntas (area 'casefiles').
 - [x] Q47 match   apps-powerfx       (SharePoint upload=Standard / Dataverse Notes=Premium / Entra guest user=Custom)  src 112532/112538
 - [x] Q48 code    integrations-alm   (custom connector transform code: class Script : ScriptBase override ExecuteAsync)  src 112555
 - [x] Q49 hotspot integrations-alm   (Dataverse->Service Bus: Register service endpoint / SAS / JSON message format / Register new step)  src 112613  [OJO opciones de dropdown inferidas]
+- [x] Q50 yesno   extend-platform    (Custom API Action; No response prop obligatoria / aparece en $metadata=Si / user sin permiso=error Si)  src 112626
+- [x] Q51 yesno   extend-platform    (plug-in PreOperation con pre/post images; sync=Si / cols en ambas images=Si / PreEntityImages['telephone1']=No es alias)  src 112638
+- [x] Q52 single  integrations-alm   (Logic App gobernada por Managed Identity -> Application user)  src 112648
