@@ -1,0 +1,12 @@
+{
+  "n": 41,
+  "area": "extend-ux",
+  "type": "order",
+  "scenario": "You are creating a model-driven app for a retail organization. The organization wants the visual indicator on the contact form to display the progress of incident resolution. You need to design a PowerApps Component Framework (PCF) control to meet the requirement.",
+  "q": "Which four commands should you run in sequence to get started with your PCF component code development? Move the appropriate commands from the list to the answer area and arrange them in the correct order.",
+  "options": ["npm install", "npm run build", "mkdir C:\\Users\\your name\\Documents\\MyPCFComponentFolder", "pac pcf init -namespace mynamespace -name myprogresscontrol -template field", "cd C:\\Users\\your name\\Documents\\MyPCFComponentFolder"],
+  "answer": ["mkdir C:\\Users\\your name\\Documents\\MyPCFComponentFolder", "cd C:\\Users\\your name\\Documents\\MyPCFComponentFolder", "pac pcf init -namespace mynamespace -name myprogresscontrol -template field", "npm install"],
+  "why": "First create the project folder with mkdir, then move into it with cd. Initialize the PCF project with 'pac pcf init -namespace ... -name ... -template field' (a field-template control for a visual indicator on a column). Then run 'npm install' to download the project dependencies before you start coding. 'npm run build' comes later (to build the control), not as part of getting started.",
+  "cs": null,
+  "src": ["Screenshot 2026-07-02 112348.png", "Screenshot 2026-07-02 112354.png"]
+}

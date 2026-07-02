@@ -66,3 +66,6 @@ sub-preguntas (area 'casefiles').
 - [x] Q36 yesno   extend-platform    (console app crea/actualiza contacto; No/No/Si/No - Mark Butler, key not present, no siempre ColumnSet(true))  src 112104
 - [x] Q37 code    extend-platform    (plug-in Execute: GetService(typeof(ITracingService)) + context=(IPluginExecutionContext))  src 112122/112131
 - [x] Q38 multi   integrations-alm   (Developer environment -> Microsoft Dataverse + Region)  src 112149
+- [x] Q39 single  extend-ux          (Monitor form onload script error; flags DisableFormHandlers/DisableFormLibraries -> culpable travel_AccountJS)  src 112200..112228
+- [x] Q40 yesno   extend-platform    (Web API crear savedquery; Si/No/Si - Prefer return=representation, no @odata.context, query option en URL)  src 112249
+- [x] Q41 order   extend-ux          (empezar PCF: mkdir -> cd -> pac pcf init -template field -> npm install)  src 112348/112354

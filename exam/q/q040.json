@@ -1,0 +1,15 @@
+{
+  "n": 40,
+  "area": "extend-platform",
+  "type": "yesno",
+  "scenario": "The company you work for uses Microsoft Dataverse. You plan to develop system views that are available for every user. You want the advanced find queries to be reusable in the application that the users are using. You use the Dataverse Web API to create the table record (a savedquery) shown in the exhibit. You need to anticipate how the table record will perform, and identify any required changes.",
+  "q": "For each statement, select Yes if it is true, otherwise No.",
+  "rows": [
+    {"s": "The code contains a header that returns the value of created records.", "v": true},
+    {"s": "The missing expression in line 9 is @odata.context.", "v": false},
+    {"s": "The first line appends a specific query option to the URL to the entity set.", "v": true}
+  ],
+  "why": "The request includes the Prefer: return=representation header, which makes the Web API return the created record's values in the response, so statement 1 is Yes. The missing expression is NOT @odata.context (which is a response annotation the server returns, not something you send when creating a record); the create body needs a binding/type annotation instead, so statement 2 is No. The first line of the request URL appends a query option (for example $select) to the savedqueries entity set URL, so statement 3 is Yes.",
+  "cs": null,
+  "src": ["Screenshot 2026-07-02 112249.png"]
+}

@@ -1,0 +1,12 @@
+{
+  "n": 39,
+  "area": "extend-ux",
+  "type": "single",
+  "scenario": "You are working with an established model-driven app that allows users to log upcoming travel requests and bookings. Users have reported a script error on opening the Contact form, which you have replicated. Using the Monitor tool, you examined the FormEvents.onload operation. The onload event handlers are: eventIndex 0 = Mscrm.Form_onload (library Account/Account_main_system_library.js), eventIndex 1 = enableBPFfields (library travel_AccountJS), eventIndex 2 = OnLoad (library travel_AccountJS); the onchange for statecode handler is validateAreaCode (library travel_AccountJS). AllLibraries: index 0 = travel_AccountJS, index 1 = travel_StateAreaCodeOptions, index 2 = $webresource:Account/Account_main_system_library.js. You perform the following two edits to the Account record URL and the error still occurs: (1) ...&flags=DisableFormHandlers=true_0_2  (2) ...&flags=DisableFormLibraries=1_2. You need to identify the cause of the error.",
+  "q": "Which library or function should you identify?",
+  "options": ["travel_AccountJS", "travel_AccountJS.OnLoad()", "Account/Account_main_system_library.js", "travel_AccountJS.validateAreaCode()", "Account/Account_main_system_library.js.Mscrm.Form_onload()"],
+  "answer": "travel_AccountJS",
+  "why": "DisableFormHandlers=true_0_2 disabled onload handlers at index 0 (Mscrm.Form_onload) and index 2 (OnLoad), and DisableFormLibraries=1_2 disabled libraries at index 1 (travel_StateAreaCodeOptions) and index 2 (Account_main_system_library.js). The error still occurred, so the culprit must be something still enabled: onload handler index 1 (enableBPFfields) which comes from the travel_AccountJS library (AllLibraries index 0, which was NOT disabled). Therefore the travel_AccountJS library is the cause. The specific functions/other libraries were already disabled by the flags, so they cannot be the cause.",
+  "cs": null,
+  "src": ["Screenshot 2026-07-02 112200.png", "Screenshot 2026-07-02 112210.png", "Screenshot 2026-07-02 112217.png", "Screenshot 2026-07-02 112228.png"]
+}
