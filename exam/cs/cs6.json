@@ -1,0 +1,42 @@
+{
+  "cs": "cs6",
+  "n": 84,
+  "area": "casefiles",
+  "title": "FastNQuick Shipping (Fusion development, Office management app)",
+  "status": "DONE",
+  "sections": [
+    {"title": "Environment", "text": "FastNQuik Shipping is a company that uses fusion development within the Power Platform to streamline and automate its business processes.\n\nThe development members are:\n- Martha (product owner)\n- Mike and Bobby (Software developers)\n- Sharon (citizen developer).\n\nFastNQuick Shipping maintains four Power Platform environments, each with an instance of Dataverse: Development, Testing, Training and Production. Each environment contains the below apps and cloud flows:\n- Six canvas apps: Account/Contact capture, Expense logging, Travel requests, Leave requests, Meeting-room booking, and Lead-logging.\n- Two model-driven apps: Office management and Opportunity management.\n- A Power Apps portal, used by customers to track the receipt of their messages.\n- More than 25 Power Automate cloud flows.\n\nAll FastNQuick Shipping staff are added to the PowerPlatformUser Microsoft Entra security group as part of the onboarding process.\n\nThe Office management app uses the custom table Message, which is related N:1 with both Account and Contact, to record and assign ownership of messages received from customers and to keep an accurate record of customer details and their employees. The app has no existing business logic."},
+    {"title": "Requirements", "text": "The office administration team has recently hired three receptionists, who are tasked with taking messages for senior members of staff. To assist with training and to ensure that the new hires are following the correct procedures, Martha requests that the Product team create a new business process flow in the Office management app that delivers the following functionality:\n- Name of the business flow: 'Take a message'\n- Business flow stages:\n  1. Locate customer - Table: Message - Steps: Account, look-up (required)\n  2. Update customer - Table: Account - Steps: Primary contact, look-up; Number of active contacts, whole number, read-only.\n  3. Record message - Table: Message - Steps: Assigned owner, look-up; Note added?, Yes/No (required)\n- Business logic:\n  - When the form loads, JavaScript calculates the number of active contacts against the account and sets the calculated value in the custom number of active contacts column on the account table.\n  - If there are no contacts related to the account, the user should be prompted to create a task to add one at a later date.\n- Security: The flow should be visible only to users with the Office admin role."},
+    {"title": "Office Management user groups", "text": "Custom security roles:\n| Name | Take a message: Read | Run Flows | Process: Read |\n| Base | None | No | None |\n| Manager | None | No | None |\n| Office admin | Organization | No | None |\n\nTeams:\n| Team Name | Team Type | Security Group | Members | Security Roles |\n| Basic | Microsoft Entra Security Group | PowerPlatformUsers | (from group) | Base |\n| Executive assistants | Microsoft Entra Security Group | Management | (from group) | Manager |\n| Office managers | Owner | - | Amy, Peter, Mary, Alannah, Richard and Alison | Office admin |\n| System administrators | Owner | - | Mike, Bobby, Martha and Sharon | System administrator |"}
+  ],
+  "questions": [
+    {
+      "q": "On deploying the 'Take a message' business process flow to production, Office Administrator Amy cannot see the business process flow when she opens a new message record, but Bobby can. You need to fix this issue. What should you do?",
+      "type": "single",
+      "options": ["Open the model-driven app designer, go to Business process flows under Components and select New.", "Upgrade the Office admin role to have organization read permission on the Process table.", "Upgrade the Office admin role with the Run Flows privilege.", "Upgrade the base role to have organization access to the Take a message business process flow."],
+      "answer": "Upgrade the Office admin role to have organization read permission on the Process table.",
+      "why": "To view any business process flow (or business rule) a user needs READ access to the Process table. Amy's Office admin role currently has 'Process: Read = None', so she cannot see the BPF; Bobby is a System administrator so he can. Granting the Office admin role organization Read on the Process table lets Amy (and other office admins) see the flow. Having Read on the specific BPF table alone is not enough without Process table read.",
+      "src": ["Screenshot 2026-07-02 113708.png", "Screenshot 2026-07-02 113732.png"]
+    },
+    {
+      "q": "Bobby adds a business rule recommendation to the Primary contact field on the Account table: IF Number of Active Contacts less than 1 THEN Show Recommendation 'Follow-up' (with details to create a follow-up task) and Set Follow-up to 'Yes'. You need to identify in which scenario the Recommend lightbulb icon will display to model-driven app users, indicating the recommendation has been applied. Which scenario should you identify?",
+      "type": "single",
+      "options": ["The user views an account form with no related contacts, which was already open.", "The user opens an account with no related contacts.", "The user opens an account with no related contacts and saves the record.", "The user opens an account with related contacts and saves the record."],
+      "answer": "The user opens an account with no related contacts and saves the record.",
+      "why": "The Number of active contacts column is populated by the form-OnLoad JavaScript, but because accounts/contacts are created by a canvas app, that JavaScript does not run at create time and the column is null until the record is opened AND SAVED (which triggers the calculation). Only after the user opens an account that has no related contacts and saves the record is the count set to 0 (< 1), so the recommendation condition is met and the Recommend lightbulb icon displays.",
+      "src": ["Screenshot 2026-07-02 113748.png", "Screenshot 2026-07-02 113753.png"]
+    },
+    {
+      "q": "You need to calculate the number of active contacts related to the current account and set the value of the Number of Active Contacts column. How should you complete the JavaScript function called on the form OnLoad event? Select the appropriate options from the drop-down menus.",
+      "type": "code",
+      "code": "var sdk = window.sdk || {};\n(function () {\n  // Count Contacts\n  this.calculateContacts = async function (executionContext) {\n    const formContext = executionContext.getFormContext();\n    let accountId = formContext.data.[[1]].getId().replace(/{|}/g, '');\n    let count = 0;\n    await Xrm.WebApi.retrieveMultipleRecords(\"Contact\",\n      `?$select=contactid&$filter=_parentaccountid_value eq ${accountId} and [[2]] eq 0`).then(\n      function (result) {\n        for (var i = 0; i < result.entities.length; i++) {\n          count++;\n        }\n      },\n      function (error) {\n        console.log(error.message);\n      }\n    );\n    formContext.getAttribute(\"new_NumberActiveContact\").setValue(count);\n  }\n}).call(sdk);",
+      "blanks": [
+        {"id": 1, "a": "entity", "options": ["entity", "process", "attributes"]},
+        {"id": 2, "a": "statecode", "options": ["statecode", "statuscode"]}
+      ],
+      "why": "Use formContext.data.entity - the entity object holds the current record; getId() returns its GUID so you can retrieve the account's contacts. (process interacts with the business process flow; attributes exposes non-table data.) Filter the contacts on statecode eq 0: statecode holds the status value (0 = active, 1 = inactive), so it returns only ACTIVE contacts. Do not use statuscode - that is the status REASON column, and many status reason values can map to the active status, so it would not reliably return active contacts.",
+      "src": ["Screenshot 2026-07-02 113807.png", "Screenshot 2026-07-02 113813.png"]
+    }
+  ],
+  "src": ["Screenshot 2026-07-02 113655.png", "Screenshot 2026-07-02 113702.png", "Screenshot 2026-07-02 113708.png", "Screenshot 2026-07-02 113716.png", "Screenshot 2026-07-02 113721.png", "Screenshot 2026-07-02 113732.png", "Screenshot 2026-07-02 113748.png", "Screenshot 2026-07-02 113753.png", "Screenshot 2026-07-02 113807.png", "Screenshot 2026-07-02 113813.png"]
+}

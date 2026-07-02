@@ -111,3 +111,4 @@ sub-preguntas (area 'casefiles').
 - [x] Q81 single  automation         (generar PDF invoice + email desde command button, min custom, monitoreable -> Power Automate cloud flow triggered con JavaScript)  src 113543
 - [x] Q82 single  apps-powerfx       (reusar componentes no-code entre apps con updates -> Component library)  src 113619
 - [x] Q83 order   apps-powerfx       (header como component library 6 pasos: +New library -> custom input+label -> save library -> new canvas app -> Get more components import -> insert header)  src 113632/113643
+- [x] Q84 CASE STUDY cs6 casefiles  (FastNQuick Shipping fusion dev; 3 secciones+tablas + 3 sub: Office admin org read Process table / recommendation al abrir+guardar account sin contactos / code entity+statecode)  -> exam/cs/cs6.json DONE  src 113655..113813
