@@ -1,0 +1,26 @@
+{
+  "n": 8,
+  "area": "integrations-alm",
+  "type": "order",
+  "scenario": "You are working as a developer for a company that uses Microsoft Dataverse. The company wants opportunities to be marked as closed when an order is confirmed. You need to pass data to an http triggered Azure function and configure the Plug-in Registration Tool to send data to an Azure function when an order is confirmed in Dataverse.",
+  "q": "Which five actions should you perform in sequence?",
+  "options": [
+    "Select Register New Web Hook.",
+    "Register a new step on the update of the sales order.",
+    "Select Register New Service Endpoint.",
+    "Enter the Endpoint URL.",
+    "Register a new step on the update of the sales order and update the filtering attributes to check the status field only.",
+    "Add the key-value for the http triggered Azure function.",
+    "Set Authentication to WebhookKey."
+  ],
+  "answer": [
+    "Select Register New Web Hook.",
+    "Enter the Endpoint URL.",
+    "Set Authentication to WebhookKey.",
+    "Add the key-value for the http triggered Azure function.",
+    "Register a new step on the update of the sales order and update the filtering attributes to check the status field only."
+  ],
+  "why": "Use a WEB HOOK (not a Service Endpoint) to call an HTTP-triggered Azure function from Dataverse; web hooks send data about Dataverse operations to external services, passing executionContext as JSON. First select Register New Web Hook. Then enter the Endpoint URL you get from the Azure portal. Set Authentication to WebhookKey, because an HTTP-triggered Azure function is secured with an API key. Add the key-value pair for the function key. Finally register a new step on the update of the sales order and set the filtering attributes to the status field only, so the plug-in step fires only when the status (order confirmed) changes, improving performance. Registering the step without limiting filtering attributes would fire on every update. Register New Service Endpoint is for Azure Service Bus / Event Hub integrations, not an HTTP-triggered function.",
+  "cs": null,
+  "src": ["Screenshot 2026-07-02 102019.png", "Screenshot 2026-07-02 102027.png"]
+}

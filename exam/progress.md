@@ -28,3 +28,6 @@ el header "Question X of 103". Cada pregunta ocupa 2-3 capturas consecutivas.
 - yesno (Sí/No por afirmación) · casestudy (contexto compartido + varias preguntas, campo `cs`)
 
 - [x] Q7  single  extend-ux          (PCF: call RetrieveMultipleRecords desde updateView)  src 101948
+- [x] Q8  order   integrations-alm   (webhook a Azure function: Register New Web Hook -> ... -> step con filtering)  src 102019/102027
+- [x] Q9  hotspot integrations-alm   (App Insights: Azure portal / Maker portal / Azure portal)  src 102044/102050
+- [x] Q10 single  extend-platform    (validar email en create real-time -> pre-operation synchronous plug-in)  src 102107

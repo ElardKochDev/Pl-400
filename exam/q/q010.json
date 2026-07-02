@@ -1,0 +1,17 @@
+{
+  "n": 10,
+  "area": "extend-platform",
+  "type": "single",
+  "scenario": "CompanyA uses Power Apps for order management. When a new order is created from the model-driven app in Microsoft Dataverse, the email address needs to be verified in order to check that the format is correct and that the domain on which emails would be sent is valid. You need to design a solution that applies business logic every time a record is created in Microsoft Dataverse from the model-driven app. The business logic must run in real-time and it must not allow invalid email addresses to be created.",
+  "q": "What should you use to implement business logic?",
+  "options": [
+    "A post-operation asynchronous plug-in",
+    "A pre-operation synchronous plug-in",
+    "A post-operation synchronous plug-in",
+    "A custom workflow activity"
+  ],
+  "answer": "A pre-operation synchronous plug-in",
+  "why": "Use a pre-operation SYNCHRONOUS plug-in. Validation must happen BEFORE the record is created, and the pre-operation stage runs before the main operation while the transaction is not yet committed, so the plug-in can validate the email and throw an InvalidPluginExecutionException to prevent an invalid record from being saved. It must be synchronous (real-time) so it blocks the create. A post-operation plug-in (sync or async) runs after the record has already been created, so it cannot stop an invalid record. An asynchronous plug-in runs in the background after the operation, so it is not real-time and cannot block the create. A custom workflow activity is a reusable step for workflows, not the mechanism to enforce this real-time validation on create.",
+  "cs": null,
+  "src": ["Screenshot 2026-07-02 102107.png"]
+}

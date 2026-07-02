@@ -1,0 +1,16 @@
+{
+  "n": 9,
+  "area": "integrations-alm",
+  "type": "hotspot",
+  "scenario": "You are a Power Platform functional consultant. Users are reporting issues finding functions and data in your canvas app. You want to understand what users are doing with your app so that you can improve the app. You need to enable the gathering of insights into how your app is being used and how users flow from one screen to another.",
+  "q": "Which web portal should you use to perform the following activities? To answer, select the appropriate options from the drop-down menus.",
+  "choices": ["Azure portal", "Power Apps maker portal", "Power Platform admin center"],
+  "rows": [
+    {"s": "To create an Application Insights resource", "a": "Azure portal"},
+    {"s": "To include Application Insights in the app", "a": "Power Apps maker portal"},
+    {"s": "To monitor analytics data for the app", "a": "Azure portal"}
+  ],
+  "why": "Application Insights is an Azure Monitor feature, so you create the Application Insights resource in the AZURE PORTAL (it also gives you the connection string / instrumentation key). To wire that resource into the canvas app you use the POWER APPS MAKER PORTAL: open the app settings and paste the Application Insights connection string so the app streams telemetry. To analyze the collected telemetry (user flows, sessions, events, exceptions) you go back to the AZURE PORTAL and use the Application Insights blades (Usage, User flows, Logs). The Power Platform admin center shows environment-level analytics, not the per-app Application Insights telemetry.",
+  "cs": null,
+  "src": ["Screenshot 2026-07-02 102044.png"]
+}
