@@ -1,0 +1,12 @@
+{
+  "n": 32,
+  "area": "integrations-alm",
+  "type": "multi",
+  "scenario": "You are customizing the Microsoft Dataverse platform for a client to deliver complex business requirements. After going live with the application, the client experiences a performance issue. Your client asks you to investigate the issue and share a detailed report. You run a solution checker tool on the production instance and receive an error stating the solution checker is missing required security roles. You need to determine the cause of the issue and add the required roles.",
+  "q": "Which two security roles should you assign to the user to resolve the issue? Each correct answer presents part of the solution.",
+  "options": ["System Customizer", "Export Customizations", "Environment Maker", "System Administrator", "Solution Checker", "Environment Admin"],
+  "answer": ["Export Customizations", "Solution Checker"],
+  "why": "To run the solution checker the user needs the Solution Checker security role (which grants permission to run the checker and view results) AND the Export Customizations privilege/role, because the checker exports the solution's customizations in order to analyze them. Without Export Customizations the checker cannot read/export the components to scan. System Customizer, Environment Maker, System Administrator, and Environment Admin are broader/administrative roles and are not the specific roles required (and required missing roles reported are these two).",
+  "cs": null,
+  "src": ["Screenshot 2026-07-02 111944.png"]
+}

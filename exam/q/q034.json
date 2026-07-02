@@ -1,0 +1,12 @@
+{
+  "n": 34,
+  "area": "extend-ux",
+  "type": "order",
+  "scenario": "CompanyA is using a model-driven app that manages the goals and goal metrics for their sales representatives. The company wants to use a progress control that is not available out-of-the-box. You create the code for the component using Power Apps Component Framework (PCF) and you have gathered all dependencies. You now need to build, test, and then deploy the PCF control in a new solution.",
+  "q": "Which five actions should you perform in sequence? Move the appropriate actions from the list of actions and arrange them in the correct order.",
+  "options": ["Execute the npm install command.", "Execute the msbuild command.", "Execute the npm start command.", "Execute the pac solution add-reference -path command.", "Execute the pac solution init -publisher-name -publisher-prefix command.", "Execute the msbuild /t:restore command.", "Execute the npm run build command."],
+  "answer": ["Execute the npm run build command.", "Execute the npm start command.", "Execute the pac solution init -publisher-name -publisher-prefix command.", "Execute the pac solution add-reference -path command.", "Execute the msbuild /t:restore command."],
+  "why": "First run 'npm run build' to build the PCF component. Then run 'npm start' to test the control in the local test harness. To package it into a solution, run 'pac solution init --publisher-name --publisher-prefix' to create the solution project, then 'pac solution add-reference --path' to reference the component project from the solution. Finally run 'msbuild /t:restore' to restore packages/build the solution so the control can be deployed. (npm install and a bare msbuild are not part of the required five-step sequence here because dependencies were already gathered.)",
+  "cs": null,
+  "src": ["Screenshot 2026-07-02 112021.png", "Screenshot 2026-07-02 112028.png"]
+}

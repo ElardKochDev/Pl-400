@@ -59,3 +59,6 @@ sub-preguntas (area 'casefiles').
 - [x] Q29 multi   integrations-alm   (auth Web API SPA: client ID+secret / Dataverse user impersonation+admin consent / application user)  src 103537/103546
 - [x] Q30 CASE STUDY cs3 casefiles  (Delivery companies / custom connectors; 4 secciones + 4 sub: Auth model+OpenAPI / API definition+import RESTful Logic Apps / Policy template / Postman)  -> exam/cs/cs3.json DONE  src 103601..103710
 - [x] Q31 SOLUTION-EVAL cs4 casefiles  (event handler func no en library; 2 soluciones: JS web resource a Form library=Yes / editar command bar EnableRule=No)  -> exam/cs/cs4.json DONE  src 103733/103744
+- [x] Q32 multi   integrations-alm   (solution checker missing roles -> Export Customizations + Solution Checker)  src 111944
+- [x] Q33 single  extend-ux          (bloquear UI y avisar durante verificacion -> Xrm.Utility.showProgressIndicator)  src 112005
+- [x] Q34 order   extend-ux          (build/test/deploy PCF: npm run build -> npm start -> pac solution init -> pac solution add-reference -> msbuild /t:restore)  src 112021/112028

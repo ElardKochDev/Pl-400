@@ -1,0 +1,12 @@
+{
+  "n": 33,
+  "area": "extend-ux",
+  "type": "single",
+  "scenario": "An organization is using a model-driven application to manage payments for its clients. The model-driven application sends data into Microsoft Dataverse. The organization wants the user to be asked to wait when payment verification is being performed in the system. Payment verification usually takes 1-3 minutes and during that time, the user should be prevented from making modifications to the invoice and they should be prompted to wait while verification is in progress. You need to write JavaScript code to prompt the user to wait until the payment verification is complete.",
+  "q": "Which function should you use to achieve this goal?",
+  "options": ["Xrm.Utility.showProgressIndicator(\"Your message\")", "Xrm.Navigation.openConfirmDialog(\"Your message\", confirmOptions)", "Xrm.Navigation.openAlertDialog(\"Your message\", alertOptions)"],
+  "answer": "Xrm.Utility.showProgressIndicator(\"Your message\")",
+  "why": "Use Xrm.Utility.showProgressIndicator. It displays a message to the user and BLOCKS the unified interface (UI) so no other changes can be made while verification is in progress; you later call Xrm.Utility.closeProgressIndicator when it completes. openConfirmDialog and openAlertDialog show a dialog the user must dismiss (and do not block the UI for the duration of a background operation), so they cannot keep the user waiting/blocked for the 1-3 minute verification.",
+  "cs": null,
+  "src": ["Screenshot 2026-07-02 112005.png"]
+}
