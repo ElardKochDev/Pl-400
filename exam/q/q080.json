@@ -1,0 +1,12 @@
+{
+  "n": 80,
+  "area": "integrations-alm",
+  "type": "order",
+  "scenario": "A company uses Microsoft Dataverse. The company uses multi-factor authentication (MFA) for all users. An external application needs to connect to custom tables in Dataverse without requiring MFA. You need to enable the external application to authenticate and authorize access to the custom tables in Dataverse.",
+  "q": "Which four actions should you perform in sequence? Move the appropriate actions from the list of possible actions to the answer area and arrange them in the correct order.",
+  "options": ["Assign a built-in security role.", "Create an Application registration in Microsoft Entra ID.", "Assign a custom security role.", "Create a non-interactive user in Dataverse.", "Create an application user in Dataverse.", "Configure API permissions.", "Create an Enterprise application in Microsoft Entra ID.", "Configure Conditional access in Microsoft Entra ID."],
+  "answer": ["Create an Application registration in Microsoft Entra ID.", "Configure API permissions.", "Create an application user in Dataverse.", "Assign a custom security role."],
+  "why": "An application (service principal) authenticates without MFA. First create an Application registration in Microsoft Entra ID (the external app's identity). Configure its API permissions to access the Dataverse API. Create an application user in Dataverse linked to that app registration (application users bypass interactive/MFA sign-in). Finally assign a CUSTOM security role that grants access to just the custom tables (least privilege). A non-interactive user or built-in role is not the right fit; the application user + custom role is the standard S2S pattern.",
+  "cs": null,
+  "src": ["Screenshot 2026-07-02 113521.png", "Screenshot 2026-07-02 113527.png"]
+}

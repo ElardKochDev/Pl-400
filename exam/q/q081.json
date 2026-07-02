@@ -1,0 +1,12 @@
+{
+  "n": 81,
+  "area": "automation",
+  "type": "single",
+  "scenario": "CompanyA sells smart bicycles and uses a model-driven app to generate invoices. The company plans to implement a solution that enhances communication with customers. The solution must allow sales representatives to send invoices as PDF files via email. You need to design a solution that allows the company to generate PDF files for the invoices and send emails to the customers at the click of a command button. The process must allow the monitoring of the integration. You want to use minimum customization to achieve the goal.",
+  "q": "Which process should you use?",
+  "options": ["A Power Automate cloud flow triggered using JavaScript.", "A custom workflow activity executed using JavaScript.", "A Microsoft Dataverse Web API call using JavaScript code.", "A Microsoft Dataverse plug-in triggered using JavaScript code."],
+  "answer": "A Power Automate cloud flow triggered using JavaScript.",
+  "why": "Use a Power Automate cloud flow triggered from JavaScript on the command button. A cloud flow can generate a PDF of the invoice and send it by email with minimum customization (low-code connectors/actions), it can be started at the click of a command button via JavaScript, and Power Automate provides run history for MONITORING the integration. A custom workflow activity or plug-in requires more code/customization, and a raw Web API call would not by itself generate the PDF, send the email, or provide the run monitoring.",
+  "cs": null,
+  "src": ["Screenshot 2026-07-02 113543.png"]
+}

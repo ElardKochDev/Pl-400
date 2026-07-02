@@ -107,3 +107,5 @@ sub-preguntas (area 'casefiles').
 - [x] Q77 order   extend-platform    (Azure aware plugin: create function app+publish profile -> VS project import -> modify code+publish -> register webhook -> register step)  src 113425/113431
 - [x] Q78 order   integrations-alm   (S2S OAuth Node: register app Entra -> add Dataverse permissions -> add key/secret -> create application user con App ID)  src 113445/113450
 - [x] Q79 single  extend-platform    (privilegios workflow activity -> Create+Read+Write+Delete Activity)  src 113509
+- [x] Q80 order   integrations-alm   (external app sin MFA a custom tables: App registration Entra -> API permissions -> application user -> custom security role)  src 113521/113527
+- [x] Q81 single  automation         (generar PDF invoice + email desde command button, min custom, monitoreable -> Power Automate cloud flow triggered con JavaScript)  src 113543
