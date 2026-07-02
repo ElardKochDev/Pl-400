@@ -1,0 +1,17 @@
+{
+  "n": 23,
+  "area": "automation",
+  "type": "match",
+  "scenario": "You are designing a solution for a sales organization. You need to ensure that the solution meets the requirements of the organization with minimal customization.",
+  "q": "Which components should you use? Match the appropriate component to each requirement. Each component may be used once, more than once, or not at all.",
+  "options": ["Business Process flow", "Workflow", "Business rule", "JavaScript", "Plug-in"],
+  "rows": ["Send a thank-you email to a customer when a sale is closed.", "Ensure that a quote is checked and validated before it is sent to the customer.", "Display an error message or a recommendation when the wrong input is entered."],
+  "answer": {
+    "Send a thank-you email to a customer when a sale is closed.": "Workflow",
+    "Ensure that a quote is checked and validated before it is sent to the customer.": "Business Process flow",
+    "Display an error message or a recommendation when the wrong input is entered.": "Business rule"
+  },
+  "why": "To automatically send a thank-you email when a sale is closed, use a WORKFLOW triggered when the sales record status is set to closed. To ensure a quote is checked and validated before it is sent, use a BUSINESS PROCESS FLOW, which guides users through the correct steps/stages. To display an error message or a recommendation when wrong input is entered, use a BUSINESS RULE - it provides a no-code UI to validate input, hide/show fields, set/clear values, and show error messages/recommendations. Plug-in and JavaScript are not needed: all three requirements are achievable with Dataverse out-of-the-box (OOTB) features, so writing C#/JS code would be unnecessary customization.",
+  "cs": null,
+  "src": ["Screenshot 2026-07-02 102903.png", "Screenshot 2026-07-02 102912.png"]
+}

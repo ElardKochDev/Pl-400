@@ -48,3 +48,7 @@ sub-preguntas (area 'casefiles').
 - [x] Q18 single  design-dataverse   (evitar duplicados sin codigo -> Alternate keys)  src 102736
 - [x] Q19 single  apps-powerfx       (componente low-code reusable en MDA/Teams/Power Pages -> Canvas app)  src 102747
 - [x] Q20 single  integrations-alm   (cambios de form no salen -> Delete active unmanaged layer)  src 102804/102815
+- [x] Q21 match   integrations-alm   (solution actions: new component=unmanaged / deploy to test=managed / edit=unmanaged)  src 102822
+- [x] Q22 single  automation         (long-running sequential enrichment con crecimiento -> Durable Functions)  src 102837
+- [x] Q23 match   automation         (thank-you email=Workflow / validar quote=Business Process flow / error input=Business rule)  src 102903/102912
+- [x] Q24 single  integrations-alm   (feed nightly delta a ERP -> Track changes / change tracking)  src 102924

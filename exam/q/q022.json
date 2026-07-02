@@ -1,0 +1,12 @@
+{
+  "n": 22,
+  "area": "automation",
+  "type": "single",
+  "scenario": "Your company uses Power Platform components within a complex enterprise architecture both on and off Azure. A new project requires the development of an application which will perform a number of operations in sequence to enrich Dataverse data using information from various data stores and third-party systems, some of which require real-time queries. Each query and subsequent update could take minutes, depending on the amount of data that needs to be processed. The amount of data could vary hugely, depending on the time of year and data availability. Your company also expects significant growth over the next year and this will substantially increase the load on this new project. You need to identify the most appropriate platform for the development of the new application.",
+  "q": "Which technology should you identify?",
+  "options": ["Durable Functions", "Power Automate Cloud Flows", "Azure Logic Apps", "Azure Functions"],
+  "answer": "Durable Functions",
+  "why": "Durable Functions (an extension of Azure Functions) are designed for long-running, stateful orchestrations that execute a sequence of operations reliably. They handle steps that take minutes, checkpoint their state, and scale automatically with load - ideal for a chained, real-time enrichment process expected to grow. Plain Azure Functions are stateless and are constrained by execution timeouts, so they are not suited to long sequential orchestrations. Power Automate Cloud Flows and Azure Logic Apps are low-code integration tools with their own run-duration/throughput limits and are less appropriate for compute-heavy, minutes-long, high-scale sequential processing.",
+  "cs": null,
+  "src": ["Screenshot 2026-07-02 102837.png"]
+}

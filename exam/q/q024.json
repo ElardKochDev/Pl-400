@@ -1,0 +1,12 @@
+{
+  "n": 24,
+  "area": "integrations-alm",
+  "type": "single",
+  "scenario": "Your company uses a model-driven app to record purchases made at a lemonade stand. Users try to record purchases at the time they are made but, when the stand becomes busy, they sometimes need to add backdated purchases or update which lemonade type was sold using receipts. The company has recently invested in a third-party ERP system. You need to develop an integration that will feed newly created or updated data from the following Dataverse tables into the ERP system in a nightly batch: Contacts; Lemonade (custom table, organization-owned); Purchase (custom table, user-owned, related N:1 with both Contacts and Lemonade); User.",
+  "q": "Which setting should you enable on the Purchase table to allow you to produce an efficient integration?",
+  "options": ["Queues", "Track changes", "Auditing", "Duplicate detection"],
+  "answer": "Track changes",
+  "why": "Enable Track changes (change tracking) on the Purchase table. Change tracking lets the nightly batch retrieve only the records that were created or modified since the last synchronization, using the Dataverse RetrieveEntityChanges (delta) API. That is the efficient way to feed just the new/updated data to the ERP without re-reading the whole table each night - which matters here because purchases can be backdated or updated later. Queues are for work distribution, Auditing records field-level history for compliance (not delta sync), and Duplicate detection prevents duplicate records; none of them provide an efficient incremental data feed.",
+  "cs": null,
+  "src": ["Screenshot 2026-07-02 102924.png"]
+}

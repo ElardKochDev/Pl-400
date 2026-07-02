@@ -1,0 +1,17 @@
+{
+  "n": 21,
+  "area": "integrations-alm",
+  "type": "match",
+  "scenario": "You manage application lifecycle management (ALM) for a company that uses Microsoft Dataverse solutions with Azure DevOps. You need to choose the correct action for each solution task.",
+  "q": "Match each solution task to the action you should perform. Each action may be used once, more than once, or not at all.",
+  "options": ["Create an unmanaged solution", "Create a managed solution", "Clone a patch", "Clone the solution"],
+  "rows": ["Create a new solution component.", "Deploy changes to a test environment.", "Edit a solution component."],
+  "answer": {
+    "Create a new solution component.": "Create an unmanaged solution",
+    "Deploy changes to a test environment.": "Create a managed solution",
+    "Edit a solution component.": "Create an unmanaged solution"
+  },
+  "why": "You should create an UNMANAGED solution to create a new solution component - new components can only be created in an unmanaged solution. You should create a MANAGED solution to deploy changes to a test environment - managed solutions are deployed to all non-development environments. You should create an UNMANAGED solution to edit a solution component - you cannot edit a component in a managed solution, only within an unmanaged solution. You should not clone a patch or clone the solution: cloned patches and cloned solutions are not supported with Azure DevOps.",
+  "cs": null,
+  "src": ["Screenshot 2026-07-02 102822.png"]
+}
