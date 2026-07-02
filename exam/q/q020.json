@@ -1,0 +1,17 @@
+{
+  "n": 20,
+  "area": "integrations-alm",
+  "type": "single",
+  "scenario": "A company uses a managed solution to deploy new and changed components from the development environment to the production environment. Exported solution files are stored securely. An administrator edits a form in the default solution in the production environment. You update the form in the development environment, export the solution, and import it into the production environment. Users report that the changes you made to the form are not displayed. You need to solve the issue.",
+  "q": "What should you do?",
+  "options": [
+    "Delete the active unmanaged layer in the production environment.",
+    "Import the solution file version imported before the administrator made the change into the production environment.",
+    "Delete the managed solution in the production environment.",
+    "Export the solution from the development environment as unmanaged and import it into the production environment."
+  ],
+  "answer": "Delete the active unmanaged layer in the production environment.",
+  "why": "When the administrator edited the form directly in the production environment, an ACTIVE UNMANAGED layer was created on top of the managed layers for that component. The unmanaged (active) layer sits at the top of the solution layering stack and takes precedence, so it hides the changes that arrive through your managed solution import. Deleting that active unmanaged layer removes the override, and the managed layer (your imported changes) becomes effective and is displayed. Re-importing an older solution or deleting the managed solution would remove functionality, and exporting as unmanaged breaks proper ALM and still would not resolve the layering conflict correctly.",
+  "cs": null,
+  "src": ["Screenshot 2026-07-02 102804.png", "Screenshot 2026-07-02 102815.png"]
+}

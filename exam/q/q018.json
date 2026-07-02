@@ -1,0 +1,12 @@
+{
+  "n": 18,
+  "area": "design-dataverse",
+  "type": "single",
+  "scenario": "CompanyA is planning to implement a solution based on Microsoft Dataverse with a model-driven app. You need to make sure that duplicate leads with the same first and last name are not created. You cannot use code.",
+  "q": "What should you use?",
+  "options": ["A duplicate detection rule", "Alternate keys", "A plug-in", "A duplicate detection job"],
+  "answer": "Alternate keys",
+  "why": "Use an alternate key defined on the combination of first name and last name. An alternate key enforces uniqueness at the database level, so Dataverse blocks the creation of a second lead with the same first and last name - and it requires no code. A duplicate detection rule only WARNS the user about potential duplicates (and can be bypassed/ignored) and does not run on API/integration creates, so it does not strictly prevent duplicates. A plug-in would work but requires code, which is not allowed. A duplicate detection job scans EXISTING records to find duplicates after the fact; it does not prevent new duplicates from being created.",
+  "cs": null,
+  "src": ["Screenshot 2026-07-02 102736.png"]
+}

@@ -1,0 +1,12 @@
+{
+  "n": 19,
+  "area": "apps-powerfx",
+  "type": "single",
+  "scenario": "A company uses a model-driven app that integrates with an external application to display news and events to users. You are asked to design a reusable low-code/no-code component that makes it easier for the users to view the information in the model-driven app, Microsoft Teams, and Power Pages sites. You need to design the component.",
+  "q": "Which component should you create to meet the requirements?",
+  "options": ["Web resource", "Power Apps component framework (PCF) control", "IFrame", "Canvas app"],
+  "answer": "Canvas app",
+  "why": "A canvas app is a low-code/no-code Power Platform component that can display external data and be reused/embedded across all the required surfaces: it can be embedded in a model-driven app form, added to Microsoft Teams, and embedded in Power Pages sites. A Power Apps component framework (PCF) control requires pro-code (TypeScript) development, so it is not low-code/no-code. A Web resource (HTML/JS) and an IFrame are model-driven-app constructs and are not a reusable low-code component that works the same across Teams and Power Pages.",
+  "cs": null,
+  "src": ["Screenshot 2026-07-02 102747.png"]
+}

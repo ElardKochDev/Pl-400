@@ -45,3 +45,6 @@ Environment/Requirements) + lista Questions 1..5. En el contador avanza como "Qu
 Se guardan en exam/cs/csN.json (no en q/). El contador global salta segun cuantas sub-preguntas
 consuma; hay que ir viendo el header. Diseno de UI: LECTOR con pestanas de seccion + navegacion de
 sub-preguntas (area 'casefiles').
+- [x] Q18 single  design-dataverse   (evitar duplicados sin codigo -> Alternate keys)  src 102736
+- [x] Q19 single  apps-powerfx       (componente low-code reusable en MDA/Teams/Power Pages -> Canvas app)  src 102747
+- [x] Q20 single  integrations-alm   (cambios de form no salen -> Delete active unmanaged layer)  src 102804/102815
