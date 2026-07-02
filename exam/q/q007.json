@@ -1,0 +1,12 @@
+{
+  "n": 7,
+  "area": "extend-ux",
+  "type": "single",
+  "scenario": "CompanyA is using model-driven apps to manage customers. The company operates in more than 100 countries and requires tax numbers to be configured correctly based on the selected country. You decide to use a Power Apps Component Framework (PCF) control to show the format of the tax number based on the selected country. You need to get the list of formats when a customer record is created and the user enters the tax number.",
+  "q": "Which function should you use to call RetrieveMultipleRecords?",
+  "options": ["init", "getOutputs", "notifyOutputChanged", "updateView"],
+  "answer": "updateView",
+  "why": "Call RetrieveMultipleRecords from updateView. In the PCF component lifecycle, updateView runs whenever any value the control depends on changes (bound properties, dataset, context) - so it fires when the user enters/changes the tax number, which is exactly when you need to fetch the list of formats via context.webAPI.retrieveMultipleRecords. init runs only once when the control is initialized, so it cannot react to later user input. getOutputs is called by the framework to read the values your control returns to the host; it is not where you query data. notifyOutputChanged is a callback you invoke to tell the framework your outputs changed - it does not retrieve records.",
+  "cs": null,
+  "src": ["Screenshot 2026-07-02 101948.png"]
+}

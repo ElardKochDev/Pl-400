@@ -26,3 +26,5 @@ el header "Question X of 103". Cada pregunta ocupa 2-3 capturas consecutivas.
 - single (radio, 1 correcta) · multi (checkbox, "elige N") · order (arrastrar a secuencia)
 - match (arrastrar opción -> fila/hueco; pool reutilizable) · hotspot/code (desplegables en código)
 - yesno (Sí/No por afirmación) · casestudy (contexto compartido + varias preguntas, campo `cs`)
+
+- [x] Q7  single  extend-ux          (PCF: call RetrieveMultipleRecords desde updateView)  src 101948
