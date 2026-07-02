@@ -1,0 +1,15 @@
+{
+  "n": 67,
+  "area": "integrations-alm",
+  "type": "yesno",
+  "scenario": "A company uses several Power Apps canvas apps and Power Automate cloud flows. You create a Data Loss Prevention (DLP) policy that blocks one of the connectors used in the apps and flows. You apply the policy to the production environment.",
+  "q": "For each statement, select Yes if it is true, otherwise No.",
+  "rows": [
+    {"s": "Users will be able to run a published canvas app that is in violation of the DLP policy.", "v": false},
+    {"s": "Cloud flows that are in violation of the DLP policy will be suspended.", "v": true},
+    {"s": "Applying another DLP policy where the connector is classified as Business allows the apps and flows to run.", "v": false}
+  ],
+  "why": "Users can NOT run a published canvas app that violates the DLP policy - they get a 'DLP conflict' error message (statement 1 = No). Cloud flows that violate a DLP policy ARE suspended - a background process automatically sets violating flows to the suspended state and they will not run (statement 2 = Yes). Applying another DLP policy that classifies the connector as Business does NOT fix it: DLP policies combine restrictively, so if ANY applicable policy blocks the connector combination, the apps/flows are still blocked (statement 3 = No).",
+  "cs": null,
+  "src": ["Screenshot 2026-07-02 113041.png"]
+}

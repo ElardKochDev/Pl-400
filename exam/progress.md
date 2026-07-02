@@ -94,3 +94,5 @@ sub-preguntas (area 'casefiles').
 - [x] Q64 single  automation         (Power Automate create lead falla -> revisar columna Lookup)  src 113007
 - [x] Q65 hotspot integrations-alm   (external read/write=Custom API / sync Azure Function on update=Webhook / on-prem seguro=Azure Relay)  src 113018
 - [x] Q66 yesno   automation         (ocultar datos confidenciales en logs: mark sensitive=No / masking rule=No / Secure Outputs=Si)  src 113030
+- [x] Q67 yesno   integrations-alm   (DLP bloquea connector: correr app=No / flows suspendidos=Si / otra DLP Business permite=No)  src 113041
+- [x] Q68 SOLUTION-EVAL cs5 casefiles  (Dataverse+website 3rd-party API, dev local+App Insights; Logic Apps=No / Power Automate=No / Azure Functions=Yes)  -> exam/cs/cs5.json DONE  src 113123..113207

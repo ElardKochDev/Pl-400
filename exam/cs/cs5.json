@@ -1,0 +1,36 @@
+{
+  "cs": "cs5",
+  "n": 68,
+  "area": "casefiles",
+  "title": "Solution Evaluation - Dataverse + website integration via third-party API",
+  "status": "DONE",
+  "format": "solution-evaluation",
+  "sections": [
+    {"title": "Solution Evaluation", "text": "Instructions: This case study contains a series of questions that present the same scenario. Each question in the series contains a unique solution that might meet the stated goals. Some question sets might have more than one correct solution, while others might not have a correct solution. Note: You cannot go back or review questions of this type on the actual certification exam."},
+    {"title": "Scenario / Requirements", "text": "You are integrating Microsoft Dataverse with your company's website through a third-party API. Your company has the following requirements:\n- You should be able to create leads in Dataverse generated from various data sources.\n- You should be able to aggregate lead data submitted from different sources and transform them into Microsoft Dataverse format.\n- The developers should be able to write and execute the code locally on their machines.\n- You should be able to troubleshoot and monitor the integration using Application Insights."}
+  ],
+  "questions": [
+    {
+      "q": "Proposed solution: You use Azure Logic Apps. Does the solution meet the goal?",
+      "type": "single",
+      "options": ["Yes", "No"],
+      "answer": "No",
+      "why": "No. Azure Logic Apps is a low-code, cloud-designer workflow service; developers cannot write and EXECUTE the integration code LOCALLY on their machines, which is a stated requirement. So Logic Apps does not meet all the goals."
+    },
+    {
+      "q": "Proposed solution: You use Power Automate. Does the solution meet the goal?",
+      "type": "single",
+      "options": ["Yes", "No"],
+      "answer": "No",
+      "why": "No. Power Automate is a low-code cloud automation service; like Logic Apps it does not let developers write and run the code locally, and it is not the right tool for custom aggregation/transformation code monitored with Application Insights. It does not meet all the goals."
+    },
+    {
+      "q": "Proposed solution: You use Azure Functions. Does the solution meet the goal?",
+      "type": "single",
+      "options": ["Yes", "No"],
+      "answer": "Yes",
+      "why": "Yes. Azure Functions lets developers write custom code to create leads from various sources and aggregate/transform the data into Dataverse format, run and debug that code LOCALLY on their machines (with the Azure Functions Core Tools), and integrate with Application Insights for troubleshooting and monitoring. It satisfies all four requirements."
+    }
+  ],
+  "src": ["Screenshot 2026-07-02 113123.png", "Screenshot 2026-07-02 113139.png", "Screenshot 2026-07-02 113151.png", "Screenshot 2026-07-02 113207.png"]
+}
