@@ -62,3 +62,7 @@ sub-preguntas (area 'casefiles').
 - [x] Q32 multi   integrations-alm   (solution checker missing roles -> Export Customizations + Solution Checker)  src 111944
 - [x] Q33 single  extend-ux          (bloquear UI y avisar durante verificacion -> Xrm.Utility.showProgressIndicator)  src 112005
 - [x] Q34 order   extend-ux          (build/test/deploy PCF: npm run build -> npm start -> pac solution init -> pac solution add-reference -> msbuild /t:restore)  src 112021/112028
+- [x] Q35 multi   integrations-alm   (custom connector exchange rates -> auth type + OpenAPI definition + HTTP verb)  src 112046
+- [x] Q36 yesno   extend-platform    (console app crea/actualiza contacto; No/No/Si/No - Mark Butler, key not present, no siempre ColumnSet(true))  src 112104
+- [x] Q37 code    extend-platform    (plug-in Execute: GetService(typeof(ITracingService)) + context=(IPluginExecutionContext))  src 112122/112131
+- [x] Q38 multi   integrations-alm   (Developer environment -> Microsoft Dataverse + Region)  src 112149

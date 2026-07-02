@@ -1,0 +1,12 @@
+{
+  "n": 38,
+  "area": "integrations-alm",
+  "type": "multi",
+  "scenario": "A company uses Power Platform and the Power Platform pipelines to deploy solutions between environments. Environments are required for each member of the development team. The development team needs an environment of type Developer. You need to configure the environment for the development team.",
+  "q": "Which two environment features should you configure? Each correct answer presents a complete solution.",
+  "options": ["Microsoft Dataverse", "Region", "Paid license", "Tenant capacity", "Security group", "Managed environments"],
+  "answer": ["Microsoft Dataverse", "Region"],
+  "why": "When creating a Developer environment you must configure its Region (the geographic location where the environment is hosted) and add a Microsoft Dataverse database (a Developer environment is meant for building/testing and needs Dataverse to hold the solution components). A paid license is not required for a Developer environment (it comes with the Developer Plan), tenant capacity and managed environments are governance/capacity concerns, and a security group is optional access control - none are the required features to stand up the Developer environment.",
+  "cs": null,
+  "src": ["Screenshot 2026-07-02 112149.png"]
+}

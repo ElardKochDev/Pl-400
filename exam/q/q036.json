@@ -1,0 +1,16 @@
+{
+  "n": 36,
+  "area": "extend-platform",
+  "type": "yesno",
+  "scenario": "A company is planning to deploy its Power Platform solution to a test environment. They plan to create some sample contacts in the test environment before deploying the solution. You are asked to create a console application in order to create some sample contacts. You apply the code shown in the exhibit (it creates a contact with first name John / last name Butler, then retrieves it and updates the first name to Mark, and later reads a value from a dictionary/attribute collection). You need to anticipate what effects the code will have.",
+  "q": "What results should you expect? For each statement, select Yes if it is true, otherwise No.",
+  "rows": [
+    {"s": "A new contact will be available in the test instance with the full name John Butler.", "v": false},
+    {"s": "Line 13 will display John Butler on the console output screen.", "v": false},
+    {"s": "Line 19 will throw the exception: A given key was not present in the dictionary.", "v": true},
+    {"s": "The service.Retrieve(...) method should always use ColumnSet(true).", "v": false}
+  ],
+  "why": "The contact is created as John Butler, but the next lines retrieve the record and update the first name to Mark, so the contact's full name in the test instance will be Mark Butler, not John Butler (statement 1 = No). Because the first name was changed to Mark, line 13 will not display 'John Butler' (statement 2 = No). Line 19 reads an attribute that was not included in the retrieved ColumnSet, so accessing that key on the attribute collection throws 'A given key was not present in the dictionary' (statement 3 = Yes). You should NOT always use ColumnSet(true): retrieving all columns is inefficient and a bad practice - you should request only the columns you need (statement 4 = No).",
+  "cs": null,
+  "src": ["Screenshot 2026-07-02 112104.png"]
+}

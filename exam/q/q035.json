@@ -1,0 +1,12 @@
+{
+  "n": 35,
+  "area": "integrations-alm",
+  "type": "multi",
+  "scenario": "CompanyA operates in different regions and the currency exchange rate varies on a daily basis. The company plans to integrate the currency exchange rate API from a third-party provider. You need to design a custom connector that retrieves the latest exchange rates for all currencies.",
+  "q": "Which three components should you use? Each correct answer presents part of the solution.",
+  "options": ["an authentication type", "an OpenAPI definition", "a test connector", "an app registration", "an HTTP verb"],
+  "answer": ["an authentication type", "an OpenAPI definition", "an HTTP verb"],
+  "why": "To build the custom connector you define: an authentication type (how the connector authenticates to the third-party exchange-rate API, e.g. API key), an OpenAPI definition (the connector's actions/operations and schema describing the API), and an HTTP verb (the method, e.g. GET, used by the operation that retrieves the rates). A 'test connector' is not a build component (testing happens after creation), and an app registration (Entra) is only needed for OAuth/AAD-secured APIs, not required here.",
+  "cs": null,
+  "src": ["Screenshot 2026-07-02 112046.png"]
+}

@@ -1,0 +1,15 @@
+{
+  "n": 37,
+  "area": "extend-platform",
+  "type": "code",
+  "scenario": "You are tasked to create a plug-in. You create a Visual Studio project to create the plug-in and you plan to edit the class file in order to enable the plug-in. Editing the class file requires you to replace the contents of the Execute method with code including expressions that allow you to write to the tracing log and give you access to the context for the event that executes the plugin. You need to add expressions that meet these requirements and allow you to edit the class file.",
+  "q": "Which expressions should you use to complete the plug-in? Complete the commands by selecting the correct parts from the drop-down menus.",
+  "code": "ITracingService tracingService =\n  (ITracingService)serviceProvider.[[1]]\nIPluginExecutionContext [[2]]\n  serviceProvider.GetService(typeof(IPluginExecutionContext));\nif (context.InputParameters.Contains(\"Target\") &&\n  context.InputParameters[\"Target\"] is Entity)\n{\n  Entity entity = (Entity)context.InputParameters[\"Target\"];\n  IOrganizationServiceFactory serviceFactory =\n    (IOrganizationServiceFactory)serviceProvider.GetService(typeof(IOrganizationServiceFactory));\n  IOrganizationService service = serviceFactory.CreateOrganizationService(context.UserId);\n  try\n  {\n  }\n  catch (FaultException<OrganizationServiceFault> ex)\n  {\n    throw new InvalidPluginExecutionException(\"An error occurred in FollowUpPlugin.\", ex);\n  }\n  catch (Exception ex)\n  {\n    tracingService.Trace(\"FollowUpPlugin: {0}\", ex.ToString());\n    throw;\n  }\n}",
+  "blanks": [
+    {"id": 1, "a": "GetService(typeof(ITracingService));", "options": ["GetService(typeof(ITracingService));", "GetService(typeof(IOrganizationServiceFactory));", "GetService(typeof(IPluginExecutionContext));"]},
+    {"id": 2, "a": "context = (IPluginExecutionContext)", "options": ["context = (IPluginExecutionContext)", "tracingService = (ITracingService)", "serviceFactory = (IOrganizationServiceFactory)"]}
+  ],
+  "why": "In line 2 use GetService(typeof(ITracingService)); to obtain the ITracingService - this is the only expression that gives you the tracing service, which provides the Trace method to log plug-in run-time data. Do NOT use GetService(typeof(IOrganizationServiceFactory)) there - that obtains the organization service factory used for web service calls, not the tracing log. For the second blank, cast to (IPluginExecutionContext) and assign to context: context = (IPluginExecutionContext)serviceProvider.GetService(typeof(IPluginExecutionContext)); - this gives access to the execution context (InputParameters, UserId, etc.) for the event that fired the plug-in.",
+  "cs": null,
+  "src": ["Screenshot 2026-07-02 112122.png", "Screenshot 2026-07-02 112131.png"]
+}
