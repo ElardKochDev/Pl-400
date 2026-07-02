@@ -1,0 +1,12 @@
+{
+  "n": 89,
+  "area": "automation",
+  "type": "multi",
+  "scenario": "A company uses Power Automate cloud flows. The owner of a critical flow leaves the company and the flow stops running. You need to ensure that flows will not be affected by future user changes.",
+  "q": "Which three actions should you perform? Each correct answer presents part of the solution.",
+  "options": ["Share the flow's connections with the application user.", "Add the service principal's client ID and secret to Azure Key Vault.", "Add the application user as a co-owner of the flow.", "Create an application user in the Power Platform environment and assign the service principal.", "Create a service principal in Microsoft Entra ID."],
+  "answer": ["Share the flow's connections with the application user.", "Create an application user in the Power Platform environment and assign the service principal.", "Create a service principal in Microsoft Entra ID."],
+  "why": "Make a non-human identity own/run the flow so it is not tied to a departing user. Create a service principal (app registration) in Microsoft Entra ID, create an application user in the Power Platform environment linked to that service principal, and share the flow's connections with that application user so the flow keeps running under the service principal instead of a person. Storing the secret in Key Vault and adding the app user as co-owner are not the required steps to decouple the flow from user changes.",
+  "cs": null,
+  "src": ["Screenshot 2026-07-02 114030.png"]
+}

@@ -1,0 +1,18 @@
+{
+  "n": 90,
+  "area": "automation",
+  "type": "match",
+  "scenario": "Your company has three Power Platform environments: Development (DEV), User Acceptance Testing (UAT) and Production. You create a solution in DEV containing a scheduled Power Automate cloud flow which is triggered to run every hour and a canvas app, and you import the solution to UAT for testing. You are using an environment variable to store the endpoint of a third-party REST API consumed by both the cloud flow and the canvas app. There are corresponding DEV, UAT and Production endpoints available. On checking the UAT environment the next day, you realize that you forgot to update the environment variable. You update the variable in UAT directly. You need to identify which environment variable will be used for each of the scenarios below.",
+  "q": "Which version of the environment variable should you identify? Drag the appropriate environment variable to each scenario. A value may be used once, more than once, or not at all.",
+  "options": ["DEV", "UAT"],
+  "rows": ["Open Canvas app sessions", "New Canvas app sessions", "Power Automate flow turned off and then back on", "Power Automate flow post save"],
+  "answer": {
+    "Open Canvas app sessions": "DEV",
+    "New Canvas app sessions": "UAT",
+    "Power Automate flow turned off and then back on": "UAT",
+    "Power Automate flow post save": "UAT"
+  },
+  "why": "When an environment variable is updated, components keep using the CACHED (old) value in some cases. Already-OPEN canvas app sessions keep the cached DEV value, because canvas apps only pick up the updated (UAT) value when a NEW session starts - so New Canvas app sessions use UAT. Power Automate cloud flows retrieve the updated value when they are turned off and back on, or after a save event, so both 'turned off and back on' and 'post save' use UAT. (A flow that simply keeps running without being toggled/saved would still use the cached DEV value.)",
+  "cs": null,
+  "src": ["Screenshot 2026-07-02 114045.png", "Screenshot 2026-07-02 114050.png"]
+}

@@ -115,3 +115,6 @@ sub-preguntas (area 'casefiles').
 - [x] Q85 single  automation         (Azure function diario 12AM -> CRON 0 0 0 * * *)  src 113826
 - [x] Q86 code    extend-platform    (change tracking RetrieveEntityChanges: token / EntityChanges.Changes / ChangeType.NewOrUpdated)  src 113841/113850
 - [x] Q87 multi   apps-powerfx       (delegation warning DateAdd -> Set(DateDuration,DateAdd...) + Filter(Orders,ShippingDate<=DateDuration))  src 113918/113922
+- [x] Q88 single  extend-platform    (retrieve record en plugin -> IOrganizationService)  src 113935
+- [x] Q89 multi   automation         (owner de flow se va: crear service principal Entra + application user + compartir connections del flow)  src 114030
+- [x] Q90 match   automation         (env variable cache: open canvas=DEV / new canvas=UAT / flow off&on=UAT / flow post save=UAT)  src 114045/114050

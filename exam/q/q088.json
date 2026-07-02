@@ -1,0 +1,12 @@
+{
+  "n": 88,
+  "area": "extend-platform",
+  "type": "single",
+  "scenario": "You have a Microsoft Dataverse table and a model-driven app. The model-driven app integrates with a third-party application. You need to write an asynchronous plug-in to run a business logic each time the model-driven app creates a record in Dataverse.",
+  "q": "Which interface is required to retrieve a record from Dataverse in plug-in code?",
+  "options": ["IPlugin", "ITracingService", "IServiceProvider", "IPluginExecutionContext", "IOrganizationService"],
+  "answer": "IOrganizationService",
+  "why": "IOrganizationService is the interface used to perform data operations against Dataverse from plug-in code - you call its Retrieve/RetrieveMultiple methods to read records (and Create/Update/Delete to write). IPlugin is the interface the plug-in class implements, ITracingService writes to the trace log, IServiceProvider gives access to the other services, and IPluginExecutionContext exposes the event context (InputParameters, images, etc.) - none of them retrieve records themselves.",
+  "cs": null,
+  "src": ["Screenshot 2026-07-02 113935.png"]
+}
