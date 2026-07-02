@@ -14,6 +14,7 @@ public sealed partial class AB900Game : MonoBehaviour
 {
     const int SlotCount = 3;
     const int AttackDamage = 16;   // daño base por respuesta correcta (+1 cada 2 niveles vía LevelAtkBonus)
+    const int TomeQuestionXp = 15; // XP la PRIMERA vez que se domina cada pregunta de un tomo
     readonly Dictionary<string, object> data = new Dictionary<string, object>();
     readonly Dictionary<string, object> superData = new Dictionary<string, object>();
     readonly Dictionary<string, object> world = new Dictionary<string, object>();
@@ -1753,14 +1754,30 @@ public sealed partial class AB900Game : MonoBehaviour
     }
 
     // Genera un laberinto conectado y coloca tomos, jefe, cofres y salida al azar.
+    // Nº de tomos definidos en los datos de un área (para dimensionar la mazmorra).
+    int AreaTomeCount(string area)
+    {
+        int n = 0;
+        var ad = D(D(data["areas"])[area]);
+        if (ad != null && ad.ContainsKey("things"))
+            foreach (var o in L(ad["things"]))
+                if (S(o as Dictionary<string, object>, "kind") == "tome") n++;
+        return n;
+    }
+
     void GenerateDungeon(string area)
     {
-        const int W = 21, H = 15;
+        // El tamaño de la mazmorra escala con SUS tomos: pocas páginas = mapa pequeño (menos
+        // caminata para llegar al tomo); muchas = mapa grande (hasta el 21x15 clásico). W/H impares
+        // (los exige CarveMaze). 1 tomo -> 11x9 ... 6+ tomos -> 21x15.
+        int nt = AreaTomeCount(area);
+        int W = Mathf.Clamp(11 + 2 * (nt - 1), 11, 21);
+        int H = Mathf.Clamp(9 + 2 * ((nt - 1) / 2), 9, 15);
         var g = CarveMaze(W, H);
         // Atrezzo temático: convierte algunas paredes pegadas al suelo en decoración
         // propia de cada mazmorra (antorchas d1 / cristales d2 / engranajes d3).
         char deco = "ACG"[(PartOf(area) - 1) % 3];   // atrezzo por parte (antorcha/cristal/engranaje)
-        int props = 12;
+        int props = Mathf.Clamp(nt + 3, 4, 12);   // menos atrezzo en mazmorras pequeñas
         for (int k = 0; k < 240 && props > 0; k++)
         {
             int dx = 1 + rng.Next(W - 2), dy = 1 + rng.Next(H - 2);
@@ -2390,11 +2407,18 @@ public sealed partial class AB900Game : MonoBehaviour
                 if (res[i] == null) { warn.text = T("⚠ Completa la pregunta " + (i + 1) + ".", "⚠ Complete question " + (i + 1) + "."); return; }
             done = true;
             bool all = true;
+            int newlyMastered = 0, lvBefore = save.lv;
             for (int i = 0; i < res.Count; i++)
             {
-                if (res[i].Value) MarkCorrect(keys[i]);
+                if (res[i].Value)
+                {
+                    if (!save.correctQ.Contains(keys[i])) newlyMastered++;   // XP solo la 1ª vez que se domina
+                    MarkCorrect(keys[i]);
+                }
                 else { all = false; if (!save.wrongQ.Contains(keys[i])) save.wrongQ.Add(keys[i]); BumpWrong(keys[i]); }
             }
+            int xpGain = newlyMastered * TomeQuestionXp;   // dominar preguntas SUBE de nivel
+            if (xpGain > 0) GainXp(xpGain);
             PlaySfx(all ? sfxRight : sfxWrong);
             if (all)
             {
@@ -2408,24 +2432,36 @@ public sealed partial class AB900Game : MonoBehaviour
                 foreach (var k in keys) save.wrongQ.Remove(k);
                 SaveSlot();
                 if (BossChaseActive() && bossChaser == null) { SpawnBossChaser(); return; }   // último tomo: ¡aparece el jefe!
-                RenderWorld(T("¡Tomo dominado!", "Tome mastered!"));
+                string msg = T("¡Tomo dominado!", "Tome mastered!");
+                if (xpGain > 0) msg += "  +" + xpGain + " XP";
+                if (save.lv > lvBefore) msg += "   " + T("¡SUBES A NIVEL ", "LEVEL UP! Lv ") + save.lv + "!";
+                RenderWorld(msg);
             }
-            else { SaveSlot(); RenderTomeQuizFail(checks, res); }
+            else { SaveSlot(); RenderTomeQuizFail(checks, res, newlyMastered, xpGain, save.lv > lvBefore ? save.lv : 0); }
         }, new Color(.2f, .5f, .35f), 0, 82);
         Button(col, T("VOLVER A LEER", "RE-READ"), () => { tomePage = 0; RenderTome(); }, new Color(.32f, .18f, .42f));
     }
 
-    void RenderTomeQuizFail(List<object> checks, List<bool?> res)
+    void RenderTomeQuizFail(List<object> checks, List<bool?> res, int newlyMastered = 0, int xpGain = 0, int leveledTo = 0)
     {
         screen = "tome-quiz-fail";
         ClearRoot();
         AddBackdrop(BackdropForArea(TomeDomain(activeTome)), 0.4f);
         var p = Panel(root, "TomeQuizFail", new Color(.09f, .05f, .1f, .95f), Anchor.Stretch, new Vector2(30, 18), new Vector2(-30, -18));
         var col = ScrollColumn(p, 12, 26);
-        int wrong = 0; foreach (var r in res) if (r == false) wrong++;
+        int wrong = 0, right = 0; foreach (var r in res) { if (r == false) wrong++; else if (r == true) right++; }
         Label(col, T("Aún no. Repasa y reintenta.", "Not yet. Review and try again."), 26, new Color(1f, .5f, .45f), FontStyle.Bold);
         Label(col, T(wrong + " fallo(s) · necesitas las " + checks.Count + " correctas.",
                      wrong + " wrong · you need all " + checks.Count + " correct."), 17, new Color(1f, .72f, .5f), FontStyle.Bold);
+        // Progreso: las que SÍ acertaste quedan dominadas y ya suman XP aunque el tomo no esté completo.
+        if (right > 0)
+        {
+            string dom = "✓ " + right + T(" pregunta(s) DOMINADA(S)", " question(s) MASTERED");
+            if (xpGain > 0) dom += "  ·  +" + xpGain + " XP";
+            Label(col, dom, 16, new Color(.55f, 1f, .63f), FontStyle.Bold);
+            if (leveledTo > 0)
+                Label(col, T("¡SUBES A NIVEL " + leveledTo + "!", "LEVEL UP! Lv " + leveledTo), 16, new Color(1f, .85f, .35f), FontStyle.Bold);
+        }
         for (int i = 0; i < checks.Count; i++)
         {
             if (res[i] == true) continue;
