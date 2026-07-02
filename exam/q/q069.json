@@ -1,0 +1,16 @@
+{
+  "n": 69,
+  "area": "automation",
+  "type": "code",
+  "scenario": "Your company is working on a project that deals with important vendors from outside the region. You are receiving emails from these vendors constantly, but they are written in different languages and so the content of the emails needs to be translated. You need to create a flow with complex expressions that will export the email content to a solution that translates them.",
+  "q": "Which options should you use to complete the code? Complete the commands by selecting the correct options from the drop-down menus.",
+  "code": "{\n  \"inputs\": {\n    \"host\": {\n      \"connectionName\": \"shared_office365\",\n      \"operationId\": \"ExportEmail_V2\",\n      \"apiId\": \"/providers/Microsoft.PowerApps/[[1]]\"\n    },\n    \"parameters\": {\n      \"messageId\": \"@triggerOutputs()?[[2]]\"\n    },\n    \"authentication\": [[3]]\n  }\n}",
+  "blanks": [
+    {"id": 1, "a": "apis/shared_office365", "options": ["apis/shared_office365", "shared_office365/apis", "apis/Microsoft_office365"]},
+    {"id": 2, "a": "['body/body']", "options": ["['body/body']", "['body/subject']", "['body/from']"]},
+    {"id": 3, "a": "@parameters('$authentication')", "options": ["@parameters('$authentication')", "parameters('authentication')"]}
+  ],
+  "why": "Line 6: use 'apis/shared_office365' - the API path is /providers/Microsoft.PowerApps/apis/<connectionName>, and shared_office365 is the connection name (the order apis/shared_office365 is required). Line 9: use ['body/body'] to export the email's CONTENT (body); ['body/subject'] exports only the subject and ['body/from'] exports the sender, not the content. Line 11: use @parameters('$authentication') to authenticate secure requests (e.g. to Azure Key Vault); the form parameters('authentication') is missing the required @ and $ symbols so authentication would fail.",
+  "cs": null,
+  "src": ["Screenshot 2026-07-02 113223.png", "Screenshot 2026-07-02 113229.png"]
+}

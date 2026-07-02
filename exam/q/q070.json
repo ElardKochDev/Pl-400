@@ -1,0 +1,12 @@
+{
+  "n": 70,
+  "area": "design-dataverse",
+  "type": "multi",
+  "scenario": "You are designing a model-driven app for a financial organization. This app has a custom table that stores customer profiles and transaction-related information. The model-driven app and the custom table are regularly accessed by the support team and the loan department team. Both teams need to access the customer profile columns on the custom table. You need to prevent the support team from being able to update the customer transactional-related information columns on the custom table.",
+  "q": "Which two security features should you use? Each correct answer presents a complete solution.",
+  "options": ["Record-level security", "Business units", "Access teams", "Column-level security", "Security roles", "Role-based form"],
+  "answer": ["Column-level security", "Role-based form"],
+  "why": "Use COLUMN-LEVEL (field) security to secure the transactional columns: create a field security profile that denies the support team Update on those columns while allowing the loan team, so the support team cannot change them. Alternatively, a ROLE-BASED FORM presents the support team a form that does not expose (or makes read-only) the transactional columns, based on their security role. Record-level security, business units, access teams and plain security roles control access at the ROW/table level, not at the individual column level, so they cannot selectively block updating specific columns.",
+  "cs": null,
+  "src": ["Screenshot 2026-07-02 113241.png"]
+}

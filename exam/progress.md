@@ -96,3 +96,5 @@ sub-preguntas (area 'casefiles').
 - [x] Q66 yesno   automation         (ocultar datos confidenciales en logs: mark sensitive=No / masking rule=No / Secure Outputs=Si)  src 113030
 - [x] Q67 yesno   integrations-alm   (DLP bloquea connector: correr app=No / flows suspendidos=Si / otra DLP Business permite=No)  src 113041
 - [x] Q68 SOLUTION-EVAL cs5 casefiles  (Dataverse+website 3rd-party API, dev local+App Insights; Logic Apps=No / Power Automate=No / Azure Functions=Yes)  -> exam/cs/cs5.json DONE  src 113123..113207
+- [x] Q69 code    automation         (flow ExportEmail: apis/shared_office365 / ['body/body'] / @parameters('$authentication'))  src 113223/113229
+- [x] Q70 multi   design-dataverse   (support no actualiza cols transaccionales -> Column-level security + Role-based form)  src 113241
