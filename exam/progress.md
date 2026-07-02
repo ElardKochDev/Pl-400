@@ -57,3 +57,5 @@ sub-preguntas (area 'casefiles').
 - [x] Q27 match   integrations-alm   (sync 3rd-party API=Webhook / mensajes a web Azure=Service Bus / real-time Dataverse=Plug-in)  src 103434/103441
 - [x] Q28 single  automation         (RPA+organizar archivos+scrape a Excel+UI testing -> Desktop flow)  src 103459
 - [x] Q29 multi   integrations-alm   (auth Web API SPA: client ID+secret / Dataverse user impersonation+admin consent / application user)  src 103537/103546
+- [x] Q30 CASE STUDY cs3 casefiles  (Delivery companies / custom connectors; 4 secciones + 4 sub: Auth model+OpenAPI / API definition+import RESTful Logic Apps / Policy template / Postman)  -> exam/cs/cs3.json DONE  src 103601..103710
+- [x] Q31 SOLUTION-EVAL cs4 casefiles  (event handler func no en library; 2 soluciones: JS web resource a Form library=Yes / editar command bar EnableRule=No)  -> exam/cs/cs4.json DONE  src 103733/103744

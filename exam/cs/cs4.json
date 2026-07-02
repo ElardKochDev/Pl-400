@@ -1,0 +1,29 @@
+{
+  "cs": "cs4",
+  "n": 31,
+  "area": "casefiles",
+  "title": "Solution Evaluation - Event handler function not in library",
+  "status": "DONE",
+  "format": "solution-evaluation",
+  "sections": [
+    {"title": "Solution Evaluation", "text": "Instructions: This case study contains a series of questions that present the same scenario. Each question in the series contains a unique solution that might meet the stated goals. Some question sets might have more than one correct solution, while others might not have a correct solution. Note: You cannot go back or review questions of this type on the actual certification exam."},
+    {"title": "Scenario / Goal", "text": "You manage a model-driven app in which you plan to configure an event handler with a specific tab by adding a function that should be executed when the event occurs. You configure the event handler, but you notice that the library that you are using does not contain the function that you want to add. You need to solve this issue."}
+  ],
+  "questions": [
+    {
+      "q": "Proposed solution: Create a new JavaScript web resource; Upload the JavaScript file containing the function to the web resource; Add the web resource to the Form library. Does this solution meet the goal?",
+      "type": "single",
+      "options": ["Yes", "No"],
+      "answer": "Yes",
+      "why": "Yes. The function you want to reference must live in a JavaScript web resource that is added to the form's Form Libraries. Creating the web resource, uploading the .js file that contains the function, and adding that web resource to the form's library makes the function available so it can be selected as the event handler. Once the library containing the function is registered on the form, the missing-function problem is solved."
+    },
+    {
+      "q": "Proposed solution: Edit the command bar; Expand the \"new.department.EnableRule.EntityRule\" enable rule; Check that the EntityLogicalName is the same as the table for the form. Does this solution meet the goal?",
+      "type": "single",
+      "options": ["Yes", "No"],
+      "answer": "No",
+      "why": "No. Editing the command bar and checking an EnableRule/EntityLogicalName relates to ribbon/command button visibility rules, not to form event handlers. The problem is that the form library does not contain the function you want to attach to the event handler, so the fix is to add the JavaScript web resource that contains the function to the form's libraries - not to modify command bar enable rules. This solution does not meet the goal."
+    }
+  ],
+  "src": ["Screenshot 2026-07-02 103733.png", "Screenshot 2026-07-02 103744.png"]
+}

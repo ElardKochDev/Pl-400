@@ -1,0 +1,44 @@
+{
+  "cs": "cs3",
+  "n": 30,
+  "area": "casefiles",
+  "title": "Delivery Companies (Custom connectors & external APIs)",
+  "status": "DONE",
+  "sections": [
+    {"title": "General background", "text": "You work at a company that uses technology created by its development department to sell products on a daily basis. Every six months, your manager evaluates the efficiency of the application and checks whether it needs further service functionality."},
+    {"title": "Current environment", "text": "- The company uses Microsoft 365 and Azure services.\n- The application is built using Microsoft Power Platform components.\n- The application contains connectors that connect it to services provided by Microsoft. These services provide a display for the products, the available delivery companies, and customer services.\n- Feedback from customers is captured and stored in Azure storage using the JSON format.\n- When a product order is placed, it needs approval from the department in charge before the product can be dispatched to the customer. Sometimes, the purchase order takes time to be approved.\n- Your company deals with several delivery companies. These companies do not charge for delivery if the product is not delivered on time.\n- The company uses Power BI to analyze data trends and to keep track of the financial health of the company.\n- The company uses Azure Stream Analytics to analyze data related to products in real time.\n- Azure Stream Analytics jobs have direct access to the workspace within the company's Power BI."},
+    {"title": "Business requirements", "text": "Your manager has identified that the following functionality needs to be added to the application:\n- The created application should connect to the services provided by the delivery companies and retrieve information from their APIs when products are delivered for free.\n- When an employee in the customer service department uses the application to review a customer's orders, customer feedback data should be retrieved from Azure Storage and sent to the application.\n- The customer feedback data needs to be aggregated for each customer."},
+    {"title": "External APIs", "text": "The APIs provided by the delivery companies have the following capabilities and limitations:\n- CompanyA's API has an OpenAPI definition.\n- CompanyB's API does not have an OpenAPI definition.\n- CompanyC's API has an OpenAPI definition and provides different API endpoints for TEST and PRODUCTION.\n- All APIs use API keys for authentication."}
+  ],
+  "questions": [
+    {
+      "q": "You need to create a custom connector that retrieves data from the API of CompanyA. Which two elements should you configure? Each correct answer presents part of the solution.",
+      "type": "multi",
+      "options": ["Delivery reference", "Authentication model", "OpenAPI", "Delivery parameter"],
+      "answer": ["Authentication model", "OpenAPI"],
+      "why": "CompanyA's API already has an OpenAPI definition, so you import/configure the connector from that OpenAPI definition, and you configure the Authentication model as API key (all APIs use API keys). 'Delivery reference' and 'Delivery parameter' are not custom-connector configuration elements."
+    },
+    {
+      "q": "You need to retrieve customer feedback by creating an Azure Function using the JSON format. Which two actions should you perform? Each correct answer presents part of the solution.",
+      "type": "multi",
+      "options": ["Develop an API definition for the Azure Function.", "Create a custom connector that works with JSON syntax.", "Copy the JSON syntax to your application.", "Import the necessary data by developing a Power Automate cloud flow.", "Import a RESTful API hosted in Azure Logic Apps."],
+      "answer": ["Develop an API definition for the Azure Function.", "Import a RESTful API hosted in Azure Logic Apps."],
+      "why": "To surface the Azure Function to Power Platform you develop an API definition (OpenAPI) for the function so a custom connector can consume it, and you import the RESTful API (exposed/hosted via Azure Logic Apps) to build the connector. Copying JSON to the app, creating a JSON-syntax connector by hand, or importing data with a Power Automate flow are not the correct steps to expose the Azure Function's feedback data."
+    },
+    {
+      "q": "You need to enable CompanyC's custom connector to use different URL endpoints in the TEST and PRODUCTION environments. What should you use when configuring the custom connector?",
+      "type": "single",
+      "options": ["Policy template", "Postman collection", "OpenAPI definition", "Environment variable"],
+      "answer": "Policy template",
+      "why": "Use a Policy template when configuring the custom connector. A policy template defines values applied when a connection is made - specifically the 'Set Host URL' policy lets the same connector point at a different host/endpoint (TEST vs PRODUCTION) depending on the environment. A Postman collection or OpenAPI definition only describes the API, and an environment variable is a solution setting, not a connector-level mechanism to swap the host URL."
+    },
+    {
+      "q": "You need to create the custom connector for CompanyB's delivery service. What should you use?",
+      "type": "single",
+      "options": ["Postman", "Azure Active Directory (Azure AD)", "Azure Function", "Azure App Service"],
+      "answer": "Postman",
+      "why": "CompanyB's API does NOT have an OpenAPI definition, so you cannot import one. Use Postman to send requests to CompanyB's API, save the requests/responses into a Postman collection, and then create the custom connector by importing that Postman collection. Azure AD is for authentication, and Azure Function/App Service are hosting services - none of them build the connector from an API that lacks an OpenAPI definition."
+    }
+  ],
+  "src": ["Screenshot 2026-07-02 103601.png", "Screenshot 2026-07-02 103609.png", "Screenshot 2026-07-02 103616.png", "Screenshot 2026-07-02 103622.png", "Screenshot 2026-07-02 103632.png", "Screenshot 2026-07-02 103647.png", "Screenshot 2026-07-02 103658.png", "Screenshot 2026-07-02 103710.png"]
+}
