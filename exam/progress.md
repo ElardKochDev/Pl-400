@@ -75,3 +75,5 @@ sub-preguntas (area 'casefiles').
 - [x] Q45 single  extend-platform    (plug-in sync timeout muchas ops -> Register pre and post entity images)  src 112510
 - [x] Q46 single  extend-platform    (cientos GET/POST concurrentes error inmediato -> Number of concurrent requests)  src 112521
 - [x] Q47 match   apps-powerfx       (SharePoint upload=Standard / Dataverse Notes=Premium / Entra guest user=Custom)  src 112532/112538
+- [x] Q48 code    integrations-alm   (custom connector transform code: class Script : ScriptBase override ExecuteAsync)  src 112555
+- [x] Q49 hotspot integrations-alm   (Dataverse->Service Bus: Register service endpoint / SAS / JSON message format / Register new step)  src 112613  [OJO opciones de dropdown inferidas]

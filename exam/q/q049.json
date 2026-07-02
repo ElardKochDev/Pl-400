@@ -1,0 +1,16 @@
+{
+  "n": 49,
+  "area": "integrations-alm",
+  "type": "hotspot",
+  "scenario": "You use Microsoft Azure to integrate your Microsoft Dataverse solution with other applications. An application uses an existing Azure Service Bus queue to handle updates to data and it processes the updated data using Azure Logic Apps. You need to send updated column data from a custom Dataverse table to the application with minimal configuration.",
+  "q": "How should you configure Dataverse? Select the appropriate options from the drop-down menus.",
+  "rows": [
+    {"s": "To configure Dataverse to send data changes to the Service Bus queue.", "a": "Register a service endpoint", "options": ["Register a service endpoint", "Register a new assembly", "Create a webhook"]},
+    {"s": "To authorize Dataverse to post messages on the Service Bus queue.", "a": "Use a Shared Access Signature (SAS)", "options": ["Use a Shared Access Signature (SAS)", "Use Microsoft Entra ID", "Use an API key"]},
+    {"s": "To enable the data changes to be processed in the Logic App.", "a": "Select JSON as the Message Format", "options": ["Select JSON as the Message Format", "Select XML as the Message Format", "Select .NET Binary as the Message Format"]},
+    {"s": "To post the changed data to Azure.", "a": "Register a new step", "options": ["Register a new step", "Register a new image", "Register a new assembly"]}
+  ],
+  "why": "Use the Plug-in Registration Tool to Register a service endpoint so Dataverse can send the plug-in context (the changed data) to the Service Bus queue. Authorize Dataverse to post to the queue with a Shared Access Signature (SAS) key. Select JSON as the message format so the Logic App can easily parse and process the message. Finally, Register a new step on the service endpoint for the update message of the custom table so the changed data is actually posted to Azure when the row is updated.",
+  "cs": null,
+  "src": ["Screenshot 2026-07-02 112613.png"]
+}

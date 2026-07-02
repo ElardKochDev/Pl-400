@@ -1,0 +1,16 @@
+{
+  "n": 48,
+  "area": "integrations-alm",
+  "type": "code",
+  "scenario": "A company uses a Power Platform custom connector for an API. You need to develop custom code to transform the request.",
+  "q": "Which classes and methods should you use to complete the code? Select the appropriate options from the drop-down menus.",
+  "code": "public class [[1]] : [[2]]\n{\n    public override Task<HttpResponseMessage> [[3]]()\n    {\n\n    }\n}",
+  "blanks": [
+    {"id": 1, "a": "Script", "options": ["Script", "ScriptBase", "Connector"]},
+    {"id": 2, "a": "ScriptBase", "options": ["ScriptBase", "Script", "HttpClient"]},
+    {"id": 3, "a": "ExecuteAsync", "options": ["ExecuteAsync", "Execute", "CreateResponse"]}
+  ],
+  "why": "A custom connector's C# transformation code must be a class named Script that derives from ScriptBase, and it overrides the ExecuteAsync method which returns a Task<HttpResponseMessage>. So the class is 'public class Script : ScriptBase' and the overridden method is 'public override Task<HttpResponseMessage> ExecuteAsync()'. These exact names are required by the custom connector code framework - the runtime looks for the Script class and calls its ExecuteAsync method.",
+  "cs": null,
+  "src": ["Screenshot 2026-07-02 112555.png"]
+}
