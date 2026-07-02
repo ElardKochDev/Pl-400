@@ -1,0 +1,626 @@
+p1/MD1  image.png  <- "Welcome " & varUserDisplayName
+p1/MD1  image.gif  <- Next to the button put a Label, and in the Text property, put varCount
+p1/MD1  image2.png  <- After a few moments, your new app will appear. You can skip past the w
+p1/MD1  image3.png  <- Your Gallery now includes the Trash can icon.
+p1/MD1  image4.png  <- Arrange the new controls you created over top of Gallery1 like this:
+p1/MD2  image5.png  <- Let's take a look at another example, in this example you're trying to
+p1/MD2  image6.png  <- Align your controls like the image below:
+p1/MD2  image7.png  <- Before we move on, notice that the formula bar has a Copilot icon on t
+p1/MD3  image8.png  <- You can either use system-defined values or a custom list of values fo
+p1/MD3  image9.png  <- If you add or change values on a choice list and the new or changed ch
+p1/MD3  imagea.png  <- You can create a list of available choice values as a local or global 
+p1/MD3  imageb.png  <- With Yes selected, notice how the Sync this choice with becomes a mand
+p1/MD3  imagec.png  <- If you determine that you want to keep your choice options as a local 
+p1/MD3  imaged.png  <- How you display values in a control, such as a label, is different for
+p1/MD3  imagee.png  <- For multiple choices columns, the property on the record is of type Ta
+p1/MD3  imagef.png  <- This formula would result in the following display of the list of sele
+p1/MD3  image10.png  <- Be sure to use the full table.column string, and not just the column s
+p1/MD3  image11.png  <- Frequently, you use a dropdown or combo box to filter a gallery so use
+p1/MD3  image12.png  <- First, add a combo box to the screen, and then set the Items property 
+p1/MD3  image13.png  <- Filtering table rows on a choices column is complicated by how the dat
+p1/MD3  image14.png  <- One approach that you could take to avoid the delegation issue is to c
+p1/MD3  image15.png  <- Save the value to the table by using the SubmitForm function on a cont
+p1/MD3  image16.png  <- When a column is added to the form, it's editable by default. If you w
+p1/MD3  image17.png  <- The following example shows that a button has been set up on the galle
+p1/MD3  image18.png  <- If your table column uses a Choice set, when you use Patch, you need t
+p1/MD4  image19.png  <- One-to-many relationships are the most common Dataverse relationships 
+p1/MD4  image1a.png  <- If you want to allow a user to select a location and to have that loca
+p1/MD4  image1b.png  <- As with most data sources, you could use the Filter() function to filt
+p1/MD4  image1c.png  <- Because you are working with a Dataverse one-to-many relationship, you
+p1/MD4  image1d.png  <- Additionally, you can use the relationship starting from the desk row.
+p1/MD4  image1e.png  <- Instead of using the Lookup() formula, you can use the dot notation an
+p1/MD4  image1f.png  <- The simplest way to establish the one-to-many relationship is by using
+p1/MD4  image20.png  <- The advanced properties on the dropdown control show how the Items pro
+p1/MD4  image21.png  <- If you already had the lookup value that you wanted to set (for exampl
+p1/MD4  image22.png  <- Many-to-many relationships provide you with the flexibility to track w
+p1/MD4  image23.png  <- You could use this expression to show a comma-separated list of values
+p1/MD4  image24.png  <- Be aware of performance implications when you use this formula, especi
+p1/MD4  image25.png  <- Another way to use the relationship is to allow a user to pick a desk 
+p1/MD4  image26.png  <- Managing many-to-many relationships on a form is more complex than man
+p1/MD4  image27.png  <- To resolve the issue, update the Choices() function in the Items prope
+p1/MD4  image28.png  <- In the Contoso example, you want to use desk features. After you unloc
+p1/MD4  image29.png  <- After you have adjusted the properties, the form user interface will w
+p1/MD4  image2a.png  <- To work around the issue, clear the Update property and manually proce
+p1/MD4  image2b.png  <- Use the saved collection of the desk features to establish the relatio
+p1/MD4  image2c.png  <- Many-to-many relationships are beneficial for situations where you wan
+p1/MD4  image2d.png  <- A common alternative design pattern is to create your own intersect ta
+p1/MD4  image2e.png  <- Working with these tables from your application is similar to working 
+p1/MD4  image2f.png  <- This Gallery displays a list of all of the invoice records in the tabl
+p1/MD4  image30.png  <- After making that change, Gallery3 now provides the vendor name.
+p1/MD4  image31.png  <- We're going to create a shopping cart. We use a parent table (the rece
+p1/MD4  image32.png  <- Name the app Shopping Cart, ensure Tablet is the format, then select C
+p1/MD4  image33.png  <- Add a Vertical Gallery to the screen and select the Products collectio
+p1/MD4  image34.png  <- Change the Layout to Title and Subtitle.
+p1/MD4  image35.png  <- Position this gallery on the right side of the screen so that it looks
+p1/MD4  image36.png  <- You now have a functioning order history page, with the order header i
+p1/MD5  image64.png  <- To write an expression in Power Automate, select any action that has a
+p1/MD5  image65.png  <- When you enter a function in the formula bar, you see a pop-up with sy
+p1/MD5  image66.png  <- After you enter a Timestamp as a string then type a comma, the flow pr
+p1/MD5  image67.png  <- Once the test is complete, you should see the green bar at the top tha
+p1/MD5  image68.png  <- When you look at the convertToUtc expression you wrote earlier, you mi
+p1/MD5  image69.png  <- To add a note, select the ellipse to show the menu. Then select Add a 
+p1/MD5  image6a.png  <- concat('Today is ', outputs('Compose'))
+p1/MD5  image6b.png  <- In this screenshot, notice how the expression editor shows some of the
+p1/MD5  image6c.png  <- You can either search for a Condition or you can enlist Copilot to add
+p1/MD5  image6d.png  <- Here's the same logic written using a condition action instead of an e
+p1/MD5  image6e.png  <- In this screenshot, you can see this in the Compose action by adding t
+p1/MD5  image6f.png  <- For a final example of a complex expression, take the scenario of havi
+p1/MD5  image70.png  <- Now select Add an input under Manually trigger a flow and add a Number
+p1/MD5  image71.png  <- The output from the first Compose action is 2024-02-11T00:00:00.000000
+p2/MD1  image37.png  <- No: Data source sends only the initial 500 records (default) to Power 
+p2/MD1  image38.png  <- Anytime you use a nondelegable function, Power Apps underlines it with
+p2/MD1  image39.png  <- The warning indicator only processes on the first thing that causes th
+p2/MD1  image3a.png  <- After you set the limit, select the close in the lower right to save y
+p2/MD1  image3b.png  <- One example of a way you can use this is to determine if a performance
+p2/MD1  image3c.png  <- Press and hold Alt Key, and select the Collection button. The txtSpeed
+p2/MD1  image3d.png  <- Press and hold Alt Key, and select the Concurrent button. This creates
+p2/MD2  image3e.png  <- First impressions are important. The first impression that app users g
+p2/MD2  image3f.png  <- If you view analytics for your app from the maker portal, it will incl
+p2/MD2  image40.png  <- The Power Apps Review Tool is another option for evaluating apps. This
+p2/MD2  image41.png  <- App settings can have a significant impact on the performance of your 
+p2/MD2  image2.gif  <- Using a loading image or a progress indicator during long operations i
+p2/MD2  image42.png  <- The simplest way to use a loading image during the loading of your app
+p2/MD2  image43.png  <- Set(showLoader, true);
+
+ClearCollect(colDesks, Desks);
+
+ClearCollect(c
+p2/MD2  image44.png  <- When Monitor is activated, it captures and allows you to view a stream
+p2/MD2  image45.png  <- The captured data includes all necessary context information so that y
+p2/MD2  image46.png  <- Trace("Start of OnStart");
+
+ClearCollect(colDesks,Desks);
+
+Trace("End 
+p2/MD2  image47.png  <- When Monitor is run for the app, you can now view the beginning and en
+p2/MD2  image48.png  <- You can set the StartScreen property to a specific screen to ensure th
+p2/MD2  image49.png  <- The StartScreen property is evaluated once at startup. If you need to 
+p2/MD2  image4a.png  <- If you have an older app, you should update your app to use the new St
+p2/MD2  image4b.png  <- Another significant advantage of direct binding is that you aren't lim
+p2/MD2  image4c.png  <- To use the preloaded data, change your relevant formulas to use the co
+p2/MD2  image4d.png  <- When Monitor is activated, it captures a stream of events from your ru
+p2/MD2  image4e.png  <- The captured data includes essential context information that helps yo
+p2/MD2  image4f.png  <- Before testing your app, start with an empty event log. In Monitor, se
+p2/MD2  image50.png  <- Control names in the event log correspond to the names in your app. De
+p2/MD2  image51.png  <- The global filter searches all columns in the event log. It's useful f
+p2/MD2  image52.png  <- Use column filters to target specific columns. Select the dropdown nex
+p2/MD2  image53.png  <- Check the Status column for HTTP status codes. For more information, s
+p2/MD2  image54.png  <- Common issues include missing or incorrect data in requests. Compare r
+p2/MD2  image55.png  <- Reviewing the Response tab can help you identify business rule violati
+p2/MD2  image56.png  <- Use the Duration column to find slow actions. Filter the column to dis
+p2/MD2  image57.png  <- To capture startup logic performance, ensure Monitor is running and th
+p2/MD2  image58.png  <- Monitor includes a built-in feature that allows you to download the cu
+p2/MD2  image59.png  <- By selecting Invite, you can invite another user in your organization 
+p2/MD2  image5a.png  <- The following diagram shows the Invite process, where you're User A an
+p2/MD2  image5b.png  <- Connect user allows you to select a published app enabled for debug an
+p2/MD2  image5c.png  <- To enable the app, turn on the Debug published app setting. After enab
+p2/MD2  image5d.png  <- To use Connect user, launch Monitor from the app list instead of Power
+p2/MD2  image5e.png  <- When Monitor launches, the Connect user button is available in the com
+p2/MD2  image.jpg  <- Application Insights is a feature of Microsoft Azure Monitor that you 
+p2/MD2  image5f.png  <- From the Azure portal, you can access prebuilt visualizations of the t
+p2/MD2  image2.jpg  <- In addition to the basic telemetry that the Power Apps runtime sends, 
+p2/MD2  image60.png  <- You can use the Alerts feature to help you stay aware of the metrics a
+p2/MD2  image61.png  <- You can query and view the data that is captured by each Trace() funct
+p2/MD2  image62.png  <- In the results, each line will have an itemType of trace. In each row,
+p2/MD2  image63.png  <- In the preceding image, JobId and JobName were context data. All ms- f
+p2/MD3  image72.png  <- Microsoft Power Platform is a low-code platform for building business 
+p2/MD3  image73.png  <- Dataverse lets you securely store and manage data that business applic
+p2/MD3  image74.png  <- The following infographic effectively represents the provided current 
+p2/MD3  image75.png  <- Azure Functions is a supported extensibility endpoint for Power Platfo
+p2/MD3  image76.png  <- Environments are created in an Entra ID (formerly Microsoft Azure) ten
+p2/MD3  image77.png  <- Each environment has its own unique settings that configure the featur
+p2/MD4  image78.png  <- GitHub Copilot chat can also be used as you build your Power Platform 
+p2/MD4  image79.png  <- Select Terminal and select New Terminal.
+p2/MD4  image7a.png  <- pac
+p2/MD4  image7b.png  <- In the upper right corner of the screen, select the Settings icon and 
+p2/MD4  image7c.png  <- In the Power Apps session details dialog, select Instance url value an
+p2/MD4  image7d.png  <- private _container: HTMLDivElement;
+p2/MD4  image7e.png  <- On the right side, enable the Allow publishing of canvas apps with cod
+p2/MD4  image7f.png  <- Select your component.
+p2/MD4  image80.png  <- Select the FirstControl. You should now see the control with the text 
+p2/MD4  image81.png  <- Multiple solutions can co-exist within an environment. To manage these
+p2/MD4  image82.png  <- Microsoft provides a Visual Studio template for creating packages. The
+p2/MD4  image83.png  <- The following diagrams the process to use the tool:
+p2/MD4  image84.png  <- Check Display list of available organizations.
+p2/MD4  image85.png  <- You'll see a list of system plug-ins. If you do this on an environment
+p2/MD4  image86.png  <- Locate Microsoft.CDS.DataLakeDataProvider.Plugins and expand it.
+p2/MD4  image87.png  <- Each of the child items is implemented in the assembly. Expand one of 
+p2/MD4  image88.png  <- Double-click on the step to see the step configuration details includi
+p2/MD5  image90.png  <- Code components are implemented using HTML, CSS, and TypeScript. While
+p2/MD5  image91.png  <- The CLI tool creates a manifest file that describes what files make up
+p2/MD5  image92.png  <- When you perform an action like create a record in an app or create a 
+p2/MD5  image93.png  <- Dataverse plugin class library creation should be successful.
+p2/MD5  image94.png  <- Search for System.Text.RegularExpressions and select Install.
+p2/MD5  image95.png  <- Your execute method should now look like the following.
+p2/MD5  image96.png  <- Choose Register | Register New Assembly.
+p2/MD5  image97.png  <- Select OK.
+p2/MD5  image98.png  <- In Plugin Type select the search icon and locate your plugin.
+p2/MD5  image99.png  <- Your solution component list should look like the following.
+p2/MD5  image9a.png  <- In the solution, select + New | Automation | Cloud Flow | Instant.
+p2/MD5  image9b.png  <- Search for perform and choose Perform an unbound action.
+p2/MD5  image9c.png  <- Your flow should look like the following.
+p2/MD5  image9d.png  <- After your flow completes, select the Perform an unbound action to exp
+p3/MD1  image9e.png  <- This is the high-level structure of the client scripting API object mo
+p3/MD1  image9f.png  <- To upload a script web resource, create a new Forms Library from the f
+p3/MD1  imagea0.png  <- The Add JavaScript Library pop up will appear. Select + New web resour
+p3/MD1  imagea1.png  <- For a table column data to be available to include in a script's logic
+p3/MD1  imagea2.png  <- Once configured as a script web resource, client script libraries can 
+p3/MD1  imagea3.png  <- From the Add library dialog, you can either associate an existing uplo
+p3/MD1  imagea4.png  <- The following is an example of registering an OnLoad event handler for
+p3/MD1  imagea5.png  <- This code displays a form level notification whenever the account numb
+p3/MD1  imagea6.png  <- When you register an event handler, you can have the execution context
+p3/MD1  imagea7.png  <- Your function definition that takes execution context as the first par
+p3/MD1  imagea8.png  <- The Client API form context (formContext) references the form or an it
+p3/MD1  imagea9.png  <- The below diagram is a high-level overview of the properties and metho
+p3/MD1  imageaa.png  <- Enter Innovation Challenge Enhancements for Display name, select CDS D
+p3/MD1  imageab.png  <- Select the Edit objects button.
+p3/MD1  imageac.png  <- Select the Forms tab, select the Information form of Form type Main, a
+p3/MD1  imagead.png  <- Open the Information form that is Form type Main.
+p3/MD1  imageae.png  <- Select the Status section.
+p3/MD1  imageaf.png  <- In the Properties pane, change the Name to section_status. By default,
+p3/MD1  imageb0.png  <- Go to the Tree view and select the General tab.
+p3/MD1  imageb1.png  <- Select the Project start column.
+p3/MD1  imageb2.png  <- Copy the Logical name (sample_projectstart) and paste it into a notepa
+p3/MD1  imageb3.png  <- Select the Back button.
+p3/MD1  imageb4.png  <- Select Open Folder.
+p3/MD1  imageb5.png  <- Select the ClientScriptLab folder you created and Select Folder.
+p3/MD1  imageb6.png  <- Hover over the CLIENTSCRIPTLAB folder and select New File.
+p3/MD1  imageb7.png  <- var formContext = executionContext.getFormContext();
+formContext.getAt
+p3/MD1  imageb8.png  <- Your script should now look like this image.
+p3/MD1  imageb9.png  <- Select + New and then select More | Web resource.
+p3/MD1  imageba.png  <- Enter FormTeamProject.js for Name, enter FormTeamProject.js for Displa
+p3/MD1  imagebb.png  <- Go to the Properties pane, and select the Events tab. Expand OnLoad if
+p3/MD1  imagebc.png  <- Enter team in the search textbox and press Enter. Select FormTeamProje
+p3/MD1  imagebd.png  <- Enter LearnLab_handleTeamProjectOnLoad under Function, check the Pass 
+p3/MD1  imagebe.png  <- The Status section should be hidden because the Project start column i
+p3/MD1  imagebf.png  <- The Status section should become visible.
+p3/MD2  imagec0.png  <- The Client API provides the Xrm object, which is globally available in
+p3/MD2  imagec1.png  <- Solution checker can perform static analysis checks on your solutions 
+p3/MD2  imagec2.png  <- Navigate to Power Apps maker portal and make sure you're in the correc
+p3/MD2  imagec3.png  <- Enter Innovation Challenge Web API for Display name, select CDS defaul
+p3/MD2  imagec4.png  <- Select the Edit objects button.
+p3/MD2  imagec5.png  <- Select the Forms tab, select the Information form of Form type Main, a
+p3/MD2  imagec6.png  <- Select + Add existing and select Table again.
+p3/MD2  imagec7.png  <- Select the Edit objects button.
+p3/MD2  imagec8.png  <- Select the Forms tab, select the Information form of Form type Main, a
+p3/MD2  imagec9.png  <- Select + New and then select Column. You're adding two columns to indi
+p3/MD2  imageca.png  <- Enter Investment Required for Display name, select Choice | Yes/No for
+p3/MD2  imagecb.png  <- Select the Table columns tab.
+p3/MD2  imagecc.png  <- The form should now look like this image. Select Save and publish. Wai
+p3/MD2  imagecd.png  <- Go back to the solution by selecting the back button.
+p3/MD2  imagece.png  <- Select Open Folder.
+p3/MD2  imagecf.png  <- Select the ClientScriptLab folder you created and select the Select Fo
+p3/MD2  imaged0.png  <- Hover over the CLIENTSCRIPTLAB folder and select New File.
+p3/MD2  imaged1.png  <- var formContext = executionContext.getFormContext();
+formContext.getAt
+p3/MD2  imaged2.png  <- Your IdeaForm should now look like this image.
+p3/MD2  imaged3.png  <- The LearnLab_setRequiredFileds function should now look like this imag
+p3/MD2  imaged4.png  <- Your IdeaForm should now look like this image.
+p3/MD2  imaged5.png  <- Select + New and select More | Web resource.
+p3/MD2  imaged6.png  <- Enter IdeaForm.js for Name, enter IdeaForm.js for Display name, select
+p3/MD2  imaged7.png  <- Select + Add library.
+p3/MD2  imaged8.png  <- Enter idea in the search textbox and press Enter. Select IdeaForm.js, 
+p3/MD2  imaged9.png  <- Expand the On Load section and select + Event Handler.
+p3/MD2  imageda.png  <- Enter LearnLab_handleIdeaOnLoad for Function, check the Pass execution
+p3/MD2  imagedb.png  <- The Investment Required and ROI Required should be empty. Select Relat
+p3/MD2  imagedc.png  <- Open one of the Ideas.
+p3/MD2  imagedd.png  <- The columns aren't required because the requirement columns on the Cha
+p3/MD2  imagede.png  <- Select the Details tab and select Yes for both Investment Required and
+p3/MD2  imagedf.png  <- The two columns should now be required.
+p3/MD3  imagee0.png  <- For example, an out-of-the-box app form might look like the image belo
+p3/MD3  imagee1.png  <- However, if you reconfigured your app to use custom code components, y
+p3/MD3  imagee2.png  <- The following image shows the three key areas of a Power Apps componen
+p3/MD3  imagee3.png  <- We recommend using Visual Studio Code or Visual Studio to write your c
+p3/MD3  image3.jpg  <- The following screenshot is an example manifest showing the properties
+p3/MD3  image4.jpg  <- When a maker configures a code component, the properties defined in th
+p3/MD4  imagee4.png  <- To solve this requirement, you'll create an editable field custom comp
+p3/MD4  imagee5.png  <- Select Terminal and select New Terminal.
+p3/MD4  imagee6.png  <- md editable-pcf
+cd editable-pcf
+p3/MD4  imagee7.png  <- The following image shows an example of the output that you should see
+p3/MD4  imagee8.png  <- The project contents should look like the image below.
+p3/MD4  imagee9.png  <- Expand the EditablePCF folder and open the ControlManifest.Input.xml f
+p3/MD4  imageea.png  <- Change the version to 1.0.0 and description-key to Edits project name.
+p3/MD4  imageeb.png  <- Change the name value to Name, display-name-key to Name, and descripti
+p3/MD4  imageec.png  <- <css path="css/EditablePCF.css" order="1" />
+p3/MD4  imageed.png  <- Make sure you still have the ControlManifest.Input.xml file selected a
+p3/MD4  imageee.png  <- The content of the CSS file should now look like the image below.
+p3/MD4  imageef.png  <- ControlManifest.xml - Actual component manifest file that is uploaded 
+p3/MD4  imagef0.png  <- The build should succeed.
+p3/MD4  imagef1.png  <- Select Edit.
+p3/MD4  imagef2.png  <- The test harness should now look like the image below.
+p3/MD4  imagef3.png  <- Select Open Folder.
+p3/MD4  imagef4.png  <- Select the Power Platform tab and select Add Auth Profile.
+p3/MD4  imagef5.png  <- Look for a Sign in to your account popup and select the account you wi
+p3/MD4  imagef6.png  <- The profile you added will show up under Auth Profiles, along with the
+p3/MD4  imagef7.png  <- npm run build
+p3/MD4  imagef8.png  <- pac pcf push --publisher-prefix msl
+p3/MD4  imagef9.png  <- The solution should get imported into your environment and published.
+p3/MD4  imagefa.png  <- You should see PowerAppsTools_msl solution. Select to open the solutio
+p3/MD4  imagefb.png  <- You should see the custom control you created.
+p3/MD4  imagefc.png  <- You should see the solution.zip file here.
+p3/MD4  image5.jpg  <- After the test harness has started, your component will display in a b
+p3/MD4  imagefd.png  <- If your component is a dataset component, you can load CSV files with 
+p3/MD4  imagefe.png  <- After the CSV has successfully loaded, the component will display its 
+p3/MD4  imageff.png  <- Select the Select an element in the page to inspect it icon at the top
+p3/MD4  image100.png  <- Highlight and right-click an element within your component and then se
+p3/MD4  image101.png  <- A frequent mechanism for providing debug context within client script 
+p3/MD4  image102.png  <- You also have the ability to run your own script from within the conso
+p3/MD4  image103.png  <- One of the most valuable utilities in DevTools is the ability to set d
+p3/MD4  image104.png  <- If you select the button of your control, this breakpoint is hit, prov
+p4/MD1  image105.png  <- 5 minutes
+p4/MD1  image106.png  <- This unit is only intended to be a high-level view of the Dataverse ar
+p4/MD2  image107.png  <- Select Class Library (.NET Framework) and select Next.
+p4/MD2  image108.png  <- Enter D365PackageProject for Project Name, select a location to save t
+p4/MD2  image109.png  <- Right-click the project and select Manage NuGet Packages.
+p4/MD2  image10a.png  <- Select the Browse tab, search for and select microsoft.crmsdk.coreasse
+p4/MD2  image10b.png  <- Name the new class PreOperationFormatPhoneCreateUpdate and select Add.
+p4/MD2  image10c.png  <- Make the class public and implement the IPlugin interface.
+p4/MD2  image10d.png  <- Implement the interface member.
+p4/MD2  image10e.png  <- Your class should now look like the following image.
+p4/MD2  image10f.png  <- The Execute method should now look like the following image.
+p4/MD2  image110.png  <- Right-click the project and select Properties.
+p4/MD2  image111.png  <- Select the Signing tab, check the box labeled Sign the assembly and se
+p4/MD2  image112.png  <- Enter contoso.snk in the Key file name field, clear the Protect my key
+p4/MD2  image113.png  <- Select Create New Connection.
+p4/MD2  image114.png  <- Select Office 365, select the Show Advanced check box, provide your cr
+p4/MD2  image115.png  <- Select Register and then select Register New Assembly.
+p4/MD2  image116.png  <- Select Browse.
+p4/MD2  image117.png  <- Browse to the Bin > Debug folder of the class library that you created
+p4/MD2  image118.png  <- Select Register Selected Plugins.
+p4/MD2  image119.png  <- Expand the newly registered assembly.
+p4/MD2  image11a.png  <- Right-click the plug-in and select Register New Step.
+p4/MD2  image11b.png  <- Select Create for Message and select contact for Primary Entity.
+p4/MD2  image11c.png  <- Select PreOperation for Event Pipeline Stage of Execution and then sel
+p4/MD2  image11d.png  <- Right-click the plug-in and select Register New Step again.
+p4/MD2  image11e.png  <- Select Update for Message, select contact for Primary Entity, and then
+p4/MD2  image11f.png  <- Clear the Select All check box, select the Business Phone check box, a
+p4/MD2  image120.png  <- Select Apps and launch the Fundraiser application.
+p4/MD2  image121.png  <- Select Dashboard and open one of the contacts.
+p4/MD2  image122.png  <- Select + New.
+p4/MD2  image123.png  <- Enter Test for First Name, Contact for Last Name, (123)-555-0100 for B
+p4/MD2  image124.png  <- The record should be saved, and the Business Phone should show only th
+p4/MD2  image125.png  <- The record should be updated, and the Business Phone should show only 
+p4/MD2  image126.png  <- Right-click the project and select Add > Class.
+p4/MD2  image127.png  <- Implement the interface member. Your class should now look like the fo
+p4/MD2  image128.png  <- The retrieved part of the Execute method should now look like the foll
+p4/MD2  image129.png  <- The retrieve multiple part of the Execute method should now look like 
+p4/MD2  image12a.png  <- Start the plug-in registration tool and select Create New Connection.
+p4/MD2  image12b.png  <- Select the assembly that you registered in Exercise 1 and then select 
+p4/MD2  image12c.png  <- Browse to the debug folder of your project, select D365PackageProject.
+p4/MD2  image12d.png  <- Select the plug-ins and then select Update Selected Plugins.
+p4/MD2  image12e.png  <- Select Retrieve for Message, select contact for Primary Entity, and th
+p4/MD2  image12f.png  <- Select Apps. Then select the Fundraiser application, and then select E
+p4/MD2  image130.png  <- Select Existing table. Then select the Contact table, and then select 
+p4/MD2  image131.png  <- Select Play.
+p4/MD2  image132.png  <- The existing records that weren't saved with the new format won't chan
+p4/MD2  image133.png  <- Select Contacts again. The record that you created should have the new
+p4/MD2  image134.png  <- Select one of the existing contacts to open it.
+p4/MD2  image135.png  <- Edit the Business Phone, as follows:
+p4/MD2  image136.png  <- Select Save. The new format should be applied. Select Contacts one mor
+p4/MD2  image137.png  <- The edited phone should have the new format.
+p4/MD3  image138.png  <- The following graphic is a decision tree that can help you determine w
+p4/MD3  image139.png  <- You can find the version number of your Web API endpoint by going to y
+p4/MD3  image13a.png  <- From the Developer Resources page. Your version number is indicated un
+p4/MD3  image13b.png  <- Select New Collection.
+p4/MD3  image13c.png  <- Select the Environment settings button.
+p4/MD3  image13d.png  <- If the variables show errors, select the url.
+p4/MD3  image13e.png  <- The variable should now look like the image below. Select Close.
+p4/MD3  image13f.png  <- Select New HTTP Request.
+p4/MD3  image140.png  <- Select the chevron icon next to the Auth tab name and then select OAut
+p4/MD3  image141.png  <- Select Implicit from the Grant Type drop-down menu, set AUTHORIZATION 
+p4/MD3  image142.png  <- Select GET as the HTTP method and add {{webapiurl}}WhoAmI in the editi
+p4/MD3  image143.png  <- If your request is successful, you see the data from the WhoAmIRespons
+p4/MD3  image144.png  <- To register an app with Entra ID, go to the App Registrations section 
+p4/MD3  image145.png  <- Specify the name of your app and what type of account access you need.
+p4/MD3  image146.png  <- If your application accesses Dataverse on behalf of a signed-in user, 
+p4/MD3  image147.png  <- The label says Dynamics CRM, which is a historical name of the precurs
+p4/MD3  image148.png  <- Configuration of Dataverse Application Users is done from the Power Pl
+p4/MD3  image149.png  <- If you're querying data and have a model-driven app that includes the 
+p5/MD1  image14a.png  <- Search for service bus and select Service Bus.
+p5/MD1  image14b.png  <- Enter the appropriate details for your namespace and then select Next.
+p5/MD1  image14c.png  <- It might take a few minutes for your resource to provision. When it's 
+p5/MD1  image14d.png  <- After your resource has been created, go to your newly created namespa
+p5/MD1  image14e.png  <- Note a few items that are found in your namespace so that Dataverse ha
+p5/MD1  image14f.png  <- From within your Shared access policy, copy your Primary Connection St
+p5/MD1  image150.png  <- When connected to the environment, register your Service Bus Endpoint 
+p5/MD1  image151.png  <- Copy and paste the Primary Connection String value that you referenced
+p5/MD1  image152.png  <- Enter your queue name into the Queue Name field and specify Message Fo
+p5/MD1  image153.png  <- Enter the following details to register a new integration step that is
+p5/MD1  image154.png  <- To see if the integration ran, go to Admin center.
+p5/MD1  image155.png  <- Expand the Audit and logs section and System jobs.
+p5/MD1  image156.png  <- Verify that your integration step ran successfully by viewing it in th
+p5/MD1  image157.png  <- Because the integration step ran successfully, you can now verify that
+p5/MD1  image158.png  <- Create a new Azure Function project by using the Azure Functions templ
+p5/MD1  image159.png  <- Give your Function project a descriptive name and then select Create.
+p5/MD1  image15a.png  <- Select the latest .NET Core LTS, select Http trigger, uncheck the Use 
+p5/MD1  image15b.png  <- Right-click your project and select Publish... from the context menu t
+p5/MD1  image15c.png  <- Select your subscription and then select Create new.
+p5/MD1  image15d.png  <- Name your new App Service, select your resource group or create a new 
+p5/MD1  image15e.png  <- Select Publish to deploy your Function to Azure. The Function is publi
+p5/MD1  image15f.png  <- Search for function app and select Function app.
+p5/MD1  image160.png  <- Choose the hosting plan you want the app to run under. Then select Sel
+p5/MD1  image161.png  <- To create an Azure Function App, specify its name and runtime stack, a
+p5/MD1  image162.png  <- Verify that your function has been published by going to the Azure por
+p5/MD1  image163.png  <- Register a new webhook by selecting Register New Web Hook under the Re
+p5/MD1  image164.png  <- Get your Function's URL from the Azure portal by selecting Get functio
+p5/MD1  image165.png  <- Cut and paste the code query string value from the copied URL and plac
+p5/MD1  image166.png  <- Register a new step that posts a message on creation of a new account.
+p5/MD1  image167.png  <- Select Create for Message, select account for Primary Entity, select S
+p5/MD1  image168.png  <- Go to your Function in the Azure portal and view the logs.
+p5/MD4  image169.png  <- One of the first decisions that you'll make is the name of your connec
+p5/MD4  image16a.png  <- The following image shows where the summary and description elements a
+p5/MD4  image16b.png  <- After you've selected an action or trigger, you'll be able to see both
+p5/MD4  image16c.png  <- You can set the Visibility option on an action to influence how the ac
+p5/MD4  image16d.png  <- The following image shows an example of what the screen looks like whe
+p5/MD4  image16e.png  <- This configuration is important because it translates into what the us
+p5/MD4  image16f.png  <- By editing each of the parameters, or by having the API developer prov
+p5/MD4  image170.png  <- The following image shows an example of what the screen would look lik
+p5/MD4  image171.png  <- The response defines what you expect to be returned from the API. Unli
+p5/MD4  image172.png  <- Selecting one of the responses will reveal the details and, similar to
+p5/MD4  image173.png  <- The items in the response correspond to what shows in the Dynamic cont
+p5/MD4  image174.png  <- Notice that a validation section similar to the following image appear
+p5/MD4  image175.png  <- Make sure that this screen doesn't show errors, and then take the time
+p5/MD4  image176.png  <- These advanced topics are covered in detail later in this learning pat
+p5/MD4  image177.png  <- Select the documentation link.
+p5/MD4  image178.png  <- The following image shows an example of the OpenAPI version of what wa
+p5/MD4  image179.png  <- Copy and save your API key because you need it later.
+p5/MD4  image17a.png  <- Enter Contoso invoicing for the Display name, select CDS Default Publi
+p5/MD4  image17b.png  <- Select + New > Automation > Custom connector.
+p5/MD4  image17c.png  <- Enter Contoso invoicing for the Connector name and then select to Uplo
+p5/MD4  image17d.png  <- Select Create connector.
+p5/MD4  image17e.png  <- Select the arrow next to Connector Name.
+p5/MD4  image17f.png  <- Select the ellipsis (...) button of the connector and then select Upda
+p5/MD4  image180.png  <- Fill in the host URL as contosoinvoicingtest.azurewebsites.net and the
+p5/MD4  image181.png  <- Notice the blue information icon next to GetInvoice that indicates the
+p5/MD4  image182.png  <- Enter Get Invoice as the Summary to improve the usability.
+p5/MD4  image183.png  <- Delete both NewInvoice operations because you don't use them.
+p5/MD4  image184.png  <- Select Update connector.
+p5/MD4  image185.png  <- Select + New connection.
+p5/MD4  image186.png  <- Select the Refresh button.
+p5/MD4  image187.png  <- Select ListInvoiceTypes > Test Operation.
+p5/MD4  image188.png  <- Custom connectors can be used by Power Apps, Power Automate, and Azure
+p5/MD4  image189.png  <- Get an API key from Contoso Invoicing.
+p5/MD4  image18a.png  <- Select + New > Automation > Cloud flow > Instant.
+p5/MD4  image18b.png  <- Name the flow Email invoice list, select Manually trigger a flow, then
+p5/MD4  image18c.png  <- Select the Custom tab and then select the Contoso invoicing custom con
+p5/MD4  image18d.png  <- Select List invoices for the action.
+p5/MD4  image18e.png  <- The flow run should succeed.
+p5/MD4  image18f.png  <- When you open the flow, it opens in the copilot power automate designe
+p5/MD5  image190.png  <- There are hundreds of prebuilt connectors available to connect Power A
+p5/MD5  image191.png  <- You can create a custom connector by either adding Power Platform as a
+p5/MD5  image192.png  <- Once the custom connector is generated, you can see it on the Power Ap
+p5/MD5  image193.png  <- The connection knows the credentials and has a reference to the connec
+p5/MD5  image194.png  <- In your project, from Solution Explorer, right-click the Connected Ser
+p5/MD5  image195.png  <- Custom Connector: select the + icon and enter InventoryLocations_Conne
+p5/MD5  image196.png  <- Access: Public
+p5/MD5  image197.png  <- Select OK and Finish. Once the connected service is configured, you ma
+p5/MD5  image198.png  <- Run your Visual Studio solution and start debugging.
+p5/MD5  image199.png  <- When the browser opens, a warning page opens with the first request se
+p5/MD5  image19a.png  <- Select Blank app. From Canvas app from blank select Create.
+p5/MD5  image19b.png  <- Enter the app name Inventory app and select Tablet format. Select Crea
+p5/MD5  image19c.png  <- From the command bar, select ... and Open.
+p5/MD5  image19d.png  <- Browse to open the *.msapp file you created in Step 3. This will load 
+p5/MD5  image19e.png  <- From the left bar, select the data icon and Add data. Search for Inven
+p5/MD5  image19f.png  <- To preview this app, select the play icon.
+p5/MD5  image1a0.png  <- Select the GET app button to view a list of inventory locations.
+p5/MD5  image1a1.png  <- Select the close icon on the top-right of the app to return to the Stu
+p5/MD5  image1a2.png  <- You need a subscription key in order for Power Apps to access any web 
+p5/MD5  image1a3.png  <- Then, copy the subscription key from either Primary key or Secondary k
+p5/MD5  image1a4.png  <- To generate a custom connector from Azure API Management, go to the AP
+p5/MD5  image1a5.png  <- Select the three dots (...), and you'll see the context menu. Select t
+p5/MD5  image1a6.png  <- Choose your Power Apps environment for the custom connector to publish
+p5/MD5  image1a7.png  <- After logging into Power Apps dashboard, open the Data blade and selec
+p5/MD5  image1a8.png  <- When a pop-up modal shows up, you'll see the API Key field enabled. En
+p5/MD5  image1a9.png  <- Go to the Connections menu, and you'll see the new connection has been
+p5/MD5  image1aa.png  <- OpenAPI defines a standard and programming language-agnostic interface
+p5/MD5  image1ab.png  <- Power Apps lets you instantly create a custom connector with this Open
+p5/MD5  image1ac.png  <- Once you create the custom connector from the OpenAPI document, you ca
+p5/MD5  image1ad.png  <- As you can see the following diagram, the OpenAPI document doesn't hav
+p5/MD5  image1ae.png  <- After logging into Power Apps dashboard, open the Data blade and click
+p5/MD5  image1af.png  <- When a pop-up modal appears, give the name, InventoryManager, to the C
+p5/MD5  image1b0.png  <- As the OpenAPI document has everything you need to create the custom c
+p5/MD5  image1b1.png  <- Once the custom connector is created, you will see the message, ✅ Cust
+p5/MD5  image1b2.png  <- Click the Custom Connectors menu on the left-hand side of the page, an
+p5/MD5  image1b3.png  <- When a pop-up modal shows up, you will see the API Key field. Enter th
+p5/MD5  image1b4.png  <- Go to the Connections menu, and you will see the new connection has be
+p5/MD5  image1b5.png  <- The last step of creating a custom connector is to check whether it wo
+p5/MD5  image1b6.png  <- During this testing stage, you can test the connection and the API ope
+p5/MD5  image1b7.png  <- To test whether your custom connector works as expected or not, go to 
+p5/MD5  image1b8.png  <- Click the 4. Test tab, and you will see the connector has an active co
+p5/MD5  image1b9.png  <- Choose the first operation on the left-hand side and click the Test op
+p5/MD5  image1ba.png  <- If for whatever reason the web API stops working you will see an error
+p5/MD5  image1bb.png  <- First of all, create a blank canvas app. In Power Apps studio go to th
+p5/MD5  image1bc.png  <- When a modal pops up, give the name, Inventory, to the App name field 
+p5/MD5  image1bd.png  <- Navigate the Data menu to add the custom connector. You will see nothi
+p5/MD5  image1be.png  <- Click the Add data button and enter inventory in the search box, and y
+p5/MD5  image1bf.png  <- Click the InventoryManager connector, and you will see the InventoryMa
+p5/MD5  image1c0.png  <- Your custom connector is successfully added to your Power Apps. Naviga
+p5/MD5  image1c1.png  <- ClearCollect(warehouses, InventoryManagement.getapiwarehouselocations(
+p5/MD5  image1c2.png  <- Click Gallery and select the Vertical control.
+p5/MD5  image1c3.png  <- Once the Vertical control is added, it asks the data source.
+p5/MD5  image1c4.png  <- Select the warehouses collection declared above. Then the Vertical con
+p5/MD5  image1c5.png  <- While holding your Alt key on Windows (or Option key on Mac), click th
+p6/MD1  image1c6.png  <- Custom connectors are supported by Microsoft Azure API Management infr
+p6/MD1  image1c7.png  <- When the target API is on-premises, the use of the connection is the s
+p6/MD1  image1c8.png  <- The values that you enter under the Parameter label column aren't the 
+p6/MD1  image1c9.png  <- API Key is a popular authentication scheme that is used by web service
+p6/MD1  image1ca.png  <- In the previous example, the user who is creating a new connection wil
+p6/MD1  image1cb.png  <- The OAuth 2.0 authentication scheme is only available for online conne
+p6/MD1  image1cc.png  <- Most of the specific providers only require client ID, client secret, 
+p6/MD1  image1cd.png  <- When a new connection is created, the user will need to provide Window
+p6/MD1  image1ce.png  <- The internals of the Azure AD secured custom connector are similar to 
+p6/MD1  image1cf.png  <- If an organization already has a service implementation by using eithe
+p6/MD1  image1d0.png  <- Callers can access the underlying service only through a custom connec
+p6/MD1  image1d1.png  <- After the custom connector has been registered in Azure AD, you can co
+p6/MD1  image1d2.png  <- Enter Contoso graph for Display name, select CDS Default Publisher for
+p6/MD1  image1d3.png  <- Select Sign in.
+p6/MD1  image1d4.png  <- Make sure that GET is selected for the verb, add /insights/used to the
+p6/MD1  image1d5.png  <- You should now get the OK - 200 status.
+p6/MD1  image1d6.png  <- Select + New and select Word document. You're creating this document s
+p6/MD1  image1d7.png  <- Select the response JSON, right-click, select Copy, and then save it.
+p6/MD1  image1d8.png  <- Select Show portal menu and then select Microsoft Entra ID.
+p6/MD1  image1d9.png  <- Select App registration > + New registration.
+p6/MD1  image1da.png  <- Enter Learn last used connector for Name, select Web enter https://glo
+p6/MD1  image1db.png  <- Select Sites.Read.All, Sites.ReadWrite.All, and then select Add permis
+p6/MD1  image1dc.png  <- You should now have three API permissions. Select Certificates & secre
+p6/MD1  image1dd.png  <- Select + New client secret.
+p6/MD1  image1de.png  <- Copy the Value and save it for later because it won't be shown again. 
+p6/MD1  image1df.png  <- Copy the Application (Client) ID and save it on a notepad. You'll use 
+p6/MD1  image1e0.png  <- Select + New > Automation > Custom connector.
+p6/MD1  image1e1.png  <- Enter Contoso graph for Connector name.
+p6/MD1  image1e2.png  <- Select Security.
+p6/MD1  image1e3.png  <- Enter https://graph.microsoft.com for Resource URL and then select Cre
+p6/MD1  image1e4.png  <- Select Definition > + New action.
+p6/MD1  image1e5.png  <- Go to the Request section and select + Import from sample.
+p6/MD1  image1e6.png  <- Scroll down and select the default response.
+p6/MD1  image1e7.png  <- Select + Import from sample.
+p6/MD1  image1e8.png  <- Paste the response that you copied from Graph Explorer in the Body fie
+p6/MD1  image1e9.png  <- Select the Test tab and then select + New connection.
+p6/MD1  image1ea.png  <- Select Test operation.
+p6/MD1  image1eb.png  <- You should see a 200 status, and the response should look like the fol
+p6/MD1  image1ec.png  <- Custom connectors that are created outside of a solution can be shared
+p6/MD1  image1ed.png  <- Custom connectors can be shared with individual users, user groups, or
+p6/MD1  image1ee.png  <- User access to the connectors and connection references that are inclu
+p6/MD2  image1ef.png  <- Applying a policy template to a custom connector allows you to select 
+p6/MD2  image1f0.png  <- When you're applying a policy template, you can choose to have it appl
+p6/MD2  image1f1.png  <- In the list of configured policies, you can select the ellipsis (...) 
+p6/MD2  image1f2.png  <- The following screenshot is an example of the policyTemplateInstances 
+p6/MD2  image1f3.png  <- By using the @headers('headerName') expression, you can access values 
+p6/MD2  image1f4.png  <- Similar to working with headers, you can use the @queryParameters('que
+p6/MD2  image1f5.png  <- As a result, you'll see the following input field when you create a co
+p6/MD2  image1f6.png  <- Using this configuration results in the following connection dialog bo
+p6/MD2  image1f7.png  <- Each policy can be run against the request (input data) or the respons
+p6/MD2  image1f8.png  <- If you use the peek feature on the action step, you can see how the da
+p6/MD2  image1f9.png  <- If you look at the Microsoft Planner API docs for this operation, noti
+p6/MD2  image1fa.png  <- The Convert array to object policy would resemble the following exampl
+p6/MD2  image1fb.png  <- Policy templates that run on the response allow you to reshape the out
+p6/MD2  image1fc.png  <- A string with multiple values is more difficult for apps and flows to 
+p6/MD2  image1fd.png  <- This action would result in a new array named taglist being added to t
+p6/MD2  image1fe.png  <- Now that you've explored some examples of policy templates in use, you
+p6/MD2  image1ff.png  <- Each convert policy template has a target object or collection paramet
+p6/MD2  image200.png  <- Alternatively, if the response was an object with a property named inv
+p6/MD2  image201.png  <- If your configuration of a policy template creates an error, you'll ty
+p6/MD2  image202.png  <- Another common way of using the Set host URL policy template is dynami
+p6/MD2  image203.png  <- Another scenario that you can accomplish with the Route request policy
+p6/MD2  image204.png  <- You can also include parameters and other expressions to help you buil
+p6/MD2  image205.png  <- The Set property policy template can be used to set or update values i
+p6/MD2  image206.png  <- If you looked at the response after the policy template was implemente
+p6/MD2  image207.png  <- The preceding example shows that the ListInvoice operation returns an 
+p6/MD2  image208.png  <- The output that you would have after making that change would be simil
+p6/MD2  image209.png  <- You can also reference other values in the body that are already set. 
+p6/MD2  image20a.png  <- This feature can give you control over when the value is used, making 
+p6/MD2  image20b.png  <- You can use the Set HTTP header policy template to add or update value
+p6/MD2  image20c.png  <- You should see the Contoso Invoicing - Policy custom connector compone
+p6/MD2  image20d.png  <- Select the Add Python xx to Path check box, select install, and then w
+p6/MD2  image20e.png  <- pip install paconn
+p6/MD2  image20f.png  <- You should get a successful sign-in message.
+p6/MD2  image210.png  <- "hostUrl": {
+        "type": "string",
+        "uiDefinition": {
+     
+p6/MD2  image211.png  <- Select the Contoso Invoicing - Policy custom connector and then select
+p6/MD2  image212.png  <- Scroll down to the Policies section and then select + New policy.
+p6/MD2  image213.png  <- Enter Host URL Policy for Name and then select Set host URL for Templa
+p6/MD2  image214.png  <- Enter @connectionParameters('hostUrl') for URL Template and then selec
+p6/MD2  image215.png  <- Select + New connection.
+p6/MD2  image216.png  <- Select Refresh connections.
+p6/MD2  image217.png  <- Select ListInvoice > Test operation.
+p6/MD2  image218.png  <- The test should return invoices.
+p6/MD3  image219.png  <- You can make the Swagger editor visible by turning on the Swagger Edit
+p6/MD3  image21a.png  <- When the editor is engaged, the OpenAPI definition in YAML Ain't Marku
+p6/MD3  image21b.png  <- When using the editor, it's best to make small, focused changes. The e
+p6/MD3  image21c.png  <- {chunkTransfer: true}
+p6/MD3  image21d.png  <- If you were working with the downloaded apiDefinition.swagger.json fil
+p6/MD3  image21e.png  <- After this change has been made, indication of the change won't be sho
+p6/MD3  image21f.png  <- The following example shows the defined ListInvoices operation and how
+p6/MD3  image220.png  <- Editing apiDefinition.swagger.json would look similar to the following
+p6/MD3  image221.png  <- Consider the API that has two methods that return the input path param
+p6/MD3  image222.png  <- When you run a Microsoft Power Automate flow that calls both actions w
+p6/MD3  image223.png  <- When you configure a parameter for an action on a custom connector, th
+p6/MD3  image224.png  <- You can configure an enum by using the custom connector designer by ed
+p6/MD3  image225.png  <- You can also use the Swagger editor and add the enum, as shown in the 
+p6/MD3  image226.png  <- Additionally, if you looked at the maker experience in Power Automate,
+p6/MD3  image227.png  <- The API that you're working with must provide an operation that return
+p6/MD3  image228.png  <- In the custom connector designer for the Invoice Type ID parameter, yo
+p6/MD3  image229.png  <- You can also configure the x-ms-dynamic-values extension by using the 
+p6/MD3  image22a.png  <- Now with the extension configured, the maker is presented with a more 
+p6/MD3  image22b.png  <- To configure the x-ms-dynamic-list extension, you must directly change
+p6/MD3  image22c.png  <- In the Contoso Invoicing API example, after the OpenAPI definition was
+p6/MD3  image22d.png  <- The preceding image shows parameters that aren't relevant for adding a
+p6/MD3  image22e.png  <- The response from the operation that is used for dynamic schema must b
+p6/MD3  image22f.png  <- The following image shows how the AddInvoice parameter configuration l
+p6/MD3  image230.png  <- To implement the call to the dynamic schema extension, you can replace
+p6/MD3  image231.png  <- Select the Contoso Invoicing - Extensions connector and then select Ed
+p6/MD3  image232.png  <- Return to the connector, select the Test tab, and then select + New co
+p6/MD3  image233.png  <- Scroll down to the Operations section, select ListInvoiceTypes, and th
+p6/MD3  image234.png  <- You should get a response containing invoice types. Later, you'll use 
+p6/MD3  image235.png  <- Turn on the Swagger Editor toggle switch.
+p6/MD3  image236.png  <- Make sure the indentation looks like the image below.
+p6/MD3  image237.png  <- Select + New connection again.
+p6/MD3  image238.png  <- The connection creation should fail.
+p6/MD3  image239.png  <- Scroll down, select the ellipsis (Chevron) button of the typeId parame
+p6/MD3  image23a.png  <- Enter Invoice Type for Summary, enter 1 for Default value, and then se
+p6/MD3  image23b.png  <- Select ListInvoiceTypes for Operation ID, select typeId for Value, and
+p6/MD3  image23c.png  <- Locate AddInvoice and see if x-ms-dynamic-values was added.
+p6/MD3  image23d.png  <- Select the GetInvoiceSchema operation and then select Test operation.
+p6/MD3  image23e.png  <- Review the response. This response is what an API needs to return to a
+p6/MD3  image23f.png  <- Before:
+p6/MD3  image240.png  <- Make sure that the indentations match the following image.
+p6/MD3  image241.png  <- Select the GetInvoiceSchema action and then select internal for Visibi
+p6/MD3  image242.png  <- Select + New and then select Automation > Cloud flow > Instant.
+p6/MD3  image243.png  <- Enter My connection for name, enter your name for API Key, and then se
+p6/MD3  image244.png  <- In the Invoice Type drop-down menu, select Purchase Order.
+p6/MD3  image245.png  <- The Purchase Order field should now be visible.
+p6/MD3  image246.png  <- The Purchase Order field should no longer be visible.
+p6/MD4  image247.png  <- Power Apps
+p6/MD4  image248.png  <- Power Automate flows
+p6/MD4  image249.png  <- Connection references
+p6/MD4  image24a.png  <- Managed and unmanaged solutions
+p6/MD4  image24b.png  <- To create a solution, sign in to Power Apps and then select Solutions,
+p6/MD4  image24c.png  <- Add the Display name, select CDS Default Publisher, and then enter a D
+p6/MD4  image24d.png  <- Congratulations, you have created your new solution.
+p6/MD4  image24e.png  <- To add new apps, flows, and tables, select the Volunteer Request solut
+p6/MD4  image24f.png  <- To add existing apps, flows, and tables, select + Add existing. Select
+p6/MD4  image250.png  <- Sign in to Power Apps, select Solutions, and then select Volunteer Req
+p6/MD4  image251.png  <- You should see all your apps, flows, and tables.
+p6/MD4  image252.png  <- To edit the canvas app, select the app and then select Edit, which is 
+p6/MD4  image253.png  <- Select the flow and then select Edit, which directs you to the edit mo
+p6/MD4  image254.png  <- Select the table and then select Edit, which takes you to the section 
+p6/MD4  image255.png  <- In the source tenant, sign in to Power Apps and then select Solutions,
+p6/MD4  image256.png  <- Select Publish. This selection will make sure that all changes that ar
+p6/MD4  image257.png  <- You then need to decide which environment this solution will be export
+p6/MD4  image258.png  <- In the upper left of the screen, you should see a message stating that
+p6/MD4  image6.jpg  <- The zipped file name contains the solution name, if it's managed or un
+p6/MD4  image259.png  <- Go to your destination tenant, sign in to Power Apps, and then select 
+p6/MD4  image7.jpg  <- If you receive an authentication window, enter your credentials to con
+p6/MD4  image25a.png  <- Select the zipped file that was exported.
+p6/MD4  image25b.png  <- Select Next.
+p6/MD4  image25c.png  <- You'll now see your solution imported successfully in the new tenant.
+p6/MD4  image25d.png  <- Usually, a solution architect on your project will map out the ALM pla
+p6/MD4  image25e.png  <- Automation is tailored to each project's requirements, but commonly ha
+p6/MD5  image25f.png  <- Make sure that you avoid selecting the Add All Assets option. Choosing
+p6/MD5  image260.png  <- When exported from an environment, solutions are in the form of a zip 
+p6/MD5  image261.png  <- It's compatible with Linux, Mac, and Windows, and you can install it t
+p6/MD5  image262.png  <- Solution unpack reversibly decomposes a solution .zip file by dividing

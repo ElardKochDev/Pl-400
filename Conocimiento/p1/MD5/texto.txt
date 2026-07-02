@@ -1,0 +1,144 @@
+# Introduction to expressions
+Completed100 XP
+2 minutes
+When you build a flow in Power Automate, it's easy to get started by adding a trigger and some actions, and then passing data between them with dynamic content. But, in most cases you need to perform more complex operations. You may want to do a calculation, to transform data for your solution, or even to access, convert, and compare values. To do these things, you can look to expressions.
+In Power Automate, expressions are a set of simple functions that enable you to return data. Put simpler, you use expressions to write a formula to get your data the way you want it. Expressions allow you to do things like convert a date to UTC, divide two numbers, create that perfect string by combining fields, and much more by using various functions.
+Flows in Power Automate run on top of Azure Logic Apps. This is relevant because they both use the same functions. When you're searching the internet for solutions or reading documentation about Power Automate functions, it's common to end up looking at Logic Apps documentation. For example, the Reference Guide of functions for Power Automate is hosted on the Logic Apps side of the documentation (not Power Automate).
+Through the rest of this module, you'll learn about the different types of functions and the syntax so you can start to use expressions in your flows.
+# Get started with expressions
+Completed100 XP
+3 minutes
+To write an expression in Power Automate, select any action that has an input, then select the input field to open the formula options menu. Notice that you'll see a blue option button appear on the right side of the input field. The button's upper half shows a lightning bolt icon, and the lower half shows fx. The lower half of this button opens up the expression editor. Selecting the fx button takes you to the expression pop-up which is depicted in the image below. You can also type a forward slash or "/" in the input field to bring up the options as a drop-down selection. Either way gets you to the expression editor.
+Don't be confused: although the input field shows the options Function and Dynamic content below it, you craft an expression here that uses Azure Logic Apps functions. You can also add any dynamic content available in this flow into the expression as you craft it.
+The formula box provides a place where you can type your expressions by combining one or more functions. Before you learn about the different types of functions and their usage, there are some commonalities you should learn first. Function names aren't case-sensitive.
+Tip
+Notice in the screenshot above we used a Manually trigger a flow trigger and a Compose action. This allows you to have a simple setup for writing and testing your expressions without worrying about other inputs or actions. Use this setup to follow along in this app or anytime you want to try out something new.
+## Auto suggest, hints, and links in the formula bar
+When you enter a function in the formula bar, you see a pop-up with syntax suggestions.
+Here you can see for the convertFromUtc function that it has two required inputs and one optional input.
+Timestamp is required and expects a string.
+destinationTimeZone is required and expects a string.
+format? is optional and expects a string.
+Note
+The question mark at the end of format tells you that it is an optional input.
+After you enter a Timestamp as a string then type a comma, the flow prompts for the destinationTimeZone:
+This can be daunting. What does it want for the time zone? If you look in the pop-up, you see that it provides a URL you can copy that references the list of time zone values. Following the link provides you with the string for the destinationTimeZone Time zone name. With this information, we can now complete the expression.
+convertFromUtc('2024-02-09T12:00:00Z','Eastern Standard Time')
+Once the expression is completed, you can select the Add button at the bottom of the expression editor to save your changes. Always be sure to select Add when editing an expression. If you select out of the inputs, you will lose your changes. Power Automate doesn't have AutoSave.
+Note
+If you're using the legacy designer, you will select Update to save your formula.
+With your first expression complete, you can now select Test in the top right-hand corner. Then select Test>Run flow>Done.
+Once the test is complete, you should see the green bar at the top that says, "Your flow ran successfully." Expand the Compose action and you can see the result of our formula converting date & time to the new time zone in the OUTPUTS.
+This same process will help you see the output of any test expressions you create.
+# Notes make things easier
+Completed100 XP
+2 minutes
+When you look at the convertToUtc expression you wrote earlier, you might notice that you need to scroll to see the whole formula in the function bar. A common technique to make reviewing your expression easier is to use notes and paste the whole formula into the note. That way you won't need to open up the pop-up formula editor.
+To add a note, select the ellipse to show the menu. Then select Add a note.
+In the note box, you can type any text you want. This can be text or just a copy and paste of the expression used in your action.
+## Defining text
+When you use text in a Power Automate expression, you use the single quote (') at the beginning and end of each string. For example, if you wanted to combine the string "Today is " (with an extra space) and the output from our expression above, you would use the Concat function. Your syntax would be:
+concat('Today is ', outputs('Compose'))
+These little details help you become more effective when working with expressions. One of the great things about expressions is that they're consistent. As you learn about one function you can often apply those learnings to the next function, rapidly speeding up your learning.
+# Types of functions
+Completed100 XP
+12 minutes
+Functions are grouped into 10 different categories including string, logic, and math. The categories are organized to make finding a particular function easier. Below you get an overview of each category and some examples.
+Keep in mind as you go through the various examples, we use static text and values. This is to allow you to test and recreate the examples as easily as possible. In your flows, you can substitute dynamic content in place of this static data. Just ensure that your dynamic data is the correct format for the function.
+In this screenshot, notice how the expression editor shows some of the available String functions. This list is scrollable, and as you reach the end of the String functions, you'll see the Collection functions and so on. Notice that there's a Search input, as well. If you know which function you want to reference in your formula, you can enter it here and skip the scrolling. Selecting any of these formulas adds them to the formula input field, where you can add inputs to complete the formula so that you can save it.
+It is not necessary to select a function, though. If you know the function, you can simply begin typing it. Also, notice that you can enlist Copilot to help you create an expression by providing natural language inputs, if you don't know which expression to use or you simply want help updating an existing expression.
+## String functions
+String (text) functions are used to modify strings, find characters in a string, format strings, and more. Text manipulation is a core skill often used when trying to better format or modify data you received from somewhere else.
+An example of a string function is the formatNumber function. This function can convert a number into a string in a selected format. A common request is to make a number look like currency. To change the number 12.5 into $12.50, use the following formula:
+formatNumber(12.5,'C')
+The 'C' represents the Currency numeric format string. Don't worry: a list of the other options are available at Standard numeric format strings. You might be asking what if you wanted to show the number as currency but with the Yen symbol? There's an optional parameter where you can pass the locale.
+formatNumber(12.5,'C','ja-JP')
+This formula returns ¥13.
+## Collection functions
+These functions are used for arrays and strings. You can use them to check if an array is empty, to grab the first, or last item, or even for join, union, and intersection operations.
+An example of a helpful Collection function is length. You can use length to return the number of items in a string or array. The following example would be used to count the number of characters in the string "I love Power Automate."
+length('I love Power Automate.')
+The output would be 22. Notice that a space counts as one character. You can use this type of function for validation or with the String functions to manipulate strings.
+## Logical functions
+These functions are used to work with conditions, to compare values, and to do other logic-based evaluations. These are often thought of as If statements where, for example, you want to compare if a number is greater than another number. Power Automate supports all of the logical comparisons you would expect.
+In the example here, an expression compares if 12 is greater than 10 and then outputs the appropriate string. This is also your first expression that uses more than one function. We combine if and greater logical functions.
+If(greater(12,10),'Yes','No')
+The result of this expression would be the string Yes. To understand the expression, work from the inside out. Greater(12,10) returns true or false depending on whether 12 is greater than 10. In this case, the formula evaluates to true (i.e., 12 is greater than 10).
+The first value after the Greater expression ('Yes') is the value that is returned if the expression evaluates to true, and the next value ('No') is the value returned if the expression evaluates as false. Since Greater(12, 10) evaluates as true, the first value after the expression, or Yes, is returned.
+Important
+While you can write logical expressions as shown above, there is also an action called Condition that lets you write If statements without an expression. You can insert a new step in your flow by asking Copilot to Insert a condition or by selecting the plus icon and searching for the action called Condition.
+You can either search for a Condition or you can enlist Copilot to add one into your flow.
+Here's the same logic written using a condition action instead of an expression.
+Tip
+As you're working with Copilot, verify that it accomplishes what you want. If Copilot gets you started, you can add or modify to get exactly what you need.
+You'll find over time that you use a combination of both expressions and conditions, depending on your requirements.
+## Conversion functions
+These functions are used to change your data type. This can be something simple like converting a text number into an integer, or more complex functions like changing the encoding of a file from base64 to binary. Knowing that these functions are available helps you overcome problems you come across when getting your data shaped correctly.
+A common scenario is the need to use int or float to change a text number into an actual number. This is common when importing data into your flow from a data source. The number 12 or 12.4 can be stored as text. To use that number in a logical function or write it to a location that expects a number, you need to convert it. The following example changes the string "12" into the integer 12.
+Int('12')
+This outputs the integer 12. If the string was "12.4" then you would need to convert it to a float because of the decimal digit. In that case, you would use
+Float('12.4')
+Now you can use the text numbers you just created to re-create the previous logical function example.
+If(greater(Int('12'), Float('12.4')),'Yes','No')
+This would output the string "No" because 12 isn't greater than 12.4. Combining functions like this is common and a useful pattern to learn.
+## Math functions
+Math functions do exactly as you would expect. They allow you to add, subtract, multiply, and perform other similar calculations. Also, Math functions allow you to find the smallest and largest numbers from a data set or get a random number between a specified interval, among other things. To get a random number from 1 to 10, use this expression:
+rand(1,10)
+One thing to keep in mind is that there are different functions for adding numbers (add) and subtracting numbers (sub). Many formula languages add negative numbers to produce subtraction, but Power Automate doesn't. To add two numbers together, you use this expression:
+add(12, 13)
+This would return 25. If you wanted to add three numbers, then you would need to add a second function like so:
+add(add(12,13),15)
+This would return 40. As you saw before, you find yourself nesting functions to get the results you want.
+## Date and time functions
+These functions are used to return the current date and time, change time zones, find specific info about a date and time, and do other date or time manipulations. If you have date and time values in your data, you will use these functions.
+One important thing to remember as you explore date and time functions in Power Automate is that they're often based on UTC. Most data sources pass data back and forth with Power Automate in UTC format. Also, if you use the function UTCNow(), that returns the current time in UTC format. If you want to use that to compare to user data that is currently in the Eastern Time Zone, then you need to use the following formula to convert the time zone:
+convertFromUtc(utcNow(), 'Eastern Standard Time', 'dd-MM-yyyy hh:mm tt' )
+This will output 09-02-2024 11:28 AM. For a complete list of the date time format options, see Custom date and time format strings.
+## Referencing functions
+The referencing functions are used to work with the outputs of your actions and triggers. The nice thing is that most of the time, Power Automate writes these functions for you. When you add dynamic content to your flow, you're using referencing functions without knowing it. If you add dynamic content and then hover on top of that content, you can see the underlying reference function.
+In this screenshot, you can see this in the Compose action by adding the User name dynamic content to the Inputs for Compose.
+By hovering over User name with the mouse pointer, you can see
+triggerOutputs()?['headers']?['x-ms-user-name-encoded']
+Power Automate created the expression using the triggerOutputs for you. It's pulling the x-ms-user-name-encoded property from the Headers property. Most of the time in Power Automate you reference these properties via dynamic content. But it's possible to write your own expressions to recreate this if necessary. Each trigger and action have different formats for how you retrieve their data.
+Explore these functions by adding different triggers, actions, data sources, and apply-to-each loops in your flow. Then, use their properties as dynamic data to see more examples. The good news is writing these types of expressions isn't common.
+## Workflow functions
+The workflow functions are used to retrieve information about your flow and are closely related to the referencing functions. One of the functions is called workflow. You can use it as shown here.
+workflow().run.id
+This returns the ID of the current flow run. You could use this for error reporting or logging if needed. These functions aren't commonly used.
+## URI parsing functions
+These functions are used to dissect a URI that is passed in as a string. You can use these functions to find the host, path, query string, or other portions of the URI. The following example shows you how to use uriQuery to get the query string portion of the given URI.
+uriQuery('https://flow.microsoft.com/fakeurl?Test=Yes')
+This would return the string ?Test=Yes which you could then parse with string functions to get the value passed in from the URI.
+## Manipulation functions
+Manipulation functions are used to work with specific objects in your flow. You can do things such as find the first non-blank value, work with properties, or find xpath matches. These functions are used typically in JSON or XML node evaluations.
+One function you might find handy is coalesce. This function allows you to find the first non-null value from a specified set of values. You use the function as shown in the following formula:
+coalesce(null, 'Power Automate', 'Power Apps')
+This formula would return the string Power Automate. This is handy when you're passing in multiple values and want to find the first one that isn't null.
+# Write complex expressions
+Completed100 XP
+5 minutes
+When you combine more than one function to get the result you want, this is known as a complex expression. In the Math functions and Date and Time functions sections, you already saw examples of these expressions. You saw that to add three numbers, you need to combine two add functions like:
+add(add(12,13),15)
+Which resulted in the output of 40.
+Then you saw how you use the utcNow function to get the current date and time and then use convertFromUtc to change it to the Eastern Standard time zone as shown here:
+convertFromUtc(utcNow(), 'Eastern Standard Time', 'dd-MM-yyyy hh:mm tt' )
+This resulted in the output of 09-02-2024 11:28 AM.
+When you think of complex expressions, there's always more than one function nested in an expression where you use the output of one function as an input of another. There are no special syntax, operators, or considerations.
+For a final example of a complex expression, take the scenario of having a couple of inputs as part of your Manually trigger a flow trigger and using that input in a formula to compute a new time. You can use the example flow that you used to test your expressions or to build a new flow that looks like this one.
+Now select Add an input under Manually trigger a flow and add a Number. Then select Add an input again and add a Date. Your trigger should now look similar to this:
+Now, in the Compose step create an expression to add the number of days from the trigger to the date.
+addDays(triggerBody()?['date'], triggerBody()?['number'])
+This expression uses the Date Time function addDays and the Referencing function triggerBody.
+Note
+If you find yourself asking "How do I know what goes in for trigger body?" then you're thinking correctly. The secret is you can combine dynamic content into your expressions. To do so, start your expression by typing addDays() and then with your cursor between the (), select Dynamic content. Then you can choose your fields. This is a great way to reference that content while letting Power Automate do the hard work of writing the expression.
+If you test your flow and enter the date 2024-02-09 and the number 2, your output is 2024-02-11T00:00:00.0000000. This is the UTC format for February 11, 2024.
+Now you can find out what day of the week that is by using another Compose action with the following expression:
+dayOfWeek(outputs('Compose'))
+The output from the first Compose action is 2024-02-11T00:00:00.000000. The output of the second Compose action is 0, which represents Sunday. Sunday is 0 and each subsequent day increases by 1. Here's a screenshot of what your flow would look like with the two compose actions and the dayOfWeek formula in the second compose action.
+Now add another Compose step to check if the date selected is a Thursday. Enter the following expression:
+if(equals(outputs('Compose_1'),4), 'You chose a Thursday', 'You didn't choose a Thursday')
+For February 9, 2024 this will return the string "You didn't choose a Thursday."
+This example is a typical build pattern for a complex expression, building piece by piece in separate steps. Now that you have all of the necessary functions worked out, add another Compose step. In the new Compose, write one large expression that does everything in one step. The expression looks like:
+if(equals(dayOfWeek(addDays(triggerBody()['date'], triggerBody()['number'])),4), 'You chose a Thursday', 'You did not choose a Thursday' )
+The output for February 9, 2024 will be the string "You didn't choose a Thursday." If this is what you're expecting, you can then remove all of the preliminary compose actions from the flow to clean it up.
+Congratulations. You wrote a complex expression by doing small steps and then putting it all together in the end.

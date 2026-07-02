@@ -1,0 +1,65 @@
+# Introduction to developing with Microsoft Dataverse
+Completed100 XP
+5 minutes
+Extending the Dataverse platform with code is required whenever some level of automation needs to occur that existing features don't support and you can't easily build the automation with low-code techniques like Power Automate. These types of extensibility points frequently execute as server-side code via an asset called a plug-in. Flow and other options enable asynchronous automation and logic but cannot fully replicate the capabilities of plug-ins for synchronous rules. Plug-ins are still required when you need to implement synchronous operations within a model-driven application.
+Dataverse plug-in development is frequently required and is an essential skill in the Power Platform developer's toolkit.
+## Building model-driven apps
+The Dataverse metadata and tables store all data and table-level business logic that defines a model-driven app. Also, the method in which we package and distribute customizations to a model-driven app (via solutions) is also contained within Dataverse.
+## Building client apps
+Dataverse provides APIs for building applications, including custom web applications written in ASP.NET, Node.js applications, Windows applications, or another type of application. There are many benefits to using Dataverse to build your application, a few of which we summarize in the next section.
+## Benefits
+Each Dataverse environment has a unified set of features that enables you to create business-focused definitions of your organization's data and business processes within various applications. Since data and metadata reside in the cloud, applications are easy to manage and administer. A built-in security model allows you to control access to tables and functionality for different sets of users within your organization.
+Microsoft has built many first-party applications on Dataverse, including Dynamics 365 Sales, Dynamics 365 Customer Service, and Dynamics 365 Field Service. By building your apps on the same Dataverse platform, you can easily interact with data constructed by other applications within the Dataverse.
+# Microsoft Dataverse extensibility model
+Completed100 XP
+8 minutes
+Understanding Microsoft Dataverse's underlying architecture is valuable for extending its capabilities. Since Dataverse is a software-as-a-service platform, most of these details, such as underlying data storage, are successfully abstracted from us as developers, and we can focus on more interesting items, such as building custom business logic and integrating with other applications. The graphic illustrates the underlying components, with the highlighted sections showing areas where developers can extend Power Apps model-driven applications using code.
+Note
+This unit is only intended to be a high-level view of the Dataverse architecture. For more in-depth analysis of the Dataverse, refer to the Dataverse Developer Guide.
+## Metadata and solution-awareness
+Microsoft Dataverse provides a metadata-driven architecture, enabling flexibility to create custom tables and extend existing tables. Using this approach, we can easily transport our customizations across environments using Dataverse solutions.
+When you create a custom table, metadata about that table, its columns and relationships to other tables, and user interface components (such as forms and views) are stored as metadata in the Dataverse environment in a solution.
+Dataverse also exposes an OData V4 RESTful endpoint, known as the Dataverse Web API that can be leveraged to view and manipulate metadata within a Dataverse environment. One common mechanism for browsing your solution's metadata is to leverage the Metadata Browser. Microsoft provides this as a solution that you can install into your app. The current links can be found at Browse table definitions in your environment. This tool can be installed into any model-driven Power App. In addition, XrmToolbox has a community metadata browser tool available.
+## .NET assemblies (plug-ins)
+Dataverse plug-ins are managed code classes registered to run when specific Dataverse events occur. When the event occurs, they pass through a plug-in execution pipeline that consists of three stages: Pre-Validation, Pre-Operation, and PostOperation. When registering a plug-in, choose in which stage your code should run. The stage you should choose depends on the purpose of the extension. You don't need to apply all your business logic within a single step.
+You can configure plug-ins to run either synchronously or asynchronously. Synchronous plug-ins execute immediately according to the stage and execution order; the entire operation will wait until they're complete. Asynchronous plug-ins are executed via a system job after the operation completes and can only be registered for the PostOperation stage.
+You can also develop and register plug-ins to implement logic for Dataverse Custom API messages.
+## APIs
+The Dataverse APIs provide a programmatic interface for applications and services to access business data, organization information, and metadata stored in Dataverse. Developers can use a RESTful OData Web API or typed .NET classes via the SDK for .NET assemblies, depending on how they need to consume the API. The Web API is the most broadly applicable because it only requires the ability to make HTTP requests and consume HTTP responses. You must use the SDK for .NET for Dataverse plug-in development. For most other uses, you can choose the API style that best fits what you are building.
+# Event framework
+Completed100 XP
+10 minutes
+Microsoft Dataverse exposes events to indicate where the process is currently executing in the pipeline. You can handle these events to do things like validate data, prevent transactions from completing, or automate any business logic you can't accomplish by declarative means.
+You can subscribe to these events by registering .NET assemblies (called plug-ins) to execute custom logic whenever the given event occurs. You perform the registration by using a tool called the Plugin Registration Tool. For more information on the Plugin Registration tool, see the Register a plug-in tutorial.
+At a high level, handling events involves three things. First, you must subscribe to a specific message representing the type of operation (or event) currently occurring (or about to occur), such as Create, Retrieve, Update, etc. You must also indicate where in that event pipeline you would like your logic to execute (that is before or after the operation). You can also handle events before validation occurs, a convenient method that you can use to perform advanced validation logic that you can't accomplish via business rules or workflows. Lastly, you must indicate the execution mode you want the logic to run (synchronously or asynchronously).
+Let's now go into these three areas in more detail.
+## Event messages
+Dataverse exposes many messages that are published when various data operations occur. For more information on these messages, see Use messages with the Organization service.
+The basic data operations exposed by Dataverse are:
+Create
+Retrieve
+RetrieveMultiple
+Update
+Delete
+Associate
+Disassociate
+Also, there are various messages that are exposed contextually, depending on what type of table you're handling. For example if my table has a rollup column, I can implement an event handler on the CalculateRollupField event message.
+Generally, we can find an inventory of these custom messages made available via Dataverse by searching through the Microsoft.Sdk.Messages namespace for any classes whose name ends in \Request. Another way to see which messages are available for a given type of table is to navigate table-message combinations via the Plugin Registration tool.
+Also, we can create and expose our own messages by creating custom Actions. For more information on Actions, see Create your own actions.
+## Event pipeline
+In addition to subscribing to specific messages or event types, Dataverse also exposes a way to specify where in the pipeline that event executes your custom logic. For ASP.NET developers, this is like how you work with page lifecycles within a web application. This approach is a common development pattern for publish-subscribe architectures and should feel familiar to developers with experience with other event frameworks.
+### Pre-validation
+The Pre-validation event occurs first in the pipeline, before any security checks are performed. It's intended for usage to ensure that the user executing the current transaction has the correct permissions needed to perform the intended operation.
+As a developer, you can use this event to run validation logic and cancel the operation before the transaction occurs. For example, if configured to run whenever a table is updated, you can cancel the operation before the update occurs by throwing an InvalidPluginExecutionException method within your plugin's execution logic. For more information on execution context, see Understand the Execution Context.
+### Pre-operation
+Use this event if you want to change any values of the table prior to it being saved.
+### Post-operation
+Use this event to modify any message properties before the requestor of the request gets the response. Avoid applying updates to the corresponding table at this point, as it will trigger another update event.
+## Execution modes (synchronous versus asynchronous)
+You can configure plug-ins to run synchronously or asynchronously, depending on what type of pipeline operation is being handled.
+### Synchronous
+Plug-ins registered in this mode will run as soon as the processing of the event reaches their execution pipeline stage, and the entire operation won't proceed until the logic has completed execution. If multiple plug-ins are registered to run against the same pipeline stage, the execution order attribute (specified via the Plug-in Registration tool) will determine which one runs first.
+### Asynchronous
+Plug-ins registered in this mode dispatch as a system job to the asynchronous service, which executes their logic after the given operation completes. For more information on how system jobs work, see Asynchronous service.
+Note
+You can only register asynchronous plug-ins for the PostOperation stage of the Event Pipeline.

@@ -1,0 +1,168 @@
+# Introduction to Microsoft Power Platform for developers
+Completed100 XP
+5 minutes
+Microsoft Power Platform is a low-code platform for building business apps quickly. It includes five main components: Power Apps, Power Automate, Power BI, Power Pages, and Copilot Studio. You can use each Power Platform component individually or together. When used together, their design allows them to interact with each other to achieve business objectives, be it building analytics, process automation, or data-driven productivity apps.
+The platform uses a low-code approach to build solutions rapidly. It allows everyone in an organization, from frontline workers to professional developers, to participate in building apps that drive positive business outcomes. Developers can work seamlessly with the makers in an organization to address gaps and solve complex challenges through the platform's rich extensibility model. Using native integration with Azure, developers can also use their cloud development skills to extend Microsoft Power Platform. This approach to low-code development is a transformative way to quickly achieve application development objectives within an organization.
+You can be a more efficient developer by learning the basics of what the platform offers. The following is a high-level overview of the core components and their key extensibility points.
+## Power Apps applications
+Apps created with Power Apps are consumed by users using their desktop or mobile device. There are different types of Power Apps: canvas and model-driven.
+Canvas applications give the maker complete control over the pixel-perfect screen contents and navigation between multiple screens. Canvas applications use connectors to work with data and services. You can embed canvas applications into SharePoint, Teams, Power BI, and Dynamics 365 applications.
+Model-driven applications are data-driven applications that you can build on top of Microsoft Dataverse. Model-driven applications can use other data sources and services by embedding a canvas application that uses connectors to access those data sources.
+The following are the key developer extensibility points for Power Apps:
+Building custom visual controls using Power Apps Component Framework (PCF)
+Implementing client business logic using JavaScript and the client API
+Building custom connectors for external data sources and services using tools like Azure Functions and Azure API Management
+Building HTML web resources
+To learn about creating canvas apps, see the Create a canvas app in Power Apps learning path. For a high-level introduction on creating model-driven apps, see the Create a model-driven application in Power Apps learning path.
+## Power Automate
+Power Automate is used to automate tasks and orchestrate activities across various services using connectors. Using Power Automate, you can create cloud flows or desktop flows.
+Cloud flows can be triggered manually, configured to run when specific events occur, such as when a record is created, or scheduled to run at a specific time. Power Automate is built on top of Azure Logic Apps but offers unique integration with Microsoft Power Platform.
+Desktop flows, as the name suggests, are used to automate repetitive interactive tasks on the web or the desktop.
+The following are the key developer extensibility points:
+Building custom connectors using tools like Azure Functions and Azure API Management
+Use workflow definition functions to build complex expressions
+To learn more about building cloud flows with Power Automate, see the Automate a business process using Power Automate learning path. For an introduction to desktop flows, see the Get started with Power Automate for desktop learning path.
+## Power BI
+Power BI is Microsoft's business analytics solution that provides interactive data visualization BI tools to help users visualize and share data and insights across their organization.
+The following are the key developer extensibility points:
+Embed Power BI in apps, websites, and portals
+Create custom visuals using the open-source SDK
+Use Power BI REST API to run automatic data refresh, augmentation, and transformation processes, autoscale the resources, automate application lifecycle management (ALM), and more
+Develop Power Query custom connectors to connect to and access data from proprietary applications, services, or data sources
+For an introduction on how to create Power BI reports, see the Create and use analytics reports with Power BI learning path.
+## Power Pages
+Power Pages allow you to create external-facing business websites that allow users outside an organization to sign in with a wide variety of identities, create and view data from Dataverse, or even browse content anonymously. Makers can use low code to customize the websites, and developers can use extensibility points to handle advanced requirements.
+The following are the key developer extensibility points:
+Custom web page templates built with HTML, CSS, and Liquid
+Create code components for websites using Power Apps component framework
+Extend site integration with Dataverse with the Web API
+Use Visual Studio Code and the Power Platform CLI to enable metadata editing and CI/CD (Continuous Integration/Continuous Deployment) of site configurations
+To learn more about building websites with Power Pages, see the Get Started with Power Pages learning path.
+## Copilot Studio copilots
+Copilot Studio lets you create powerful copilots (agents) that can answer questions from your customers, other employees, or visitors to your website or service. Copilot Studio is built on Microsoft Bot Framework and provides a low-code experience to build and manage chatbots.
+The following are the key developer extensibility points:
+Build Bot Framework Skills
+Extend bots with Bot Framework Composer
+For an introduction on how to create copilots using Copilot Studio, see the Create copilots with Copilot Studio learning path.
+## Connectors
+Connectors are a key component allowing access to data and services. A connector is a proxy or a wrapper around an API that allows the underlying service to talk to Microsoft Power Automate, Microsoft Power Apps, and Azure Logic Apps. It provides a way for users to connect their accounts and use a set of prebuilt actions and triggers to build their apps and workflows.
+There are hundreds of prebuilt connectors available for use in apps and flows. You can build custom connectors for any REST API. Developers can also implement code that transforms request and response payloads beyond the scope of existing policy templates.
+You can learn more about custom connectors in the connectors documentation or from the Get started with Power Automate for desktop learning path.
+## Dataverse
+Dataverse is a cloud-scale data store that builds on Microsoft's data technologies and abstracts away data management complexity from the app maker. It lets you securely store and manage data that your business applications use. Business data within Dataverse is stored within a set of data tables. Role-based security allows businesses to control access to the data tables and even individual records for different users within your organization. You can define calculated table columns, business rules, workflows, and business process flows to ensure data quality and drive business processes. Developers can extend or customize Dataverse functionality by adding custom business logic.
+The following are the key developer extensibility points:
+Create plug-ins, similar to event handlers, that customize or extend Dataverse data processing with custom business logic (code)
+Use webhooks and Azure Service Bus to integrate with external systems
+Extend the Dataverse API with your own custom API that implements your business logic
+Use virtual tables to integrate data stored in external systems into Dataverse without replicating the data
+For a more in-depth look at Common Data Service, see the Get started with Dataverse module.
+## Common Data Model
+The Common Data Model is an open-sourced standard definition of entities that represent commonly used concepts and activities. When built with a Dataverse application, a core set of entities is available upon which application builders can add their own custom entities to support specific business scenarios.
+The following are the key developer extensibility points:
+Use the Common Data Model Library to work with data stored in Azure Data Lake.
+To learn more about how to use the Common Data Model, see the Common Data Model documentation.
+# Overview of Dataverse and the Common Data Model
+Completed100 XP
+7 minutes
+Dataverse lets you securely store and manage data that business applications use. Dataverse stores the business application data within a set of tables (formerly referred to as entities). A table is a set of rows (formerly referred to as records) and columns (formerly referred to as fields/attributes). Each column in the table stores a certain type of data, for example, name, age, salary, etc. Dataverse includes a base set of standard tables that cover typical scenarios. You can also create custom tables specific to your organization and populate them with data using Power Query. App makers can then use Power Apps to build end-user applications that use this data.
+## Benefits of Dataverse
+Dataverse is built on multiple Azure data storage capabilities, including Azure SQL, Cosmos DB, and Azure storage. Dataverse abstracts the underlying technologies to provide a unified set of features that enable you to create business-focused definitions of your organization's data and business processes within various applications. Because data and metadata are both stored in the cloud, applications are simple to manage and administer. Additionally, a built-in security model allows you to control access to tables and functionality based on user's roles within your organization.
+Microsoft has built several first-party apps on Dataverse, including Dynamics 365 for Sales, Service, Field Service, and Customer Insights - Journeys. By building your apps on top of the same Dataverse platform, you can extend other apps or interact with their data within Dataverse.
+### Work with any type of data
+Dataverse is designed to work with the most common data types and incorporates all the major categories of data technologies your organization needs: relational, nonrelational, file, image, search, and data lake. Typically, this would require developers to work with multiple APIs from different data engines. Dataverse provides a unified API in front of all data, ensuring the consistent execution of any custom business logic that extends the default behavior.
+Dataverse includes a set of visual designers to create, edit, and interact with data and data models. The designers make it easy to quickly define the tables, relationships, business rules, forms, views, and workflows that represent your business. Developers can also use the API to programmatically interact with the platform metadata, such as creating tables and columns.
+Dataverse also supports virtual tables. Virtual tables map data in an external data source so that it appears to exist in Dataverse. Virtual tables enable Dataverse to execute real-time data operations against the external data source. Developers can create data providers using code to facilitate connecting to external data sources. More information: Create and edit virtual tables that contain data from an external data source.
+### Work with any type of app
+When an organization wants to create a new app, it can realize other productivity gains by using Dataverse with Power Apps. Power Apps understands the rich metadata included in Dataverse and uses it in multiple ways to help you rapidly build great-looking apps that are secure and scalable, and make them available across desktop, web, mobile, and Microsoft Teams.
+For developers who want to integrate Dataverse data into existing apps or write new apps by using custom code, Dataverse provides a REST-based API to make integration easier. This REST API provides full coverage of Dataverse capabilities thus providing an unrestricted extensibility model for building fully customized experiences.
+## Built-in security model
+As a developer building an application, you're used to having to design and create your own security model for the application. Dataverse includes a prebuilt set of constructs to allow the configuration of an application security model. Dataverse uses role-based security to put together a collection of privileges that cover both data access with row-level granularity and business functions that can span multiple tables. These security roles can be associated directly with users, or they can be associated with Dataverse teams and business units.
+Because row-level control of access may not be sufficient in some business scenarios, Dataverse has a column-level security feature to allow more granular control of security at the column level.
+Dataverse also includes two security constructs that can be used for hierarchies: the manager hierarchy and the position hierarchy. With the manager hierarchy, a manager must be within the same business unit as the report, or in the parent business unit of the report's business unit, to have access to the report's data. The position hierarchy allows data access across business units. These can be helpful in building more complex security models.
+Developers can also automate security tasks using the API.
+## When to write code
+As a Power Platform developer, you need to understand the gaps that exist between what can be accomplished through configuration versus code. Sometimes, existing features might not provide the functionality needed to meet a requirement, and Dataverse provides various extension points where developers can extend the common functionality by using code.
+To identify gaps where features don't already exist, it's crucial that all Power Platform developers familiarize themselves with the capabilities of Dataverse. If you aren't familiar with building apps with Power Apps that use Dataverse, we recommend that you complete the Create a model-driven application in Power Apps learning path and Create a canvas app from scratch using Microsoft Dataverse walkthrough in the Power Apps maker documentation.
+## Types of extensibility
+Typically, any code-based customization activities are referred to as "extending" an application. Therefore, if you notice terms like extensibility, it generally means code in terms of Power Apps development. Within the extensibility model, activities are grouped into two broader sets: extending the user experience and extending the platform or Dataverse itself.
+### Extending the user experience of Power Apps
+To extend the user experience of a Power Apps app, you can use Power Apps Component Framework (PCF) to create code components that are used across all Power Apps types. Model-driven Power Apps also exposes a JavaScript client API that allows you to interact with application pages to implement business logic on the application forms.
+While canvas apps don't offer scripting capabilities, their logic is built using Microsoft Power Fx. Power Fx is the low-code language that is used across Microsoft Power Platform. It's a general-purpose, strong-typed, declarative, and functional programming language. Proficient platform developers should be comfortable in using the language, editing it in source files if necessary, and able to debug the apps using tooling like Monitor. For more information, see Overview of Power Apps with Monitor.
+TypeScript is a recommended language to use in many scripting scenarios. Because TypeScript is transpiled to JavaScript, both languages are generalized into the term of "client script." With client script, you can configure form event handlers in the same way that you would an HTML form element. You can also call script functions from within a command bar (ribbon) and can consume client script web resources from within HTML web resources.
+HTML web resources are the predecessor to PCF code components and are also used to display custom presentation logic within a form in model-driven apps when more advanced requirements exist that can't be achieved by using the standard out-of-the-box forms. You might encounter these when working with apps built prior to PCF code components being available.
+### Extending Dataverse
+Extending Dataverse as a platform is required whenever there's a need for some level of automation or behavior not supported by the existing features. These types of extensibility points run as server-side code through a construct called a plug-in. Power Automate and other options enable asynchronous automation and logic, but they haven't been able to do everything that plug-ins can do in terms of synchronous behavior. When requirements for synchronous operations exist within an application, plug-ins are still required. Synchronous processing by plug-ins allows any Dataverse modifications to be treated as a single unit of work in a transaction.
+Developers can also use the custom API capability to create their own APIs in Dataverse. You can consolidate one or more operations into a custom API that you can call from code, Power Apps canvas apps, or Power Automate.
+Plug-in development is an essential skill and a common task for Power Platform developers.
+## Dataverse solutions
+One of the fundamental concepts when it comes to developing and extending Dataverse is the solutions construct. Dataverse solutions are containers for apps and other components such as site maps, tables, processes, web resources, choices, flows, and more. Solutions are used to transport apps and components from one environment to another or to apply a set of customizations to existing apps. Solutions are also how the first-party apps from Microsoft and apps from independent software vendors are installed in your environment.
+Solutions are the mechanism for implementing application lifecycle management (ALM) in the Power Platform. For detailed information about the solution concepts, see Solutions in Power Apps in the Dataverse documentation. Power Platform build tools can be used with Azure Dev Ops or GitHub to automate Power Platform ALM operations. For more information how solutions are used for application lifecycle management, see Overview of ALM with Microsoft Power Platform in Microsoft Power Platform ALM guide.
+## Common Data Model overview
+Microsoft has published a Common Data Model comprised of an extensible collection of schemas representing common business concepts. By using a common schema across all business applications such as Contacts, Leads, Accounts, or Products, data interoperability is greatly simplified.
+The following infographic effectively represents the provided current state of the base Common Data Model schemas. The Common Data Model is an evolving ecosystem; numerous others will surface as time progresses.
+## Consuming the Common Data Model
+Common Data Model is influenced by data schemas that are present in Dynamics 365, covering a range of business areas. If you're a customer or a partner using Dynamics 365, you're already using the Common Data Model. Dataverse implements the Common Data Model standard entities, such as Account and Contact. Some standard entities in the Common Data Model are built into each Dataverse database. Other standard entities are installed as part of a solution, including first-party applications (such as Dynamics 365 Field Service) or industry solution accelerators (such as the Dynamics 365 Automotive Accelerator).
+The Common Data Model is maintained in GitHub. Schemas are maintained as JSON files. An entire entity reference can be found at Overview of applicationCommon. Microsoft also provides a Visual Entity Navigator that allows users to visually navigate Common Data Model entities.
+When building against the Common Data Model, you need to understand the layering approach that is taken to build out your custom application's schema. At the base of a Common Data Model application resides a core schema that contains commonly used entities such as Account and Contact. From there, you can layer function or industry-specific models to further accelerate the development of your own custom application, after which you can build your own models.
+# Extending Power Platform with Azure
+Completed100 XP
+10 minutes
+Azure cloud services provide a wealth of functionality and enable Microsoft Power Platform developers to harness its capabilities through various extensibility points. This unit reviews a few Azure technologies in the context of how they play, or potentially play, a role in a Microsoft Power Platform focused implementation. Azure includes many services, and all Microsoft Power Platform developers should be familiar with what Azure has to offer. For an overview of all Azure technologies, see the Azure website. For more in-depth training that will prepare you for taking the Microsoft Azure Fundamentals exam, consider completing the Azure fundamentals learning path.
+Developers should become familiar with the low-code capabilities of Microsoft Power Platform so they don't rebuild something that it already does well. If you're coming from an Azure developer background, it might be easy to start with an Azure component instead of a Microsoft Power Platform component. For example, if you were asked to build a chatbot you might first look to Azure Bot Framework. As a Microsoft Power Platform focused developer, you could first look to Copilot Studio copilots to implement the chatbot. Then use an Azure Bot Framework Skill to augment the capabilities of the Copilot Studio copilot chatbot that you built. Using this approach, solutions are built using the rapid application development of Microsoft Power Platform but still take advantage of the deep customizations that is possible by including Azure services and custom code.
+## Azure functions
+Azure Functions is a supported extensibility endpoint for Power Platform. Extracting custom logic into an Azure function enables you to offload complex logic outside of your transactional application, thus providing a much more stable and effective user experience. Azure Functions can also be used to build APIs that are exposed to Microsoft Power Platform as a custom connector. As a custom connector the Azure Function business logic can easily be invoked from apps and flows. The following diagram illustrates an application using an Azure function from a Power Apps canvas app.
+## API management
+Azure API Management allows you to manage APIs across clouds and on-premises. In addition, API Management can export API definitions directly to Microsoft Power Platform. When exported, the API is configured as a custom connector available in Power Apps and Power Automate.
+## Service bus
+Azure Service Bus is a reliable messaging-as-a-service (MaaS) framework that enables real-time, asynchronous messaging across systems. In specific use cases, this is a valuable feature that provides the ability to integrate with both cloud and on-premises systems in a serverless, distributed fashion.
+Developers can configure Microsoft Dataverse to publish events to Azure Service Bus queues and topics. Events can be published automatically on Dataverse data modifications or on demand from developer's custom logic.
+Azure Service Bus can store the message until the consuming party is ready to receive the messages allowing you to architect solutions that are less dependent.
+## Event Grid
+Event Grid is a fully managed single service for managing routing for all events from any source for any destination. It simplifies the development of event-based applications and the creation of serverless workflows. Event Grid can be used to route events between Microsoft Power Platform and other Azure services like Azure Functions, for example.
+## Logic apps
+Logic Apps is a cloud service that helps you schedule, automate, and orchestrate tasks, business processes, and workflows when you need to integrate apps, data, systems, and services across enterprises or organizations.
+Microsoft Power Platform has Power Automate service that is built on Logic Apps and includes integration with Power Apps and Dataverse. Developers familiar with Logic Apps will find Power Automate familiar as well.
+Logic Apps can complement a Microsoft Power Platform solution when automation requires support not available in Power Automate. For example, to use the Enterprise Integration Pack or SOAP connectors. Compared to Power Automate, Logic Apps offers a different deployment and consumption model that can be more efficient in certain scenarios.
+## AI services
+Azure AI Services is a family of AI and cognitive APIs to help build intelligent apps. Microsoft Power Platform has the AI Builder service that implements a low code option for some of the APIs. AI Builder empowers a broader set of app builders to implement intelligent processing. Developers can help augment Microsoft Power Platform solutions with Azure AI Services when the solution requirements or usage becomes too complex for AI Builder or needs an API that AI Builder doesn't offer.
+Azure AI Services includes APIs, SDKs, and services that are available to help developers add cognitive features to their applications. The Power Platform's extensibility framework makes it possible for users to incorporate these features into apps and flows. The catalog of services within Azure AI Services can be categorized into five main pillars: vision, speech, language, web search, and decision.
+For more in-depth training on how to use some of the Cognitive Services features, review the various available Learn modules and Learning Paths that are tagged with the AI Services product. For more information, see the Azure AI Services Documentation.
+## Azure Data Lake and Azure Synapse analytics
+Microsoft Power Platform data seamlessly supports Azure Data Lake storage with its Microsoft Dataverse and Common Data Model framework. Building on Microsoft Power Platform enables complex analytics scenarios where you can use industrialized big data tools such as Power BI, Azure HDInsight, or Azure Synapse.
+The Azure Synapse Link for Dataverse service supports initial and incremental writes for table data and metadata. Any data or metadata changes in Dataverse are automatically pushed to the Azure Synapse metastore and Azure Data Lake, depending on the configuration, without any additional action. This is a push, rather than pull, operation. Changes are pushed to the destination without you needing to set up refresh intervals.
+For more information, see What is Azure Synapse Link for Dataverse.
+## Azure SQL Database
+Dataverse itself is built on top of Azure SQL Database engine and includes a SQL data connection that provides read-only access to the table data of the target Dataverse environment. Experienced SQL Server developers can use the familiar technology to be immediately more productive with Dataverse.
+Power Apps and Power Automate can work with data in Azure SQL via the Azure SQL connector.
+## Other services
+Azure includes many other services that can be used to extend Power Platform functionality when required. Examples of other frequently used services include:
+App Service for cloud apps for web and mobile
+Identity Management with Microsoft Entra ID and Microsoft Entra ID B2C
+Internet of Things for integration with Microsoft Power Platform solutions like Dynamics 365 Field Service
+DevOps with reliable tools for continuous delivery
+Developer Tools
+Microsoft Power Platform developers should be familiar with Azure capabilities to help building and extending effective Microsoft Power Platform solutions.
+# Power Platform environments
+Completed100 XP
+10 minutes
+Developers building solutions for the Power Platform should understand Power Platform Environments and how to create and use them as part of building components. Developers should also be familiar with the environment settings and be able to configure their environment to support their development efforts.
+Power Platform environments manage and share your organization's data, apps, automations, and other Power Platform components. An organization can have multiple Power Platform environments, each used for different purposes. For example, you might have some development environments where you build assets, and you might use others for testing and some to support the production use of assets.. Environments can be security boundaries controlling who has access to the assets and data.
+Environments are created in an Entra ID (formerly Microsoft Azure) tenant and are tied to a geographic location. The location also applies to the resources you create in the environment. For example, if you create an app in an environment, that app is routed only to data centers in that geographic location.
+There are multiple types of environments, like developer, trial, sandbox, and production. Each has different characteristics. Developer environments are a place to build your assets. It's primarily for a solo developer to isolate their work. Some teams collaborate in an environment of type sandbox or production, depending on the required environment features.
+Note
+Environment type determines the features and capabilities of the environment and not the purpose. So you can have an environment of type production used for testing, which doesn't mean you're testing in your production environment.
+Environments can be created manually via the admin portal., using the Power Platform CLI, from PowerShell, or using the admin API. Your organization's administrator can restrict who can create the different types of environments, so you may have to collaborate with them to gain access to or create the necessary environments.
+## Environment settings
+Each environment has its own unique settings that configure the features and behaviors of that environment. Environment settings can be configured from the environment settings option using the Power Platform admin portal.
+As you can see in the above image, the settings are categorized to make it easier to locate the different settings. If you know what you are looking for, the search feature can provide a quick path to navigate directly to the setting you wish to modify. If you're new to the Power Platform, browsing the different settings pages is a good idea to get an idea of the different options you can configure. Many of the options link to additional information to allow you to learn about the setting. Often, when setting up a development environment, some settings used in test and production should remain consistent in your development environment.
+The following are some of the more common settings developers may want to adjust:
+Product->Behavior->Release Channel
+Product->Feature->Embedded Content
+Product->Feature->Hosted RPA
+Product->Feature->Power Apps component framework
+Product->Feature->Create in Dataverse solutions
+Product->Feature->TDS endpoint
+Product->Languages
+Product->Currencies
+Users + permissions
+Audit and logs -> Audit Settings

@@ -1,0 +1,288 @@
+# Introduction
+Completed100 XP
+5 minutes
+A plug-in is imperative logic, used only when a declarative process, such as a business rule, flow, or workflow, can't meet your requirements.
+Fundamentally, a plug-in is merely a .NET assembly that implements an IPlugin interface, which can be found in the Microsoft.CrmSdk.CoreAssemblies NuGet package. The IPlugin interface exposes a single method, Execute, which is where you can place any custom logic that you want to invoke based on whatever event you're handling.
+Common scenarios of when to use plug-ins are:
+Canceling the event and displaying an error to the user.
+Making changes to the data in the operation.
+Initiating other actions by using the Organization Service to add automation.
+## Alternatives to plug-ins
+Plug-ins should be considered a last resort in many cases. Although plug-ins are powerful and, if well written, highly performant, it's important to minimize the amount of custom/imperative logic that you place into your system, because it can affect maintainability, upgradability, and so on.
+Common alternatives to plug-ins are:
+Workflows
+Power Automate flows
+Calculated and rollup fields
+Custom actions
+## Plug-in considerations
+Plug-ins perform better when you consider their performance, capabilities, and ability to run synchronously.
+A well-written plug-in will always be the most efficient way to apply business logic to Microsoft Dataverse. However, a poorly written plug-in can create a significant negative impact on the performance of your environment.
+Plug-ins provide several capabilities that aren't available with declarative business logic, such as efficiently working with external services in code. Nevertheless, Power Automate is rapidly approaching parity with plug-ins.
+If synchronous logic is required for your application, plug-ins might be required. However, on-demand workflows can also run synchronously and should be considered, depending on your requirements.
+# Plug-ins usage scenarios
+Completed100 XP
+5 minutes
+It's best practice to approach customizing a model-driven Power App with the idea that writing code is a last-resort method for achieving desired business application functionality. Quality areas such as maintainability, upgradability, stability, and performance should factor in when determining the best approach for a given scenario. Considering these quality areas is one of the most important skills that any Power Apps developer can have.
+## Business rules vs. plug-ins
+Occasionally, business rules aren't able to achieve certain objectives, or maybe their complexity causes developers to prefer writing the logic in a plug-in. One scenario could be if you have a complex "if/then/else" situation that would be more easily achieved in a switch statement, or when you're dealing with dynamic values that aren't readily accessible with a business rule. Client scripting is also an option for this scenario.
+## Workflows/flows vs. plug-ins/client script
+Circumstances might occur when existing limitations require you to develop plug-ins to accomplish certain activities.
+The following table can help you determine when it might be more appropriate to use a workflow versus a plug-in or client script.
+# Plug-in execution context
+Completed100 XP
+5 minutes
+Whenever a plug-in (or custom workflow extension) runs, Microsoft Dataverse provides a wealth of data about the context of the current operation. Both plug-ins and custom workflow assemblies have access to an IWorkflowContext class, which is accessible through differing methods.
+In plug-ins, the IPluginExecutionContext is accessible through the IServiceProvider parameter of the Execute method by calling the GetService method.
+c#
+public class SamplePlugin : IPlugin
+
+{
+
+public void Execute(IServiceProvider serviceProvider)
+
+{
+
+// Obtain the execution context from the service provider.
+
+IPluginExecutionContext context = (IPluginExecutionContext)
+
+serviceProvider.GetService(typeof(IPluginExecutionContext));
+
+}
+
+}
+In custom workflow extensions, the IPluginExecutionContext is passed as a parameter of the Execute method of type CodeActivityContext.
+c#
+public class SampleWorkflowExtension : CodeActivity
+
+{
+
+protected override void Execute(CodeActivityContext context)
+
+{
+
+// Obtain the execution context from the code activity context.
+
+IWorkflowContext workflowContext = context.GetExtension();
+
+}
+
+}
+Both IPluginExecutionContext and IWorkflowContext implement the IExecutionContext interface. Each also exposes information that is specific to their type. For more information, see Understand the execution context.
+## IExecutionContext properties
+Two of the most notable properties of the IExecutionContext interface are InputParameters and OutputParameters. Other frequently used properties are PreEntityImages, PostEntityImages, and SharedVariables.
+### InputParameters
+InputParameters are contained in the execution context's InputParameters collection and are of type Entity. This property enables you to see what entity values were presented to the plug-in prior to the implementation of a given operation.
+For example, if you want to validate your data and prevent it from being saved if validation isn't successful, the steps that you take would be similar to the following:
+Register your plug-in to run on the Pre-Validation stage on Create and/or Update of the entity that you want to validate.
+Validate data in your plug-in by reading the values from the InputParameters collection. On Create, you'll want to retrieve the Target collection.
+Throw an InvalidPluginExecutionException if the provided data isn't valid.
+Or, perhaps you want to update values on your entity (such as stripping special characters from a phone number) before the data is saved. You might handle this situation with the following steps:
+Register your plug-in to run on the Pre-Operation stage on Create and/or Update of the entity that you want to update.
+Update the data in your plug-in by editing the values from the InputParameters collection. On Create, you'll want to retrieve the Target collection.
+### OutputParameters
+Output parameters are contained in the execution context's OutputParameters collection and are of the type Entity. Output parameters are only provided after the given operation has occurred. As such, you'll only be able to use this collection when you're handling events in the PostOperation stage.
+For example, if you want to change the values that are returned by the operation, you can modify them by conducting the following steps:
+Register your plug-in to run on the PostOperation stage on Create and/or Update of the entity that you want to update.
+Update the data in your plug-in by editing the values from the OutputParameters collection. On Create, you'll want to retrieve the Target collection.
+### PreEntityImages and PostEntityImages
+When registering plug-ins to run against the event framework, you can provide an immutable copy, or snapshot, of the data. This is ideal, especially when you need to reference values of the data before or after an operation has occurred, for example, for logging or custom auditing purposes.
+While you can retrieve entity values by using the Organization Context from within a plug-in with a Retrieve request, using entity images to conduct this task is much more efficient and highly advised.
+### SharedVariables
+Shared variables allow you to configure data that can be passed from a plug-in to a step that occurs later in the implementation pipeline. While we highly recommend that you configure plug-ins to be stateless and not have any dependencies on external events, there are sometimes exceptions to this rule.
+One exception might be when you want to ensure that you don't have any "runaway" plug-ins in your environment. That is, they're activating under an infinite-recursion scenario. You can also use the execution context to determine the depth in which your plug-in is currently running, but under certain situations, it might be appropriate to manually track. For example, perhaps your plug-in is mistakenly starting Update logic within a plug-in that is configured to run on Update of the entity, which in turn is causing it to run infinitely. To troubleshoot this, you could build a pattern to count the number of times that this plug-in is able to run. An example might be to configure a limit of five runs of a plug-in with the following steps:
+In the plug-in, check if the RunCount shared variable exists, and if it doesn't, create one that is initialized to zero.
+Check if the RunCount variable's value is greater than five, and if it is, throw an InvalidPluginExecutionException.
+At the end of your plug-in, increment the RunCount variable by 1.
+Note
+This is only an extra safeguard against a bug that accidentally causes your plug-ins to overrun your resources. You should make sure that you are building your plug-ins in such a way that this scenario won't ever occur. Dataverse also provides safeguards to prevent "runaway" plug-ins such as these, but their recovery methods are much more resource-intensive than this method and more difficult to diagnose.
+# Exercise - Write your first plug-in
+Completed100 XP
+30 minutes
+In this scenario, an organization needs to ensure that phone number data is entered in a consistent format. To achieve this objective, you create a plug-in to run on create/update that strips out all non-numeric characters from a phone number before saving to Dataverse. You'll then create another plug-in that runs on Contact retrieve/retrievemultiple to reformat the phone number to include parentheses and dashes, if the data exists.
+## Exercise 1: Create/update plug-in
+In this exercise, you'll create a plug-in that will run on create and update. This plug-in strips out all non-numeric characters from a phone number.
+Each exercise consists of a scenario and learning objectives. The scenario describes the purpose of the exercises, while the objectives are listed and have bullet points.
+Note
+If you don't have the Dynamics 365 SDK tools, see Download tools from NuGet to download.
+### Task 1: Create a plug-in
+Start Visual Studio 2022.
+Select File > New > Project.
+Select Class Library (.NET Framework) and select Next.
+Enter D365PackageProject for Project Name, select a location to save the project, select .NET Framework 4.6.2 for Framework, and then select Create.
+Right-click the project and select Manage NuGet Packages.
+Select the Browse tab, search for and select microsoft.crmsdk.coreassemblies, and then select Install.
+Read the license terms and then select Accept if you agree.
+Close the NuGet package manager.
+Right-click Class1.cs and Delete.
+Right-click the project and then select Add > Class.
+Name the new class PreOperationFormatPhoneCreateUpdate and select Add.
+Add the using statements to the new class as follows:
+c#
+using Microsoft.Xrm.Sdk;
+
+ using System.Text.RegularExpressions;
+Make the class public and implement the IPlugin interface.
+Implement the interface member.
+Your class should now look like the following image.
+### Task 2: Format a phone number
+Get the execution context from the service provider. Replace the exception in the Execute method with the following snippet.
+c#
+IPluginExecutionContext context =
+ (IPluginExecutionContext)serviceProvider.GetService(typeof(IPluginExecutionContext));
+Check the input parameter for Target. Add the following snippet to the Execute method.
+c#
+if (!context.InputParameters.ContainsKey("Target"))
+
+ throw new InvalidPluginExecutionException("No target found");
+Add the following snippet to the Execute method. This snippet gets the target entity from the input parameter and then check if its attributes contain telephone1 (Business Phone for Contacts, Phone for Accounts).
+c#
+var entity = context.InputParameters["Target"] as Entity;
+
+ if (!entity.Attributes.Contains("telephone1"))
+
+ return;
+Add the following snippet to the Execute function. This snippet removes all non-numeric characters from the user-provided phone number.
+c#
+string phoneNumber = (string)entity["telephone1"];
+
+ var formattedNumber = Regex.Replace(phoneNumber, @"[^\d]", "");
+Set telephone1 to the formatted phone number. Add the following snippet to the Execute method.
+c#
+entity["telephone1"] = formattedNumber;
+The Execute method should now look like the following image.
+Right-click the project and select Properties.
+Select the Signing tab, check the box labeled Sign the assembly and select New Key File.
+Enter contoso.snk in the Key file name field, clear the Protect my key file with a password check box, and then select OK.
+Close the Properties tab.
+Build the project and make sure that the build succeeds.
+### Task 3: Register a plug-in and steps
+Note
+If you don't have the Dynamics 365 SDK tools, see Download tools from NuGet to download.
+Start the plug-in registration tool application.
+Select Create New Connection.
+Select Office 365, select the Show Advanced check box, provide your credentials, and then select Login.
+Select Register and then select Register New Assembly.
+Select Browse.
+Browse to the Bin > Debug folder of the class library that you created, select D365PackageProject.dll, and then select Open.
+Select Register Selected Plugins.
+Select OK.
+Expand the newly registered assembly.
+Right-click the plug-in and select Register New Step.
+Select Create for Message and select contact for Primary Entity.
+Select PreOperation for Event Pipeline Stage of Execution and then select Register New Step.
+Select Close.
+Right-click the plug-in and select Register New Step again.
+Select Update for Message, select contact for Primary Entity, and then select the Attributes lookup.
+Clear the Select All check box, select the Business Phone check box, and then select OK.
+Select PreOperation for Event Pipeline Stage of Execution and then select Register New Step.
+### Task 4: Test the plug-in
+Go to your Maker Portal and make sure you have the correct environment selected.
+Select Apps and launch the Fundraiser application.
+Select Dashboard and open one of the contacts.
+Select + New.
+Enter Test for First Name, Contact for Last Name, (123)-555-0100 for Business Phone, and then select Save.
+The record should be saved, and the Business Phone should show only the numeric values.
+Change the Business Phone to 001-123-555-0100 and wait for a few seconds.
+The record should be updated, and the Business Phone should show only the numeric values.
+## Exercise 2: Create/Retrieve multiple plug-ins
+In this exercise, you'll create a plug-in that will run on retrieve and retrieve multiple. This plug-in adds parentheses and dashes to the phone numbers.
+Each exercise consists of a scenario and learning objectives. The scenario describes the purpose of the exercises, while the objectives are listed and have bullet points.
+### Task 1: Create a plug-in
+Start Visual Studio.
+Open the project that you created in Exercise 1.
+Right-click the project and select Add > Class.
+In the Name field, enter PostOperationFormatPhoneOnRetrieveMultiple for the class and then select Add.
+Add the using statements to the new class as follows:
+c#
+using Microsoft.Xrm.Sdk;
+Make the class public and implement the IPlugin interface.
+Implement the interface member. Your class should now look like the following image.
+### Task 2: Format phone number for retrieve
+Get the execution context from the service provider. Replace the exception in the Execute method with the following snippet.
+c#
+IPluginExecutionContext context =
+ (IPluginExecutionContext)serviceProvider.GetService(typeof(IPluginExecutionContext));
+Check if the message name is Retrieve or RetrieveMultiple. Add the following snippet to the Execute method.
+c#
+if (context.MessageName.Equals("Retrieve"))	
+ {
+
+ }	
+ else if(context.MessageName.Equals("RetrieveMultiple"))	
+ {
+
+ }
+Check if the output parameters contain a business entity and that it's a type of entity. Paste the following snippet inside the if retrieve condition.
+c#
+if (!context.OutputParameters.Contains("BusinessEntity") && context.OutputParameters["BusinessEntity"] is Entity)
+ throw new InvalidPluginExecutionException("No business entity found");
+Get the entity and check if it contains telephone1 field. Add the following snippet inside the if retrieve condition.
+c#
+var entity = (Entity)context.OutputParameters["BusinessEntity"];
+
+ if (!entity.Attributes.Contains("telephone1"))	
+     return;
+Add the following snippet to the if retrieve condition. This snippet tries to parse telephone1 as long and will return if the parsing doesn't succeed.
+if (!long.TryParse(entity["telephone1"].ToString(), out long phoneNumber))
+
+ return;
+Format the phone number by adding parentheses and dashes. Add the following snippet inside the if retrieve condition.
+var formattedNumber = String.Format("{0:(###) ###-####}", phoneNumber);
+ entity["telephone1"] = formattedNumber;
+The retrieved part of the Execute method should now look like the following image.
+### Task 3: Format phone number for retrieve multiple
+Add the following snippet to the inside of the retrieve multiple condition. This snippet will check if the output parameters contain BusinessEntityCollection and if it is of the type EntityCollection.
+c#
+if(!context.OutputParameters.Contains("BusinessEntityCollection") && context.OutputParameters ["BusinessEntityCollection"] is EntityCollection)
+     throw new InvalidPluginExecutionException("No business entity collection found");
+Get the entity collection from the output parameters. Add the following snippet inside the retrieve multiple condition.
+c#
+var entityCollection = (EntityCollection)context.OutputParameters["BusinessEntityCollection"];
+Iterate through each entity in the entity collection.
+c#
+foreach (var entity in entityCollection.Entities)	
+ {
+
+ }
+Add the following snippet inside the foreach condition. This snippet will do the same thing that the retrieve condition is doing.
+c#
+if (entity.Attributes.Contains("telephone1") && entity["telephone1"] != null)
+ {
+    if (long.TryParse(entity["telephone1"].ToString(), out long phoneNumber))
+    {
+        var formattedNumber = String.Format("{0:(###) ###-####}", phoneNumber);
+        entity["telephone1"] = formattedNumber;
+    }
+ }
+The retrieve multiple part of the Execute method should now look like the following image.
+Rebuild the project and make sure that the build succeeds.
+### Task 4: Update plug-in assembly and register steps
+Start the plug-in registration tool and select Create New Connection.
+Select Office 365, select Show Advanced, provide your credentials, and then select Login.
+Select the assembly that you registered in Exercise 1 and then select Update.
+Select Browse.
+Browse to the debug folder of your project, select D365PackageProject.dll, and then select Open.
+Select the plug-ins and then select Update Selected Plugins.
+Select OK.
+Right-click the new plug-in and select Register New Step.
+Select Retrieve for Message, select contact for Primary Entity, and then select PostOperation for Event Pipeline Stage of Execution. Make sure that you have Synchronous selected for Execution Mode and then select Register New Step.
+Right-click the plug-in and select Register New Step again.
+Select RetrieveMultiple for Message, select contact for Primary Entity, and then select PostOperation for Event Pipeline Stage of Execution. Make sure that you have Synchronous for Execution Mode selected, and then select Register New Step.
+### Task 5: Test the plug-in
+Go to your Maker Portal and make sure you are in the correct environment.
+Select Apps. Then select the Fundraiser application, and then select Edit. You'll add the Contact table to the application.
+Select + New page.
+Select Dataverse table and then select Next.
+Select Existing table. Then select the Contact table, and then select Add.
+Select Play.
+Select Save and continue.
+Select Play again.
+Select Contacts.
+The existing records that weren't saved with the new format won't change. Select + New.
+Provide the following information and then select Save. The record should be saved, and the plug-in should apply the new format.
+Select Contacts again. The record that you created should have the new format.
+Select one of the existing contacts to open it.
+Edit the Business Phone, as follows:
+Select Save. The new format should be applied. Select Contacts one more time.
+The edited phone should have the new format.

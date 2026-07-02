@@ -1,0 +1,87 @@
+# Introduction
+Completed100 XP
+7 minutes
+A common requirement in business app data storage to help ensure data consistency is a data column with a standardized, infrequently changing list of values. Users enter data by choosing an option from a list instead of typing a free-form value. Examples of these options include lists such as countries/regions, incident priority, and satisfaction rating.
+Microsoft Dataverse has a column type that supports this functionality, the Choice column. Choice columns allow a user to pick values from a list when entering data. By default, users can pick a single choice, but the column can be easily configured to allow multiple values from a single list of known values. For example, Primary Category could be a single choice column, Other Categories could be a multiple choice column, and both could use the same list of categories.
+You can either use system-defined values or a custom list of values for choice columns. The choices are stored as table column metadata and can only be modified by an app maker, not an app user. This feature is beneficial when building an app that works with a list of values, as your formulas can reference the choice list name and the display names of the values. For example, the following formula sets a color on a gallery item's text Color property based on the Category column, which is a choice column.
+As you compose this formula, Power Apps will know the possible values for the Category column, and will allow you to select the value to compare from the list of known values for the choice column as soon as you insert the "." after the column name.
+Note
+If you add or change values on a choice list and the new or changed choices don’t immediately show in the editor, refresh the table in the data panel. Refresh the table on the data panel by selecting the ellipsis (...) next to the table, and selecting Refresh from the pop-up menu. Repeat until your new values show.
+## Local versus global
+You can create a list of available choice values as a local or global list. Local choice lists can only be used in the column and table where they’re created. The Global choice option allows the list to be used in multiple columns, either in the same table or in many different tables. When you create a new Choice column, the default value for the option Sync with global choice? is Yes (which is recommended). The Global choice option allows use of the same choices in other tables. Unless the values only apply to a single column in a single table, use global choice values.
+With Yes selected, notice how the Sync this choice with becomes a mandatory field, and you must make a selection for the choices. When you select this field, a pane showing the various options available will appear next to the new column pane. You can either type in the choice-type you're looking for, or scroll through the list to select one. Also, notice that when you hover over any of the choice sets, you get a preview of the choices that are already part of that choice set.
+It's also possible to create a new choice set by selecting the + New choice, and by entering information on your choices.
+Notice that you can also assign a Default choice for your column as you create it. Don't worry, you can come back later and set or change the default choice.
+If you determine that you want to keep your choice options as a local choice set, you would select No under Sync with global choice?. In this case, you would define your choices just below the No button. (At least one is required.) You'll just need to add a Label for the choice; Power Apps will automatically assign an integer value for that item. You can change the value, but it's not recommended. You can also select a color for each choice by selecting the box just to the left of the Label name. In the Select color popup, you can hard-code the color value through the entry fields for the Hex or the R-G-B values. Alternatively, you can adjust the color slider bar and fine-tune the color slider by looking at box above the slider. The color that you select is available only in model-driven apps.
+You add more choices by selecting the + New choice button and repeating the process.
+If you need to allow the user to select multiple choices, you must check the "Selecting multiple choices is allowed" box before you finish creating the column, as this option will be disabled once you create the column.
+## Display column values
+When the data for a choice is stored in a Dataverse row, only the numeric value is stored, not the text. For multiple choices, a comma-separated list of numeric values is stored to represent multiple selections.
+How you display values in a control, such as a label, is different for single and multiple choice values. Choice fields can be used to set the value of a label to display the list text value. For example, if you had a Category choice field for the category of customer, you could display that field in a label in a gallery by using the following formula.
+For multiple choices columns, the property on the record is of type Table. It's a single column table with a Value column, with each row representing a selected value. To display a user-friendly, comma-separated list of text values, some preprocessing is required. For example, if you had a Preferred Delivery column that allowed users to choose one or more weekdays for delivery, you'd use the following formula to set the Text property on a label.
+This formula would result in the following display of the list of selected values.
+## Choice vs. lookup
+One common data modeling decision is choosing between a choice column and a lookup column or between multiple choices and a many-to-many relationship. There's no right or wrong answer. However, your decision affects how you manage the list of values and the formulas that you can apply. Consider the differences that are summarized in the following table.
+Remember that after you've created the column, you can't change the data type. So before you create the column, consider how the apps, automation, or reporting will be using the data.
+The rest of this module explores how to use choice columns when you're building a canvas app from Microsoft Power Apps.
+# Filter Dataverse choice columns with Power Fx formulas
+Completed100 XP
+4 minutes
+When you have a Dataverse table with a choice column, you’ll often want to filter data using that choice column. The most common filtering scenarios are:
+Filter the table rows for display in a gallery.
+Have a dropdown menu or combo box control with the list of choice values, and then let the user select one or more. Then, you can use the selected values to filter the table rows that you show in the gallery.
+For example, if you have a Category choice column on the Accounts table, you can use the following logic to filter only preferred customers:
+PowerApps Formula
+Filter(
+  Accounts,
+  Category = 'Category (Accounts)'.'Preferred Customer'
+)
+Be sure to use the full table.column string, and not just the column string, 'Preferred Customer' (like the image below), because it's an invalid comparison. If you forget to add the table to the string, you see the 'Incompatible types for comparison' error. Since the 'Category (Accounts)' is a table (or option set) itself, you can't compare the table value with a text value. Therefore, you need to use the fully qualified reference: 'Category (Accounts)'.'Preferred Customer' (also displayed as [@Category].'Preferred Customer').
+Frequently, you use a dropdown or combo box to filter a gallery so users can select which categories of items to display. In the following example, you'll use a combo box to allow users to make multiple selections of account categories to show in the gallery.
+First, add a combo box to the screen, and then set the Items property by using the Choices function.
+The Choices() function prepares a list of values for your user to select from by using the metadata for the choice column Accounts.Category.
+Next, you modify the Items formula for the gallery to include using the combo box SelectedItems property.
+Filter(Accounts, Category in ComboBoxCategory.SelectedItems)
+Using the in operator allows the formula to filter on any of the selected categories.
+This formula will only show rows in the gallery when at least one category is selected. If you want to show all rows when no categories are selected, you could add an IsEmpty check to your formula.
+PowerApps Formula
+Filter(
+  Accounts, Category in ComboBoxCategory.SelectedItems
+  || IsEmpty(ComboBoxCategory.SelectedItems)
+)
+## Filter choices columns
+Filtering table rows on a choices column is complicated by how the data is stored in Dataverse as a comma-separated list. As a result, any filter that you compose that involves a choices column receives a delegation warning, as illustrated in the following example.
+One approach that you could take to avoid the delegation issue is to create a Dataverse table view that filters the choices values and then use the view in your Filter() function criteria. This approach would help you avoid the delegation warning, but it won't allow the app user to provide the filter criteria values. The following screenshot shows an example of a Dataverse view filter for the Preferred Delivery choices column.
+You could use this Dataverse view named Monday Delivery by using the following Filter() function:
+PowerApps Formula
+Filter(
+  Accounts,
+  'Accounts (Views)'.'Monday Delivery'
+)
+Additionally, you can still include user-entered criteria for columns other than the Category. For example, the following Filter() function shows the addition of the Category choice column, which is filtered on the value that the user selected from the dropdown list.
+PowerApps Formula
+Filter(
+  Accounts,
+  'Accounts (Views)'.'Monday Delivery',
+  Category = Dropdown1.Selected.Value
+)
+Because of their standardized list of values, choice and choices columns are useful in providing consistent ways to filter table rows.
+# Modify choice and choices values
+Completed100 XP
+4 minutes
+The simplest way to set a choice column value in a table is to use an Edit form. When you add a choice column to the form, it sets up the field to complete the following tasks:
+Set up as either a dropdown menu (for a single choice) or a combo box (for more than one choice). (When you add an Edit form, Power Apps will set up both with a combo box.)
+Use the Choices() function to populate the list of values that the user can select. (Again, this is done automatically when using an Edit form).
+Set the control's current value from the row's column value.
+Save the value to the table by using the SubmitForm function on a control, such as a button.
+When a column is added to the form, it's editable by default. If you want to display the choice column on the form but not have it editable, you can select the control's DisplayMode and change it to DisplayMode.View. (You may need to first navigate to the Advanced tab in the Properties pane on the left side of the canvas and Unlock to change properties.)
+## Use Patch to create or update
+You can also create or update choice column values by using the Patch() function. This approach is suitable when updating only a few fields that require little or no user input. For example, on a gallery item you can have a button that, when selected, will use the OnSelect behavior to run a Patch() function to update the row.
+The following example shows that a button has been set up on the gallery item to make the account a preferred customer. When the button is selected, the goal is to set the row's Category choice field to Preferred Customer. To accomplish this task, we've added a Make VIP button to the gallery item.
+The OnSelect property for the Make VIP button contains the Patch() formula, as shown below:
+PowerApps Formula
+Patch(Accounts, ThisItem, {Category: 'Category (Accounts)'.'Preferred Customer'})
+If your table column uses a Choice set, when you use Patch, you need to prefix your value with the Choice set name, else you get an 'OptionSetValue' error. You can learn what the Choice set name is by going to your Table in Dataverse, selecting that column in Edit mode, and looking for the field Sync this choice with. Just below that column will be the name of the Choice set.
+In a case like this, your Patch() on a button in a similar table would be similar to this:
+PowerApps Formula
+Patch(Accounts, ThisItem, {'Customer Type': Category.Preferred})

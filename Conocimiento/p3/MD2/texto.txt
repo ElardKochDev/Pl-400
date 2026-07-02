@@ -1,0 +1,268 @@
+# Introduction to conducting global operations with the client API Xrm object
+Completed100 XP
+8 minutes
+The Client API provides the Xrm object, which is globally available in your code, enabling various activities without relying on the execution context. At a high level, the following diagram illustrates each of the available properties and methods. For an in-depth overview of this object, see Client API Xrm object.
+## App object
+Using addGlobalNotification from the App object, you can display an error, information, warning, or success notifications for an app and specify actions to execute based on the notification. This notification is similar to form notifications, but you can use it outside the context of a form. For example, a command bar script could notify a user of an action completed. Use clearGlobalNotification method to clear a notification in the app.
+## Device object
+The Xrm.Device object exposes native device capabilities that are related to mobile device interactions, except for the pickFile method, which is also accessible through web clients. Canvas apps also provide an extensible framework for mobile development and should be considered in these scenarios. The following table is a summary of the methods that are available within the Xrm.Device object.
+Depending on the device configuration, some functionality isn't available. User consent may also be required for the app to access specific device capabilities. For example, the user may have globally disabled device location capabilities or refused the app camera access. When developing an app, beware that these methods may fail because of the device's capabilities, configuration, lack of permissions, or consent.
+## Encoding object
+You can use the Xrm.Encoding object to encode and decode XML and HTML strings. This encoding and decoding can be valuable when you're:
+Interacting with HTML web resources,
+Encoding and decoding query string parameters,
+Interacting with FetchXML that contains special characters like '&' or '<' in a search string.
+## Navigation object
+The Navigation object provides navigation-related methods you can use within a model-driven application. Because of their blocking nature, activities such as showing alert, confirm, and error dialogs aren't considered an optimal user experience but are still available. In these scenarios, we recommend considering form notifications or other non-blocking mechanisms to warn users of an issue. Here's a summary of methods that are available within the Xrm.Navigation object.
+## Panel object
+The Xrm.Panel object provides a method to display a webpage on the side pane of a model-driven app form. This feature is currently in preview and isn't covered in detail here. For more information, see Xrm.Panel.
+## Utility object
+The Xrm.Utility object is a container for various useful methods. The following table is a summary of the methods that are available within the Xrm.Utility object. For more information, see Xrm.Utility (Client API reference)
+There are also many methods not listed here that you might come across in older code that has now been deprecated because they've moved to the Xrm.Navigation namespace. If you find these methods, you should update the code to use the new Xrm.Navigation methods.
+## Xrm.WebApi object
+The Xrm.WebApi object provides properties and methods to use the Web API for traditional CRUD operations within a client script. When using Xrm.WebAPI in your script, operations are automatically performed in the context of the current app user. You can use the Web API when the app is online and offline (if you configure the environment for offline). The namespace includes a specific online and offline set of methods; however, using these methods requires keeping track of the client state. If you use the Xrm.WebAPI, Xrm.WebAPI.createRecord, the API determines if it should use the online or offline namespace methods for you.
+The following table is a summary of the methods that are available within the Xrm.WebApi object. For more information, see Xrm.WebApi (Client API reference).
+Using properties and methods of Xrm object, you can automate business processes and improve the overall user experience.
+# Client scripting best practices
+Completed100 XP
+9 minutes
+Although developing client scripts may seem straightforward for seasoned JavaScript developers, it is essential to follow best practices when implementing them. Developers often overlook that users may access the data through other means. For example, they can use data import or export, maker studio, canvas apps, third-party desktop apps, shell scripting, etc. You should use client scripting to solve specific client-side UI issues and enhance user experience in a model-driven app. It is neither a security measure nor a universal solution. Often, a client-side approach must be combined with a server-side solution, such as a Dataverse plug-in, to ensure all access points fulfill the business requirements.
+## Use solution checker
+Solution checker can perform static analysis checks on your solutions against a set of best practice rules and quickly identify these problematic patterns. This check includes the JavaScript used for client scripting. The checker can identify performance, stability, and reliability issues as they become introduced, which can negatively affect the user experience. The checker can also spot the use of deprecated methods. When run regularly, you can proactively identify and remediate the problems before their release to the users. You can run the solution checker on demand from the maker portal or as part of an automated build process. This automation allows it to be run regularly and become a part of your ongoing application lifecycle management process.
+For more information about using solution checker, see Use solution checker to validate your apps in Power Apps in product documentation.
+## Business rules vs. client script
+Business rules are an available feature in model-driven applications that enable users to perform frequently required actions on a form based on certain requirements and conditions. Specifically, business rules can do the following tasks:
+Set field values
+Clear field values
+Set field requirement levels
+Show or hide form column controls
+Enable or disable form column controls
+Validate data and show error messages
+Create business recommendations based on business intelligence.
+One of the distinct features of business rules is that table-scoped rules can automatically apply the logic on the backend where applicable. This scoping ensures app consistency regardless of whether an action runs via the user interface, data import, or an API method call. Client script alone wouldn't be a full equivalent in these scenarios.
+While the available business rules framework is robust, some scenarios might exist where business rules can't fully implement a given requirement. In these cases, client scripting can narrow the differences between business rules and a more demanding requirement. Here are some common limitations that users experience with business rules where client script might be a better solution.
+### Reference related data
+If you need to reference data in a related table, such as the address of the primary contact of an account, you need to use client script and the Web API.
+### Logic needs to run on the form save event
+Business rules only run on form load and a field change unless you set the scope to table. You must use a client script if you need business logic to run on the Save form event.
+### Complex conditions
+If your condition has multiple and statements or requires or statements, writing these conditions in client script might be more efficient than through business rules.
+### Clear values of form data
+Clearing data from a form column isn't easily accomplished in a business rule. While there are workarounds that you can use, like assigning a "dummy" column that always contains NULL values, you can more elegantly accomplish this using client script.
+### Calculated columns vs. client script
+Calculated columns run the logic on the retrieve, so any client-side changes don't reflect in the value of the calculated column until a form refreshes. If you want data to update instantly on the form, client script would be the preferred method. Often, client-script complements a backend implementation that uses calculated or rollup columns, plug-ins, etc. This combined approach can provide a consistent user experience in the app while ensuring data consistency and integrity at the backend.
+## Coding standards and best practices
+The following sections cover the best practices and standards for coding.
+### Define unique script function names
+The functions you write are most likely on a form with many other libraries. If another library contains a function with the same name as the one you provide, whichever function loads last is the one the form uses. To avoid a potential conflict, make sure that you use unique function names. You can use the following strategies if you or your organization doesn't have one already established:
+Unique function prefix - Define each of your functions by using the standard syntax with a consistent name that includes a unique naming convention, as shown in the following example.
+JavaScript
+function MyUniqueName_performMyAction()
+  {
+  // Code to perform your action.
+  }
+Libraries with namespaces - Associate each of your functions with a script object to create a namespace to use when you call your functions, as shown in the following example.
+JavaScript
+//If the MyUniqueName namespace object isn’t defined, create it.
+  if (typeof (MyUniqueName) == "undefined")
+     { MyUniqueName = {}; }
+     // Create Namespace container for functions in this library;
+     MyUniqueName.MyFunctions = {
+   performMyAction: function(){
+   // Code to perform your action.
+   //Call another function in your library
+   this.anotherAction();
+     },
+     anotherAction: function(){
+   // Code in another function
+    }
+  };
+When you use your function, specify the full name, as shown in the following example.
+JavaScript
+MyUniqueName.MyFunctions.performMyAction();
+Tip
+If you call a function within another function in the same namespace, you can use the this keyword as a shortcut to the object that contains both functions. However, if you use your function as an event handler, the this keyword will refer to the object on which the event is occurring.
+### Avoid unsupported methods
+While a few third-party online resources might suggest or have examples of how you can use unsupported methods to perform certain actions, this isn't supported or recommended. These methods can't be guaranteed to work in future versions of your app and might contribute to the instability of your implementation. You should also avoid methods you discover by inspecting the API objects in the debugger if the discovered methods aren't in the official documentation for the client API reference documentation.
+### Review your code for deprecated methods
+The Client API is being continuously developed and improved. It's important to review your code base for the use of deprecated methods and follow documentation recommendations for their replacements. If you use the solution checker, it flags these methods as problems.
+### Avoid using jQuery in forms and ribbon commands
+jQuery and other direct HTML DOM manipulation libraries aren't supported within form scripts or command bar commands. You should restrict your scripts to only using methods in the Client API object model. For more information, see Understand the Client API object model.
+### Write non-blocking code
+You should use asynchronous patterns to ensure a non-blocking user experience when performing queries or process-intensive activities.
+Try avoiding methods that block UI, like confirmation dialogs, blocking progress indicators, etc. The preferred interaction method with the user is through non-intrusive notification mechanisms like a highly visible alert area in the app or form.
+### Write code for multiple browsers
+Ensure that any scripts you implement you test to work against all browsers and device form factors your users use with your model-driven apps. For more information, see Supported web browsers and mobile devices.
+# Debugging client script
+Completed100 XP
+3 minutes
+Nearly every modern browser has a debugging extension that supports capturing network traffic, analyzing page content, and debugging client scripts. The following toolsets are useful for performing debugging operations:
+Microsoft Edge (through F12 Developer Tools). For more information, see Using the F12 developer tools guide.
+Google Chrome (through F12 Developer Tools)
+Mozilla Firefox (using Firebug)
+Apple Safari (using Web Inspector)
+## View script resources
+When your model-driven app form page loads, all client script libraries load alongside the webpage as individual script resources. Given the volume of script resources needed to run a model-driven app, locating a file you might want to debug against can be difficult. When using debugging tools like Microsoft Edge, we recommend you note your file name and use the tool's search capabilities to locate your script files.
+## Write messages to the console
+Using the window.alert method when debugging JavaScript issues or the debugger statement to interrupt execution are still commonly used to troubleshoot code in the application. But now that all modern browsers provide easy access to debugging tools, it isn't a best practice as others might be using the application you're currently debugging. These debugging calls are also often inadvertently left in code, causing issues for the app users in production.
+Consider writing your messages to the console instead. Here's a small function you can add to your libraries to help send any messages you want to view to the console when it's open.
+JavaScript
+function writeToConsole(message)
+{
+ if (typeof console != 'undefined') {
+  console.log(message);
+ }
+}
+Unlike the alert method, if you forget to remove any code that uses this function, people using the application don't see your messages. It's also helpful when troubleshooting the application behavior in production without disrupting the app users.
+## Use Fiddler Auto-Responder to replace web resource content
+Constantly editing web resources when they are under development can be difficult and time-intensive. You have to republish the files within a solution upon every edit and ensure that you clear the browser cache of the previous version of the resources. In addition, if multiple developers share the environment, it can be disruptive for others.
+To improve efficiency, consider using a tool like Auto-Responder in Telerik Fiddler to replace content of a web resource with content from a local file, rather than uploading it and republishing each time. Several other third-party tools that also support live editing can be considered. For more information on how to install and configure Fiddler Auto-Responder, see Script web resource development using Fiddler Auto-Responder.
+# Exercise - Use table data from client script
+Completed100 XP
+14 minutes
+In this exercise, you use a client script to implement the business requirement of making columns on the form required based on the values in a related table. You set the requirement level of columns on the Idea form in the Innovation Challenge sample app based on the value of columns on the Challenge table. To accomplish this, you use the Xrm.WebAPI methods to retrieve the related data.
+Important
+Use a test environment with Microsoft Dataverse provisioned and the sample apps enabled. If you don't have one you can sign up for the community plan.
+## Task - Prepare solution
+In this task, you create a solution, add existing tables to the solution, add new columns, and prepare the main form of one of the tables you added to the solution.
+Navigate to Power Apps maker portal and make sure you're in the correct environment that has the sample apps enabled.
+Select Solutions and then select + New solution.
+Enter Innovation Challenge Web API for Display name, select CDS default publisher for Publisher, and select Create.
+The Innovation Challenge Web API solution you created should open.
+Select + Add existing and then select Table.
+Enter idea in the Search textbox, select Idea, and then select Next.
+Note
+If you're unable to locate Idea table you may not have the sample apps in your environment. Select another environment or create a new one with the sample apps installed.
+Select the Edit objects button.
+Select the Forms tab, select the Information form of Form type Main, and then select Add.
+Select Add again.
+Select + Add existing and select Table again.
+Search for challenge, select Challenge, and then select Next.
+Select the Edit objects button.
+Select the Forms tab, select the Information form of Form type Main, and then select Add.
+Select Add again.
+Open the Challenge table you just added to the solution.
+Select + New and then select Column. You're adding two columns to indicate what data is required for Idea rows created for this Challenge.
+Enter Investment Required for Display name, select Choice | Yes/No for Data type, expand the Advanced options. Make a note of the prefix of the Schema name; your prefix is different. You need this when you're creating the script and what to refer to the fields you're adding.
+Select Save.
+Select + New and then select Column again.
+Enter ROI Required for Display name, select Choice | Yes/No for Data type, and select Save.
+Expand the Challenge table on the left side and then select Forms.
+Open the Information form you added to the solution.
+Select the Table columns tab.
+Add the Investment Required column to the form.
+Add the ROI Required to the form.
+The form should now look like this image. Select Save and publish. Wait for the publishing to be completed.
+Go back to the solution by selecting the back button.
+## Task - Create client script
+In this task, you create a script that sets the required level for columns on the Idea table based on the Challenge tables column values.
+Start a new instance of Visual Studio Code or use your favorite code editor. You can download and install Visual Studio Code.
+Select Open Folder.
+Create a folder in your Documents folder and name it ClientScriptLab.
+Select the ClientScriptLab folder you created and select the Select Folder button.
+Hover over the CLIENTSCRIPTLAB folder and select New File.
+Name the file IdeaForm.js.
+Add the below functions to IdeaForm.js. Your functions should have either unique names or use a namespace to ensure uniqueness.
+JavaScript
+function LearnLab_handleIdeaOnLoad(executionContext) {
+}
+function LearnLab_handleChallengeOnChange(executionContext) {
+}
+Add this script to the OnLoad function. This script registers an OnChange event handler, you need to handle OnChange in case the related challenge changes.
+JavaScript
+var formContext = executionContext.getFormContext();
+formContext.getAttribute('sample_originatingchallengeid').addOnChange(LearnLab_handleChallengeOnChange);
+Add this script to the OnChange function. This code simply gets the formContext.
+JavaScript
+var formContext = executionContext.getFormContext();
+Add this function to the IdeaForm file. This function is called from both OnLoad and OnChange functions and the formContext is passed as an argument. This is where you implement the business logic to set the requirement levels.
+JavaScript
+function LearnLab_setRequiredFields(formContext) {
+}
+You first get the challenge lookup values. Add this script to the setRequiredFields function. We got sample_originatingchallengeid from the properties of the column in solution explorer.
+JavaScript
+var challenge = formContext.getAttribute('sample_originatingchallengeid').getValue();
+You then check if the challenge value is null. Add this script to the setRequiredFields function.
+JavaScript
+if (challenge != null) {
+    }
+    else{
+    }
+You make the columns not required if the challenge is null. Add this script inside the else. This ensures if a challenge isn't selected the columns aren't required.
+JavaScript
+formContext.getAttribute("sample_investmentrequired").setRequiredLevel('none');
+formContext.getAttribute("sample_timetoroimonths").setRequiredLevel('none');
+Your IdeaForm should now look like this image.
+You get the ID of the related challenge if the challenge isn't null. Add this script inside the if statement.
+JavaScript
+var challengeId = challenge[0].id;
+Now you retrieve the challenge row using WebAPI and select only the two columns you're interested in InvestmentRequired and ROIRequired. Add the script inside if statement.
+Note
+Replace crc8c with your prefix from Task 1.
+JavaScript
+Xrm.WebApi.retrieveRecord("sample_challenge", challengeId, "?$select=crc8c_investmentrequired,crc8c_roirequired").then(
+            function success(result) {
+            },
+            function (error) {
+            }
+        );
+If the retrieveRecord succeeds, you first create two variables that hold the requirement values for both columns and set their initial value to not required. After that you check whether the columns are required and set the requirement variable accordingly. Finally you set the column requirement to the value of the variable you created. Add this script inside the success function. Replace the prefix cr07c_ for cr07c_investmentrequired and cr07c_roirequired with the prefix of the columns you created.
+Note
+Replace crc8c with your prefix from task 1.
+JavaScript
+var investmentRequired = 'none';
+var roiRequired = 'none';
+if (result.cr07c_investmentrequired) {
+    investmentRequired = 'required';
+}
+if (result.cr07c_roirequired) {
+    roiRequired = 'required';
+}
+formContext.getAttribute("sample_investmentrequired").setRequiredLevel(investmentRequired);
+formContext.getAttribute("sample_timetoroimonths").setRequiredLevel(roiRequired);
+You log the error message if retrieveRecord causes an error. Add this script inside the error function. You could also use methods from Xrm.Navigation to show a dialog to the user with appropriate options if necessary.
+JavaScript
+console.log(error.message);
+The LearnLab_setRequiredFileds function should now look like this image.
+You call the LearnLab_setRequiredFileds from both OnLoad and OnChange functions. Add this script to both OnLoad and OnChange functions.
+JavaScript
+LearnLab_setRequiredFields(formContext)
+Your IdeaForm should now look like this image.
+Select File and Save all.
+## Task - Upload the script
+In this task, you load the script you created into your environment.
+Navigate to Power Apps maker portal and make sure you're in the correct environment.
+Select Solutions and open the Innovation Challenge Web API solution.
+Select + New and select More | Web resource.
+Enter IdeaForm.js for Name, enter IdeaForm.js for Display name, select Java script (JS) for Type, and then select Choose File.
+Select the IdeaForm.js file you created earlier and then select Open.
+Select Save.
+Your solution should now have the Challenge table, Idea table, and the IdeaForm.js web resource.
+Don't navigate away from this page.
+## Task - Edit form
+In this task, you add the JavaScript library to the Idea main form and add an event handler for On Load event.
+Make sure you're still in the Innovation Challenge Web API solution.
+Expand the Idea table and select Forms.
+Open the Main Information form.
+Select the Form libraries tab.
+Select + Add library.
+Enter idea in the search textbox and press Enter. Select IdeaForm.js, and then select Add.
+Select the Events tab from the right.
+Expand the On Load section and select + Event Handler.
+Enter LearnLab_handleIdeaOnLoad for Function, check the Pass execution context as first parameter checkbox, and select Done.
+Select Save and publish and wait for the publishing to complete.
+Select the Back button.
+Select All.
+Select Publish all customizations and wait for the publishing to complete.
+## Task - Test
+In this task, you test your script.
+Navigate to Power Apps Maker Portal and make sure you're in the correct environment.
+Select Apps and launch the Innovation Challenge application.
+Select Challenges and open one of the Challenge rows.
+The Investment Required and ROI Required should be empty. Select Related and select Ideas.
+Open one of the Ideas.
+Clear the Investment Required and Time to ROI (months) column values.
+The columns aren't required because the requirement columns on the Challenge table are empty. Select the back button.
+Select the Details tab and select Yes for both Investment Required and ROI Required.
+Select the Ideas tab and open the same idea you selected last time.
+The two columns should now be required.

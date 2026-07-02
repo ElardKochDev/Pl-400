@@ -1,0 +1,175 @@
+# Demo of the maker portal experience
+Completed100 XP
+7 minutes
+You can build a custom connector in the maker experience. The following video demonstrates how to add and build a custom connector in this module's solution for a pet store.
+# Explore custom connector configuration options
+Completed100 XP
+8 minutes
+This unit continues explaining the basics of custom connectors by taking an in-depth look at some available configuration options.
+## Connector naming and general information
+One of the first decisions that you'll make is the name of your connector. The name should be unique and clarify what the connector is to the consumer. You're limited to 30 characters for this name, and you can elaborate more in the Description field. The Icon background color field can also help you visually identify your connector. These fields are important because they show when the user is selecting the connector to use, and these visual cues help a user work more efficiently. If you plan to submit your connector for certification, make sure that you review the stricter requirements in the Instructions on submitting your connector to Microsoft documentation.
+## Action and trigger naming
+After a user has narrowed down to your connector, they'll pick an action or trigger to use from the connector. The Operation ID, Summary, and Description fields help you describe each action and trigger. The operation ID is used internally, must be unique, and can't contain spaces. Using camel case, such as GetInvoice, will help simplify your ability to read the ID if you're looking at markup for the definition. The lack of spaces in names can be difficult for makers who use screen readers, but using camel case will help make your definitions more accessible for them.
+The Summary field is important because it shows up in the list of actions and triggers when you're selecting the one to use. We recommend that you're descriptive enough so that you can tell what the action or trigger does. For example, the GetInvoice action description could be Get a specific invoice by ID. Frequently, makers will find the action by searching, so having descriptive names can help them find the right action quickly.
+The following image shows where the summary and description elements are used when you select an action or trigger.
+After you've selected an action or trigger, you'll be able to see both summary and description elements on each action card in the designer.
+In the previous images, notice that the naming patterns are inconsistent, where some names have spaces in the summary and some don't. You can fix that error by updating the fields in the portal or, if you own the API, you can ask the developer to update what they provide on the OpenAPI definition that you import. Be aware that if you manually make changes in the portal and then import the OpenAPI definition again, it will overwrite your changes.
+## Action visibility
+You can set the Visibility option on an action to influence how the action will show in the maker experience.
+None - This option is the default. The action will display normally.
+Advanced - The action will be available but not prioritized.
+Internal - The action will be hidden.
+Important - The action will be prioritized and will show first.
+For example, if you import an Open API definition with 10 actions, and you don't want users to see/use two of them initially, you could select the internal option to hide them. This approach is a useful way to handle operations that are used to support dynamic connector metadata. It can also allow you to hide the actions initially and then make them visible later as users request them. Hiding the actions would keep the list that's visible to users as minimal as possible.
+Actions that are selected as important are shown first. The user needs to select the connector to show any that are selected as none or advanced. This approach is best used when you have numerous actions and many aren't frequently used.
+## Request
+The request defines what parameters/data will be passed into the operation when the action invokes the operation on the API. When you import an Open API definition, it will configure the request query, headers, and body settings. You can also import manually by importing from the sample.
+The following image shows an example of what the screen looks like when you're looking at the definition.
+This configuration is important because it translates into what the user sees when they use the action.
+By editing each of the parameters, or by having the API developer provide more details, you can make the user experience better when you're using the action. Selecting the ellipsis (...) on each parameter will show you the following edit screen.
+The fields and options that you should review and change are:
+Name - Don't change; this field must match what the API is expecting.
+Summary - Make this field user-friendly, for example, toDate would be To Date.
+Description - This field contains a sentence that describes the parameter. It will be used as a placeholder text for the field.
+Default value - This field is an optional default value, but it must be provided if you set visibility to internal and make the parameter required.
+Is required - Make sure to set this option if API requires a value. This option enables a visual red asterisk next to the field.
+Visibility - This parameter works like the visibility option on the previously discussed action. If you have parameters that aren't used often, select the advanced option.
+Type and Format - Make sure that these fields are appropriate because the parameter that's importing from samples makes assumptions that aren't always correct.
+Dropdown type - Use this parameter to configure a static or dynamic list of values to help make user selection easier and more predictable.
+The following image shows an example of what the screen would look like after you fix the From Date parameter.
+## Response
+The response defines what you expect to be returned from the API. Unlike the request, which has only a single definition, you can have different responses based on the HTTP status. For example, if your API call generates an error, the body will contain the error details instead of whatever your API returns. You can also have a default response, which is a catch-all response if one isn't available for a specific HTTP status.
+Selecting one of the responses will reveal the details and, similar to the process with a request, you can edit these items for easier consumption.
+The items in the response correspond to what shows in the Dynamic content panel.
+Similar to the request, make sure that you've included good names and descriptions because they can help make using the values easier.
+## Validation
+Notice that a validation section similar to the following image appears at the bottom of the screen.
+Make sure that this screen doesn't show errors, and then take the time to resolve issues that are listed.
+## Other settings
+There are also other settings such as triggers, references, and policies that aren't covered in-depth in this module.
+Triggers can be configured if the API supports either polling or webhook events. When defined, triggers allow you to use your connector as the trigger for a Power Automate flow.
+References define reusable parameters and are typically created when you import the definition and it defines a reusable parameter. References can also be handcrafted by using the built-in swagger editor.
+Policies can be used to change the behaviors of actions and triggers. Policies are created by using one of the prebuilt policy templates.
+These advanced topics are covered in detail later in this learning path.
+# Exercise - Create a new connector in a solution
+Completed100 XP
+6 minutes
+In this exercise, you create your first custom connector for an existing API called Contoso Invoicing.
+Important
+Use a test environment with Microsoft Dataverse provisioned. If you don't have a test environment, you can sign up for the Power Apps Community Plan.
+### Task 1: Review the API
+To review the API, follow these steps:
+Go to Contoso Invoicing.
+Select the documentation link.
+Review the available operations.
+Select to expand and review each operation.
+Close the documentation browser tab or window.
+Select the Open API definition link.
+The following image shows an example of the OpenAPI version of what was shown on the documentation page. Right-click and select Save as.
+Save the file locally. You use this file later in the exercise.
+Close the definition browser tab or window.
+Select the API Key link.
+Copy and save your API key because you need it later.
+Select Return to home.
+Select Download Logo.
+Save the logo image locally; you use it later.
+### Task 2: Create a new solution
+To create a new solution, follow these steps:
+Go to Power Apps maker portal and make sure that you are in the correct environment.
+Select Solutions > + New solution.
+Enter Contoso invoicing for the Display name, select CDS Default Publisher for Publisher, and then select Create. When you're working on a real project, it's best to create your own publisher.
+Don't navigate away from this page after selecting Create.
+### Task 3: Create a new connector
+To create a new connector, follow these steps:
+Open the Contoso invoicing solution that you created.
+Select + New > Automation > Custom connector.
+Enter Contoso invoicing for the Connector name and then select to Upload the image.
+Select the connector logo image that you downloaded in Task 1: Review the API.
+Enter #175497 for Icon background color.
+Enter contosoinvoicingtest.azurewebsites.net for Host.
+Select Create connector.
+Don't navigate away from this page.
+### Task 4: Import the OpenAPI definition
+To import the OpenAPI definition, follow these steps:
+Select the arrow next to Connector Name.
+Select the ellipsis (...) button of the connector and then select Update from OpenAPI file.
+Select Import.
+Select the swagger.json file that you downloaded in Task 1: Review the API and then select Open.
+Select Continue.
+Fill in the host URL as contosoinvoicingtest.azurewebsites.net and then select Security.
+Notice that the field is filled out from the imported file.
+Don't navigate away from this page.
+### Task 5: Review and adjust definitions
+To review and adjust definitions, follow these steps:
+Select the Definition tab.
+Take a few minutes to review the operations that were imported.
+Notice the blue information icon next to GetInvoice that indicates there's something that needs attention.
+Select the GetInvoice operation.
+Notice that the operation indicates a missing Summary.
+Enter Get Invoice as the Summary to improve the usability.
+Notice the blue information circle on the PayInvoice operation and that it indicates a missing Description.
+Enter Pay an invoice as the Description.
+Delete both NewInvoice operations because you don't use them.
+Select the GetInvoiceSchema operation.
+Modify the Visibility option to internal so that people don't see it in their action list.
+Select Update connector.
+Don't navigate away from this page.
+### Task 6: Test the connector
+To test the connector, follow these steps:
+Select the Test tab.
+Select + New connection.
+Paste in the API Key that you saved in Task 1: Review the API and then select Create connection.
+Select the Refresh button.
+Select ListInvoiceTypes > Test Operation.
+You should see some invoice data in the body area.
+# Use a custom connector
+Completed100 XP
+3 minutes
+Custom connectors can be used by Power Apps, Power Automate, and Azure Logic Apps. After you've selected a custom connector, using it is no different than using a built-in connector. To use the custom connector with Power Apps and Power Automate, you must configure or deploy it in the same environment where you're building your apps and flows. If you know that it is a custom connector, the quickest way to add triggers or actions from it is by selecting the Custom tab because it will show only the custom connectors in the environment. From the environment, you can select triggers and actions like you would a built-in connector.
+Ensure that your custom connector actions and triggers have a descriptive summary so that users can more easily find it with the search feature.
+The first time that you use the custom connector in your app or flow, you'll be prompted to provide the app key or credentials, depending on the connector's authentication type. This action will establish a connection with the connector that can be reused if you use the connector again in the same environment.
+If you want to use your custom connector in other environments, make sure that you deploy or configure the custom connector in each of those environments. A common example of this scenario would be having a development, test, and production set of environments for your project.
+You can choose from the following options to deploy the custom connector into each of the environments:
+Download and import - From the list of custom connectors, you can select the download icon and then download the open API definition. This downloaded open API definition file can be used to import into another environment to create a custom connector, similar to the way you would have originally created this definition if you had imported from Open API. If using this option, you must still provide some configuration in the target environment to get the custom connector fully created. You would choose this option most frequently when you don't have the ability to use a solution.
+Solutions - Custom connectors that are created in the context of a solution, such as the connector that you created in the previous exercise, can be exported and imported into another environment for reuse. After the solution has been imported, no extra configuration of the connector is required. This option requires Microsoft Dataverse to be available in the source and target environments. This option provides the most robust application lifecycle management (ALM) capability, including the ability to use build automation tooling for deployment.
+Command line - By using Microsoft Power Platform Connectors Command Line Interface (CLI), you can also download and import the custom connector definitions. For more information, see Microsoft Power Platform Connectors CLI. You would use this option when you want to automate the manual download and import process and aren't using solutions. Additionally, you can use this option when preparing your connector for certification and sharing it as an open source. For custom connectors using solutions you can also use the Power Platform CLI to perform similar operations, see Microsoft Power Platform CLI.
+To use the same custom connector for an app in Azure Logic Apps, make sure that you recreate the connector in your Azure subscription. This task can be accomplished by using the download or the previously mentioned command-line interface approach. During the creation process of the Azure Logic Apps custom connection, you'll be prompted to import the OpenAPI file that you downloaded. After the custom connector has been configured, you can use it in Azure Logic Apps in the same way that you would use it in Power Apps or Power Automate.
+# Exercise - Use a connector from Power Automate
+Completed100 XP
+4 minutes
+In this exercise, you create a manually triggered Power Automate cloud flow that uses the Contoso invoicing custom connector that you created in the previous exercise in this module.
+Important
+Complete the Exercise: Create a new connector in a solution unit before starting this exercise.
+### Task 1: Create a Power Automate cloud flow
+In this task, you create a Power Automate flow inside the Contoso invoicing solution that you previously created.
+Note
+If you still have the API key from the previous unit, it would still be usable at this time. If not, you can get a new one.
+Get an API key from Contoso Invoicing.
+Select the API Key link.
+Copy and save your API key because you need it later.
+Go to Microsoft Power Platform maker portal and select the environment that you used in the Exercise: Create a new connector in a solution unit.
+Select Solutions and then select to open the Contoso invoicing solution.
+Select + New > Automation > Cloud flow > Instant.
+Name the flow Email invoice list, select Manually trigger a flow, then Create.
+Select + New step.
+Select the Custom tab and then select the Contoso invoicing custom connector. Using the Custom tab to locate custom connectors is the fastest way to find them.
+Select List invoices for the action.
+Enter Invoice connection as Connection name.
+Paste your API Key. and select Create
+Important
+Leave the List Invoices fields blank. This will allow us to pull all the information.
+Select Flow checker to confirm there are no mistakes.
+Select Save.
+Select the arrow button located next to the flow name to go back to the solution with the flow.
+Select OK if prompted.
+Don't navigate away from this page.
+### Task 2: Test the cloud flow
+In this task, you test the cloud flow that you created in Task 1: Create a Power Automate cloud flow.
+Open the Email invoice list cloud flow if not already open.
+Select Run.
+Select Continue.
+Select Run flow.
+Select Done.
+Refresh the run history.
+The flow run should succeed.
+When you open the flow, it opens in the copilot power automate designer. Select the List Invoices action and on the left hand side, scroll down to the Outputs section and then select Show raw outputs. A panel from the right hand side pops out so you can see the invoice information more clearly.

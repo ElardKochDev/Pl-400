@@ -1,0 +1,216 @@
+# Introduction
+Completed100 XP
+4 minutes
+Microsoft Power Platform custom connectors use OpenAPI (also known as Swagger) definitions to describe authentication, actions, triggers, and their parameters. The OpenAPI specification allows you to define extensions that augment the core definition to handle specific scenarios. Microsoft has defined several extensions to the OpenAPI definition to allow you to configure specific features that are supported by custom connectors.
+You can identify each extension by looking for x-ms-<name> in the OpenAPI definitions. You've likely already used some of these definitions when you configured a custom connector with the designer, such as when entering a summary on an action's parameter that uses the x-ms-summary extension to store the value in the definition. Several extensions can only be edited either directly through the designer's Swagger editor or by exporting the connector's definitions and then editing and importing them back. You can find a complete list of custom connector supported extensions.
+This module explains the following extensions and their uses:
+x-ms-capabilities - Used on the connector and operation level definition to indicate features that are offered.
+x-ms-encoding - Specifies encoding for a path parameter.
+x-ms-dynamic-values and x-ms-dynamic-list - Provide a list of options for the user to select input parameters for an operation.
+x-ms-dynamic-schema - Allows you to make parameters and response dynamic based on results of schema that is retrieved from an operation on the API.
+The primary use case for configuring these extensions is to make the connector easier to use. For example, without dynamic values, makers would have to know internal unfriendly schema values or strings for type/lookup parameters. By configuring dynamic values, you're helping to provide a user-friendly drop-down list for makers to select from.
+Keep in mind that some extensions also require support from the API. For example, dynamic schema requires the API to support an operation to retrieve the schema. In cases where you don't control the API, it might not be possible to configure these types of extensions.
+## Configure extensions
+While some OpenAPI extensions are configured as you work with definitions by using the designer, the extensions that are covered in this module aren't. To configure these extensions, you must use one of the following approaches:
+Import OpenAPI - When you import an OpenAPI file, it can contain Microsoft OpenAPI extensions.
+Microsoft Power Platform Connectors CLI - By using the command-line tool paconn, you can download the API definition file and edit it by using your favorite JSON editor. When you have finished editing, you can use paconn to upload the amended definitions back to your environment. This approach is best when you need to make other changes to the API Properties file for connection parameters, for example.
+Microsoft Power Platform CLI - By using the command-line tool, you can download the API definition file for custom connectors using solutions and edit it by using your favorite JSON editor. When you have finished editing, you can use the CLI to upload the amended definitions back to your solution. This approach is best when you need to make other changes to the API Properties file for connection parameters, and the custom connector is in a solution.
+Built-in Swagger editor - The custom connector designer has a built-in OpenAPI editor, which is the quickest way to add OpenAPI extensions.
+## Use the Swagger editor
+You can make the Swagger editor visible by turning on the Swagger Editor toggle switch from any of the steps in the custom designer.
+When the editor is engaged, the OpenAPI definition in YAML Ain't Markup Language (YAML) will display on the left, and validation messages (if any) and an operation list will display on the right.
+If you aren't familiar with YAML, it's a human-friendly data serialization standard that helps you make changes to the YAML content, save it, and have it consumed by the connector runtime.
+Most changes that you'll make will have an example to start from. A good place to look for changes in YAML is in other connectors that are located in the Microsoft Power Platform Connector GitHub repository. For example, if you want to implement an x-ms-capability extension, you could search the repository and see how other connectors have configured it.
+When using the editor, it's best to make small, focused changes. The editor checks your syntax as you type and tells you, in real time, if a mistake has been made and where the mistake is located.
+Tips for working with YAML in the swagger editor:
+Indentation matters - Indentation is part of YAML specifications; therefore, observe how indentation is used to further provide configuration specifics.
+Open and closed braces {} - If you have an open brace {, you need to have a closed brace }.
+Open and closed brackets [] - If you have an open bracket, you need to have a closed bracket.
+Ctrl+F for Find - This keyboard shortcut allows you to search within the YAML.
+Ctrl+Z for Undo - If you notice that you made a mistake, using the Ctrl+Z keyboard shortcut will undo your last change.
+In the rest of this module, you'll explore how to use some of the Microsoft OpenAPI extensions to make your custom connectors easier to use.
+# Use OpenAPI extensions
+Completed100 XP
+4 minutes
+This unit explores how to use the Microsoft OpenAPI extensions x-ms-capabilities and x-ms-url-encoding in your custom connectors.
+The x-ms-capabilities extension helps you configure which capabilities are offered by the connector at the connector level and operation level. Currently, Microsoft Power Platform custom connectors can be configured for the following options:
+chunkTransfer - Operation level
+testConnection - Connector level
+## Enable chunk transfer
+When handling messages, the connector runtime limits message content to a maximum size. This limit helps reduce overhead that is created by the storing and processing of large messages. To help handle messages that are larger than this limit, connectors can chunk a large message into smaller message chunks. That way, you can still transfer large content. When communicating with other services through connectors, the runtime can consume large messages but only in chunks. This condition means that connectors must also support chunking, and the underlying HTTP message exchange between the connector and these services must use chunking.
+For a custom connector to use chunk transfer, the following parameters are required:
+The API must support chunking. For more information, see Chunked message handling for connectors.
+Your custom connector must enable the chunk transfer capability extension on the action.
+The maker who is using your connector action must enable chunk transfer for the flow step.
+In your custom connector definition, you would add the following logic to the operations definition for which you want to enable chunk transfer.
+{chunkTransfer: true}
+If you were working with the downloaded apiDefinition.swagger.json file instead of the YAML editor, you would make the change that is shown in the following screenshot.
+After this change has been made, indication of the change won't be shown in the custom connector designer. However, when the action is used in a flow, the following Allow chunking option will display on the step's settings.
+Assuming that the API supported it, after chunking has been enabled, large messages would now work and be transferred by using chunking.
+## Configure test connection
+By default, when you create a connection by using a custom connector, the connection isn't verified as being valid or not. For example, if you provided an invalid host URL or an invalid API key, you could create a connection, but it would eventually fail when the connection was used. By using the testConnection OpenAPI extension, you can specify an operation on your custom connector that will be run during connection creation to validate the provided configuration.
+To implement connection testing, you must have a simple operation defined on your custom connector that returns HTTP 200 (success). This operation can be an existing one that you've configured already, or you could create one specifically for testing the connection. If you configure a specific test operation, we recommend that you mark it as internal so that users don't try to use it. You can also pass static parameters to the operation. For example, if your action took a $top parameter to limit the number of records returned, you could use parameters to limit results to one record.
+The following example shows the defined ListInvoices operation and how it will be used to test the connection, and it shows configuring of the testConnection extension.
+Editing apiDefinition.swagger.json would look similar to the following image.
+## Configure path encoding
+The x-ms-url-encoding extension applies to parameters that are included in the request URL path.
+For example, you can define an action to return customers by country/region with the following request:
+https://myapi.myservice.com/customers/{country}
+In this action, country will become a parameter that is supplied by the user of the connector. Because these parameters are part of the path, they need to be URL-encoded. By default, path parameters are single URL-encoded. However, in certain scenarios, the underlying API might expect the parameters to be double URL-encoded to resolve potential ambiguities that are introduced by certain characters such as the at sign (@), slash (/), back slash (\), and so on.
+To configure double encoding on a path parameter, you would add the following option to the parameter:
+x-ms-url-encoding: double
+Consider the API that has two methods that return the input path parameter, except one of them uses double encoding, as shown in the following image.
+When you run a Microsoft Power Automate flow that calls both actions with a complex input, double encoding passes the same text value to the API, except that it's now double-encoded.
+This extension simplifies handling of the parameters where the API expects double URL encoding because a connector user doesn't need to encode the path parameters when calling the actions.
+# Use the dynamic list of values extension
+Completed100 XP
+4 minutes
+When you configure a parameter for an action on a custom connector, the default maker's experience to enter the parameter value is a simple text box. If you had a parameter on an Add Invoice action named Invoice Type ID, the maker experience would look similar to the following image.
+The maker would need to know the correct values for the Invoice Type ID field that, for this example, are the following values.
+A maker would need to enter 1 to indicate that the invoice is of type Purchase Order. To make this an easier OpenAPI definition, you should support the enum keyword. You can define an enum with a list of values that the maker can choose from.
+You can configure an enum by using the custom connector designer by editing the parameter configuration. On the configuration, if you select Static in the Dropdown type area, it will let you provide a comma-separated list of values. The following screenshot shows what the Invoice Type ID configuration would look like.
+You can also use the Swagger editor and add the enum, as shown in the following image.
+Additionally, if you looked at the maker experience in Power Automate, it would now resemble the following image.
+While the experience is improved, it still requires the maker to know what the value of 1 or 2 means. You could describe the meaning of those values in the parameter description to help simplify the process for makers. Using enums is best for self-describing data, such as if you had a parameter for Days Due and used an enum for 30,60,90 that would be simple to understand and use. Another limitation on using enum is if the API adds new allowable values, you must edit the custom connector enum definition and publish the updated version of the connector. To improve the experience further, Microsoft added the OpenAPI extension x-ms-dynamic-values.
+## Configure dynamic values
+You can configure the x-ms-dynamic-values extension on a parameter to have the list of values retrieved from the underlying API.
+The benefits of this approach are:
+You can configure a label that the user sees in addition to the value.
+The returned values always represent the correct values from the API.
+The API can trim the list of values based on security or other needs on a per-user or per-connection basis.
+Other parameter values can be passed to the API to allow filtering of the returned list.
+Output of one field can be used as an input parameter for another API call, making it possible to build dependent options, such as country/region and state lists.
+The API that you're working with must provide an operation that returns an array of valid values and, optionally, their descriptions. To support the previous example of Invoice Type ID, the API provided a ListInvoiceTypes operation that returned the following data.
+In the custom connector designer for the Invoice Type ID parameter, you can configure the x-ms-dynamic-values extension by selecting Dynamic and then specifying an Operation ID and the Value and Value display name properties. The following screenshot shows the configuration for Invoice Type ID.
+You can also configure the x-ms-dynamic-values extension by using the Swagger editor.
+Using the Swagger editor or downloading and editing the JSON file is required if you're configuring parameters on the extension.
+Now with the extension configured, the maker is presented with a more user-friendly experience when they use the action.
+In addition to the x-ms-dynamic-values extension, Microsoft has also implemented a newer extension called x-ms-dynamic-list. In concept, both accomplish the same goal of making the action's parameter a drop-down list that the user can select from. Consider the x-ms-dynamic-values extension as version 1 and the x-ms-dynamic-list extension as version 2. If you're supporting older existing flows, we recommend that you implement both in your definition. If you're only supporting newly created flows, then use only x-ms-dynamic-list. The x-ms-dynamic-list extension improves the schema for the action parameters, making it possible to resolve some ambiguous references. For example, if a request has a path parameter ID and a parameter ID as part of the request body, x-ms-dynamic-list specification allows you to differentiate the two parameters while x-ms-dynamic-values wouldn't be able to support this API.
+To configure the x-ms-dynamic-list extension, you must directly change the OpenAPI definition because the custom connector designer only configures x-ms-dynamic-values. The following image shows the x-ms-dynamic-values configuration that has also added an x-ms-dynamic-list configuration.
+Configuring dynamic values on parameters for a custom connector can make the custom connector more user-friendly for makers.
+# Use dynamic schema
+Completed100 XP
+5 minutes
+When you configure an action on a custom connector, you can also configure parameters. These parameters are configured by importing either an OpenAPI definition or a sample request. Regardless of the approach used, the list of parameters is fixed. When that action is used, the maker will be presented with the static list of parameters as defined by the connector. For many scenarios, this approach is appropriate because the list parameters are fixed and don't vary. In some cases, the parameters that should be presented for input are variable.
+The most common use cases are:
+List of parameters vary based on a type, such as a category or a type of invoice.
+The state of the record could determine which parameters can be changed. For example, a shipped order could have different available parameters than a non-shipped order.
+The parameter list could be trimmed by security.
+A common action implementation across a few different data types. For example, API might implement a Create action that applies to accounts, contacts, orders, or invoices. Input parameters will be defined by the object type that the maker selects.
+Custom connectors support these scenarios by allowing you to configure dynamic schema OpenAPI extensions. When the dynamic schema OpenAPI extensions are configured, the custom connector runtime will call an operation to retrieve the schema that defines which parameters should be visible for that given action. The schema data can include other options such as the display name and description for the parameter.
+In the Contoso Invoicing API example, after the OpenAPI definition was imported, the action resembled the following image when it was used in a Power Automate flow.
+The preceding image shows parameters that aren't relevant for adding a purchase order invoice versus a non-purchase order invoice. Also, not all invoice fields are valid input for the invoice creation. For example, createDate is a field that is set by the API and shouldn't be part of user input. After you have implemented dynamic values for the invoice type ID and dynamic schema for the other parameters, the action will look like the following image.
+As the maker changes the invoice type from purchase order to non-purchase order, the Purchase Order parameter is hidden or shown as appropriate.
+The custom connector runtime supports two different extensions that can be used to configure dynamic schema. Both accomplish the same goal, where the x-ms-dynamic-schema extension is version 1 and x-ms-dynamic-properties is version 2. If you need to support older flows by using your action, you can configure both versions on your custom connector. If you only support new flows, you can configure the x-ms-dynamic-properties extension only.
+## API support
+For you to configure dynamic schema, the underlying API must provide support by defining the operation that returns the schema. If API doesn't already have a suitable action, and you don't have the ability to modify the API or request the changes, you might not be able to implement dynamic schema.
+The operation that returns the schema can take one or more parameters that are passed from the custom connector runtime. These parameters can be constants or can represent other data that is collected on the action card. That data can be used by the API to filter the list of parameters that are returned as part of the schema. In the previous example, Invoice Type is passed as a parameter to the operation to get the dynamic schema.
+The response from the operation that is used for dynamic schema must be a valid JSON schema. The following example shows what Contoso API GetInvoiceSchema returns.
+Notice the following key points about the content:
+Type must be provided and is used to identify the parameter data type.
+Summary and description are used in the Power Automate designer to identify the parameters to the maker.
+The x-ms-visibility extension property can be provided to indicate where you think this parameter should always be shown (value "important") or if a user action is required to reveal it to the maker, such as select Advanced link on a flow card (value "advanced"). Because this information is retrieved dynamically, it can vary depending on the context information that is available.
+The required array provides the list of required parameters.
+## Configure the dynamic schema extension
+To configure the x-ms-dynamic-schema or the x-ms-dynamic-properties extensions, you must directly edit the custom connector's OpenAPI definition. Currently, custom connector designer support isn't available for editing these values.
+The following image shows how the AddInvoice parameter configuration looked after the OpenAPI definition that was provided by the API was imported.
+The preceding example shows that AddInvoice takes a CreateInvoiceRequest object as input. The properties are defined by a referenced #/definitions/Invoice, which is a shared definition of all invoice properties.
+To implement the call to the dynamic schema extension, you can replace the properties with the configured extension.
+Instead of having a hard-coded list of properties, the GetInvoiceSchema operation will be called to get the list based on the typeId parameter.
+By implementing dynamic schema on your custom connector, you can clarify for the maker which parameters need to be used for the action.
+# Exercise - Use OpenAPI extensions
+Completed100 XP
+8 minutes
+In this exercise, you'll be configuring OpenAPI extensions on the Contoso Invoicing custom connector. You'll implement the following extensions:
+Test connection - To validate that the entered API key is valid.
+Dynamic values - To make input of Invoice Type ID a drop-down list of values from the API.
+Dynamic schema - To only show the parameters that are valid for the selected invoice type.
+Important
+Use a test environment with Microsoft Dataverse provisioned. If you do not have one, you can sign up for the community plan.
+Note
+Download the following file to your local computer to complete this exercise Contoso Invoicing Triggers. Select the download button on the middle-right of the screen.
+## Task 1: Import solution
+In this task, you'll import an unmanaged solution that contains a Contoso Invoicing custom connector and then test the connector. You'll use this connector to complete the tasks in this exercise.
+Go to Power Apps maker portal and make sure that you are in the correct environment.
+Select Solutions > Import solution.
+Select Browse.
+Select the ContosoInvoicingExtensions_1_0_0_0.zip solution and then select Open.
+Select Next.
+Select Import and then wait for the import to complete. You should get a success message after the import completes.
+Select Publish all customizations and then wait for the publish to complete.
+Open the Contoso Invoicing - Extensions solution that you imported.
+You should see the Contoso Invoicing - Extensions custom connector component.
+Select the Contoso Invoicing - Extensions connector and then select Edit.
+Start a new browser window and then go to Contoso Invoicing.
+Select the API Key link.
+Copy the API Key. Save this key on a notepad; you'll need it for future tasks.
+Return to the connector, select the Test tab, and then select + New connection.
+Paste the key that you copied in the API Key field and then select Create connection.
+Select Refresh connections.
+Scroll down to the Operations section, select ListInvoiceTypes, and then select Test operation.
+You should get a response containing invoice types. Later, you'll use this operation to implement the Dynamic Values extension for the Invoice Type parameter.
+Don't navigate away from this page.
+## Task 2: Add the test connection extension
+In this task, you'll add the test connection extension:
+Turn on the Swagger Editor toggle switch.
+Add the following fragment after the produces: [] and then select Update connector. Make sure that the text indentation matches the following image.
+x-ms-capabilities:
+   testConnection:
+     operationId: ListInvoices
+     parameters: {}
+Make sure the indentation looks like the image below.
+Select + New connection again.
+Enter your name or other random value for API Key and then select Create connection.
+The connection creation should fail.
+Provide the API key that you copied in Task 1 into the API Key field and then select Create connection.
+The connection creation should now succeed.
+Don't navigate away from this page.
+## Task 3: Configure dynamic values for invoice type ID
+In this task, you'll configure dynamic values for invoice type ID:
+Select the Definition tab.
+Select AddInvoice from the Actions section.
+Scroll down, select the ellipsis (Chevron) button of the typeId parameter, and then select Edit.
+Enter Invoice Type for Summary, enter 1 for Default value, and then select Yes for Is required.
+Scroll down and select Dynamic for Dropdown type.
+Select ListInvoiceTypes for Operation ID, select typeId for Value, and then select name for Value display name.
+Select Update connector.
+Turn on the Swagger Editor toggle switch.
+If you get hash key errors, close the connector browser tab, and then reopen it in edit mode.
+Locate AddInvoice and see if x-ms-dynamic-values was added.
+Don't navigate away from this page.
+## Task 4: Configure the dynamic schema extension
+In this task, you'll configure the dynamic schema extension:
+Select the Test tab.
+Select the GetInvoiceSchema operation and then select Test operation.
+Review the response. This response is what an API needs to return to allow Dynamic Schema to be configured.
+Turn on the Swagger Editor toggle switch.
+Locate the CreateInvoiceRequest line and replace the invoice line with the following Swagger text.
+Invoice:
+x-ms-dynamic-properties:
+operationId: GetInvoiceSchema
+parameters:
+typeId: {parameterReference: typeId}
+Before:
+After:
+Make sure that the indentations match the following image.
+Turn off the Swagger Editor toggle switch.
+Select the Definition tab.
+Select the GetInvoiceSchema action and then select internal for Visibility.
+Select Update connector.
+## Task 5: Test connector
+In this task, you'll test the connector:
+Go to Power Automate and make sure that you are in the correct environment.
+Select Solutions and then open the Contoso Invoicing - Extensions solution.
+Select + New and then select Automation > Cloud flow > Instant.
+Enter Dynamic metadata and Flow name, select Manually triggered a flow for trigger, and then select Create.
+Select + New step.
+Select the Custom tab and then select Contoso Invoicing - Extensions.
+Select AddInvoice for action.
+Enter My connection for name, enter your name for API Key, and then select Create. The connection test should fail.
+Provide the API key that you copied in Task 1 in the API Key field and then select Create again.
+The connection should be created successfully.
+In the Invoice Type drop-down menu, select Purchase Order.
+The Purchase Order field should now be visible.
+Change the Invoice Type to Non - Purchase Order.
+The Purchase Order field should no longer be visible.
+Save the flow.

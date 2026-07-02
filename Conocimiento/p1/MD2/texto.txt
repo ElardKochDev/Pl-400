@@ -1,0 +1,160 @@
+# Sometimes you need something more than forms
+Completed100 XP
+6 minutes
+When building canvas apps in Power Apps, you go to Galleries to display records from your data source and Forms to view, create, and edit an individual record, but sometimes forms are not enough. In those scenarios, Power Apps has functions for updating your tabular data sources directly.
+## Directly create and edit a record
+In this module, you will learn about using the Patch function to update your data sources without the use of forms directly.
+Patch is most often used when you need to take action on the data without user interaction in a repetitive manner, or your app design doesn't allow for the use of forms. For example, if you want to update a logging data source every time a user clicks a button to navigate to another screen you could use the formula for the OnSelect property of the button.
+Patch(LoggingTable, Defaults(LoggingTable), {WhoClicked:
+User().FullName, WhenClicked: Now()}); Navigate(NextScreen,
+ScreenTransition.Cover)
+This formula would create a new record in the data source named LoggingTable. The WhoClicked column sets to the FullName property of the user who is signed in, and the WhenClicked column sets to the Date and Time of when they clicked the button. This would open the screen named NextScreen using the Cover screen transition.
+## Delete a record
+There are also functions available for deleting one or more records from your data source. Those functions are:
+Remove and RemoveIf - These functions are used to remove or delete records from the data source.
+Clear - Use the Clear function to remove all of the records from a collection.
+For example, if you wanted to give the user the ability to delete a record from a Gallery control, add a Trash icon to the Gallery displaying the data source CustomerOrders and then set the OnSelect property of the icon to the following.
+Remove(CustomerOrders, ThisItem)
+This formula would delete the record for the item that was displaying the Trash icon from the CustomerOrders data source. There would be no confirmation, so you might consider implementing a check or pop-up dialog to confirm that the user truly wants to delete the record.
+## Bulk changes to records
+Patch and Remove are both functions that are used to affect one record. If you need to affect change on more than one record, there are two options:
+Use the ForAll function, which was covered in the previous module, to loop through a table of data and run a Patch or Remove function for each record in the table.
+Use the Collect function to write from one table to another. Each record of the source table is added as a separate record to the target table.
+These topics are covered in other Power Apps learning paths and are not covered in this learning path.
+## Collections are data sources
+It’s important to remember that these functions can use a collection as their target. Patch, Remove, and RemoveIf can all be used to modify both tabular data sources and collections. As you build more complex apps storing data in collections and working with those items is very common, these functions will be a big part of that manipulation.
+The remainder of this module will refer to updating a data source. Remember that a data source can either be a tabular data source or a collection unless stated otherwise.
+In the next unit, you will learn how to create and edit records.
+# Use the Patch function to create and edit records
+Completed100 XP
+8 minutes
+The Patch function is used to create and edit records in a data source when using a Form control doesn't meet your needs. Patch is used most often when you need to act on the data without user interaction in a repetitive manner. You also use it if your app design doesn't allow for the use of forms.
+## Use Patch to create a record
+The Patch function can be used to create a new record in your data source. To create a new record, there are three parts to the formula.
+Include the name of the data source you want to edit. This could be a tabular data source (such as Microsoft Dataverse or SharePoint) or a collection. For the example, you use CustomerOrders as the name of the data source.
+The Defaults function returns a record that contains the default values for the data source. If a column within the data source doesn't have a default value, that property isn't present. By using Defaults with the data source, this notifies Patch to create a new record.
+Include the columns that you want to populate in the new record. Here you specify the name of the column to update followed by the value to write to that column. For this example, you update the Region and Country column with a string value.
+The example formula is as follows:
+PowerApps Formula
+Patch(CustomerOrders, Defaults(CustomerOrders), {Region: "Americas", Country: "Canada"})
+This formula creates a new record in the CustomerOrders data source and sets the Region to Americas and Country to Canada. Notice that you don't define any primary key information (the ID column) that the data source updates according to its settings.
+## Use Patch to edit a record
+It's also possible to edit a record in the data source. To edit a single record, there are three parts to the formula.
+Include the name of the data source you want to edit. This could be a tabular data source (such as Dataverse or SharePoint) or a collection. For the example, you use CustomerOrders as the name of the data source.
+The record that you want to edit in the data source. The most common way to specify this record is to use the LookUp function to retrieve the record from the data source. Another option if you use a Gallery and you want to update the current record is to use the ThisItem function to reference the record. For this example, you use a LookUp function.
+Include the changes that you want to make. Here you specify the name of the column to update followed by the value to write to that column. For this example, you update the Region and Country column with a string value.
+The example formula is as follows:
+PowerApps Formula
+Patch(CustomerOrders, LookUP(CustomerOrders, ID = 1), {Region: "Asia", Country: "China"})
+This formula updates the record with an ID of 1 in the CustomerOrders table by setting the Region column to Asia and the Country column to China. If there are existing values in those fields, it is overwritten.
+## Update columns with Patch
+The primary logic of most Patch functions is updating the proper columns with the correct information. This is the source of most of your troubleshooting of the Patch function. Use the following points to help you work through Patch.
+Make sure you update all of the required columns from your data source.
+You can update as many or as few of the optional columns as you would like.
+Make sure your column names are spelled and capitalized correctly. Column names are case-sensitive.
+Make sure you write the correct data type. For example, if your column in the data source is a number type, then you can't write a string value to it, even if that string contains a number.
+There are four sources to pass values in your formula to Patch your data source:
+You can hardcode a value. An example is if you want to patch the status of the record with "Pending," your Patch formula would look like:
+PowerApps Formula
+Patch(CustomerOrders, Default(CustomerOrders), {Status: "Pending"})
+This formula creates a new record and sets the Status column to the string value of "Pending."
+You can reference a variable. For example, you can store the string "Under Review" in a variable named varStatus with the following formula.
+PowerApps Formula
+Set(varStatus, "Under Review")
+Then your Patch formula would be:
+PowerApps Formula
+Patch(CustomerOrders, Default(CustomerOrders), {Status: varStatus})
+This formula creates a new record and sets the Status column to the string value of "Under Review."
+You can reference the value from the property of a control. An example would be setting the value from a drop-down menu named Dropdown1 that contained the regions. Your Patch formula would look like:
+PowerApps Formula
+Patch(CustomerOrders, Default(CustomerOrders), {Status: Dropdown1.Selected.Value})
+This formula creates a new record and sets the Status column to the value of the selected item in the drop-down menu.
+You can use the output of a formula. An example would be setting the value of the Owner column using the FullName from the User() function. Your Patch formula would look like:
+PowerApps Formula
+Patch(CustomerOrders, Default(CustomerOrders), {Owner: User().FullName})
+This formula creates a new record and sets the Owner column to the current user's FullName from Microsoft Entra ID.
+## Patch example
+Let's take a look at another example, in this example you're trying to build a solution for signing users into class as they arrive. This type of Power Apps solution is common, and the Patch function helps you quickly achieve results.
+### Solution breakdown
+Here we have a simple Canvas app connected to our data source (TrainingClassSignIn). The data source has the following columns, Training Class, FirstName, LastName, EmailAddress, SignInStatus. This is the information we want to capture when a user selects the Sign In button. In the formula bar, you see the following code:
+PowerApps Formula
+Patch(TrainingClassSignIn,Defaults(TrainingClassSignIn),{TrainingClass:TrainingClassDD.Selected.Value, FirstName:FirstNameInput.Text, LastName:LastNameInput.Text, EmailAddress:EmailAddressInput.Text, SignInStatus:"Attended"})
+To elaborate, whenever someone selects the Sign In button, Power Apps writes a new record to the TrainingClassSignIn data source. As to what data is written back for the user signing in, you can see it's getting this information from the different controls we added (color coded in the formula). You might also notice that the code sets the SignInStatus each time to "Attended" for each new record submitted.
+As you can see, Patch is flexible and powerful. Patch has even more capabilities including the ability to update multiple records and merge records. For more information about these scenarios, see Patch function in Power Apps.
+# Delete records from data sources and collections
+Completed100 XP
+8 minutes
+In this unit, we're going to cover the concept of deleting a record from a tabular data source or collection. Unlike creating and editing records, which have multiple controls and functions, for deleting records there are only a few options including the Remove, RemoveIf, and Clear functions. We most often add these functions to the OnSelect property of a button or icon control to delete a record.
+## Delete a record
+To delete a record from your data source, use the Remove function. Use the Remove function to specify the data source and the record that you want to delete. The most common way to specify this record is to use the LookUp function to retrieve the record from the data source. Another option is if you're using a Gallery and you want to delete the current record, the ThisItem operator points to the record.
+For example, you could use the following formula to delete a record.
+PowerApps Formula
+Remove(CustomerOrders, LookUp(CustomerOrders, ID = 1))
+This formula deletes the record where the ID equals 1 from the data source CustomerOrders.
+### Remove doesn't ask to confirm
+Remove doesn't prompt for any confirmation before deleting the specified record. If you would like to confirm that the user wanted to remove the record, you need to create confirmation functionality, such as a pop-up dialogue box with buttons.
+## Delete based on a condition
+If you want to delete more than one record from your data source, you can use RemoveIf. The RemoveIf function allows you to provide a data source to delete from and a condition for selecting the records to delete. This is the same logic that is used by the Filter function.
+For example, you could use the following formula to delete all of the records where the Status equals Expired from the CustomerOrders data source.
+PowerApps Formula
+RemoveIf(CustomerOrders, Status = "Expired")
+## Delete all of the records
+It's also possible to delete all of the records in a data source. This is most common with collections where you can use the Clear function. If you want to delete all of the records from a data source, you can use RemoveIf.
+### Delete all of the records in a collection
+The Clear function deletes all the records of a collection. The columns of the collection remain. The only input you pass to the function is the collection name.
+For example, you could use the following formula to delete all of the records from a collection called collectSelectedItems.
+PowerApps Formula
+Clear(collectSelectedItems)
+This formula deletes all of the records from the collectSelectedItems collection without changing the columns of the collection.
+You typically see this type of formula when you want to clear out the collection without having to redefine it, like in the case of a reset button or selecting a new order. When working on collections, you also have the ClearCollect function.
+The ClearCollect function deletes all the records from a collection and then adds a different set of records to the same collection. With a single function, ClearCollect offers the combination of Clear and then Collect.
+All three functions have their place. One way to think about whether you want to use Clear and Collect versus ClearCollect is when the clearing of the collection happens, compared to when you want to add records back. Here are two examples to illustrate:
+All at once - For example, if you're reloading the items in a collection for a drop-down menu when a screen becomes visible, you would want to use ClearCollect. A single ClearCollect function in your formula removes the old records and immediately adds the new records.
+Multi-step - For example, if you're using collections to store user inputs like in a shopping cart you can use Clear and Collect. This is because the user might want to clear their shopping cart without adding a new record.
+### Delete all of the records from a data source
+It's possible to delete all of the records from a data source using RemoveIf. This isn't a common scenario. Again there's no confirmation before the formula processes unless you build such functionality. Finally, there's no undo or recycle bin in Power Apps. If you want to recover your data, you would need to go to your data source and use whatever recovery process is available for that data source, outside of Power Apps. Proceed with caution.
+For example, you could use the following formula to delete all of the records from a data source.
+PowerApps Formula
+RemoveIf(CustomerOrders, true)
+This formula deletes all of the records from the CustomerOrders data source without changing the columns of the data source.
+The reason this works is RemoveIf checks every record in the data source to see if the equation equals true. In this case, the equation is set to true, so every record is deleted.
+Note
+Setting the equation portion to true also works with the Filter function. This can be a valuable setting if you are trying to troubleshoot formulas where you are not sure if Filter is returning data.
+# Use the Patch function to update a Gallery
+Completed100 XP
+3 minutes
+This hands-on lab shows you how to use the Patch function in a gallery.
+Sign in to Power Apps.
+From the Home screen select + Create from the left-hand navigation panel, then select Blank app and then Create under Blank canvas app.
+Name your app "Patch Exercise" or another appropriate title of your choice and select Create.
+Select the Insert button and add a Button control, and set its OnSelect property to this formula:
+PowerApps Formula
+ClearCollect(CityPopulations,
+{City:"London", Country:"United Kingdom", Population:8615000},
+{City:"Berlin", Country:"Germany", Population:3562000},
+{City:"Madrid", Country:"Spain", Population:3165000},
+{City:"Rome", Country:"Italy", Population:2874000},
+{City:"Paris", Country:"France", Population:2273000},
+{City:"Hamburg", Country:"Germany", Population:1760000},
+{City:"Barcelona", Country:"Spain", Population:1602000},
+{City:"Munich", Country:"Germany", Population:1494000},
+{City:"Milan", Country:"Italy", Population:1344000})
+Set the button's Text property to "Collect". Then press and hold Alt Key, and select the button. (This action creates the CityPopulations collection and stores the data.)
+Insert a Vertical gallery control and choose CityPopulations from the data source.
+With the gallery selected, in the right side Properties panel, change the layout from blank to Title, subtitle, and body.
+Also in the Properties panel, select Fields and update the Body field in the data to display Population.
+Insert a Text input control. From the Properties panel, set the Accessible label property to "Country," and in the Tree view, right-click and select Rename to rename the text-input to "tiCountry."
+Again, insert a Text input control. From the Properties panel, set the Accessible label property to "text input," and in the Tree view, right-click and rename the text-input to tiCity.
+Repeat the previous step with a third Text input, naming it tiPopulation and set the Accessible label property to "Population."
+Select the Insert tab add a button control, set its Text property to "Patch Country" and set its OnSelect property to this formula:
+PowerApps Formula
+Patch(CityPopulations,Defaults(CityPopulations),{Country:tiCountry.Text,City:tiCity.Text,Population:Value(tiPopulation.Text)})
+Align your controls like the image below:
+Before we move on, notice that the formula bar has a Copilot icon on the left side. If you're relatively new to Power Apps, or you're trying to figure out what the code in a formula means, you can select the Copilot icon and ask it to "Explain this formula." When you do, you should see something similar to the image below.
+The explanation has a Copy button where you can copy the text of this answer and then add it to your code as a remark. Add the double forward "//" slashes to add comments to your code like this:
+Power
+//This expression is used to patch a new record to the 'CityPopulations' data source. It takes the default values from the data source, and updates the 'Country', 'City', and 'Population' fields with the values entered in the 'tiCountry', 'tiCity', and 'tiPopulation' controls respectively.
+Now let's add more Countries/Regions to our Gallery. Put the app in Preview mode.
+In the Country text input, enter USA. In the City text input, enter Orlando. In the Population text input, enter 280832.
+Now press your Patch Country button and scroll down to the bottom of your gallery; you should see the new record you just added by using the Patch function formula from the OnSelect property of the button.
+Congratulations, you used the Patch function to add new records to a Gallery!

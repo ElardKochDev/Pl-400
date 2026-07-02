@@ -1,0 +1,267 @@
+# Introduction
+Completed100 XP
+4 minutes
+The extensibility points of Microsoft Power Platform components are purposely implemented at various points to allow custom code to be used when low code approaches aren't possible. In this video, we explore the most commonly used extensibility points.
+# User experience extensibility
+Completed100 XP
+5 minutes
+Developers are commonly involved when the desired user experience is difficult or impossible to achieve using low-code approach. Two of the most common approaches for a developer to enhance the user experience is to create a Power Apps Component Framework code component or implement some client scripting. Code components allow you to implement a custom visual that can be used by canvas or model driven apps just like any of the out of the box controls. Client scripting isn't intended to be visual but intended to implement business rules in a programmatic way. Client scripting only applies to model-driven apps. Both techniques follow prescriptive patterns and object models that you must be aware of when using either for extensibility. In the rest of this topic, we'll explore more on these options in more detail.
+## Power Apps component framework
+Code components are implemented using HTML, CSS, and TypeScript. While not required that you use any particular UI Framework, React is a popular choice.
+To create a code component, you need to implement an interface that provides a consistent way for the hosting app to interact with your component. To start developing a code component that implements that interface you use the Power Platform command line interface (CLI) tool to initialize your component files from a template of either a column or dataset. That template contains placeholders for the required interface implementation.
+The CLI tool creates a manifest file that describes what files make up your component as resources. The manifest also identifies any properties that are available for use by the application hosting the component. In the following example, a companyName property has been defined.
+When this component is used by app makers, they'll have options of either statically setting a value for the company name or dynamically binding it to one of the available data columns in the application. Properties allow the application and the component to communicate about data without the app having to understand the implementation of the component.
+The manifest also allows you to enable features. When a feature is enabled by marking it required in the manifest the code component logic can use the native API associated with the feature. For example, enabling Device.captureAudio feature allows code control to invoke the device microphone to record audio.
+<feature-usage> <uses-feature name="Device.captureAudio" required="true" /> <uses-feature name="Device.captureImage" required="true" /> <uses-feature name="Device.captureVideo" required="true" /> <uses-feature name="Device.getBarcodeValue" required="true" /> <uses-feature name="Device.getCurrentPosition" required="true" /> <uses-feature name="Device.pickFile" required="true" /> <uses-feature name="Utility" required="true" /> <uses-feature name="WebAPI" required="true" /> </feature-usage>
+The app runtime manages the lifecycle and communication with the hosted code component. This is accomplished by your code component class implementing the StandardControl interface.
+export class FirstControl implements ComponentFramework.StandardControl<IInputs, IOutputs> {}
+This interface requires you to implement the following methods:
+init - Used to initialize the component instance. Components can kick off remote server calls and other initialization actions.
+updateView - This method will be called when any value in the property bag has changed. This includes column values, datasets, global values such as container height and width, offline status, component metadata values such as label, visible, etc.
+destroy - This method is invoked when the component is to be removed from the DOM tree. Use it for the cleanup and to release any memory that the component is using.
+getOutputs (optional) - It's called by the framework prior to a component receiving the new data. Returns an object based on nomenclature defined in the manifest, expecting objects for the property marked as bound.
+Code components only require you to implement the minimum necessary to allow consistent communication and experience with the hosting app.
+## Client scripting
+Client scripting allows you to use JavaScript in Power Apps model-driven apps to implement business rules. Client scripting should be used as an alternative when declarative business rules don't meet the requirements. Client scripting runs on a model-driven form in response to the following form events:
+Form load
+Data in a column changes
+Form is saved
+In addition, a command bar button can be configured to invoke a client script when pressed.
+While you're writing your logic in JavaScript, it's important to note that even though the form is just HTML you aren't allowed to directly manipulate the form contents. Client scripting provides an object model with method calls for interacting with the various form components. This ensures your business logic is insulated from any changes in the layout or specific HTML used on the form rendering.
+The following is an example of client scripting that handles both form load and column change.
+// A namespace defined for the sample code
+// As a best practice, you should always define 
+// a unique namespace for your libraries
+var Sdk = window.Sdk || {};
+(function () {
+    // Define some global variables
+    var myUniqueId = "_myUniqueId"; // Define an ID for the notification
+    var currentUserName = Xrm.Utility.getGlobalContext().userSettings.userName; // get current user name
+    var message = currentUserName + ": Your JavaScript code in action!";
+
+    // Code to run in the form OnLoad event
+    this.formOnLoad = function (executionContext) {
+        var formContext = executionContext.getFormContext();
+
+        // display the form level notification as an INFO
+        formContext.ui.setFormNotification(message, "INFO", myUniqueId);
+
+        // Wait for 5 seconds before clearing the notification
+        window.setTimeout(function () { formContext.ui.clearFormNotification(myUniqueId); }, 5000);
+    }
+
+    // Code to run in the attribute OnChange event 
+    this.attributeOnChange = function (executionContext) {
+        var formContext = executionContext.getFormContext();
+
+        // Automatically set some column values if the account name contains "Contoso"
+        var accountName = formContext.getAttribute("name").getValue();
+        if (accountName.toLowerCase().search("contoso") != -1) {
+            formContext.getAttribute("websiteurl").setValue("https://www.contoso.com");
+            formContext.getAttribute("telephone1").setValue("425-555-0100");
+            formContext.getAttribute("description").setValue("Website URL, Phone and Description set using custom script.");
+        }
+    }
+
+    // Code to run in the form OnSave event 
+    this.formOnSave = function () {
+        // Display an alert dialog
+        Xrm.Navigation.openAlertDialog({ text: "Record saved." });
+    }
+}).call(Sdk);
+You can follow the complete walkthrough of this example for specifics on how it hooks up to the form.
+Using client scripting a developer can make a form more approachable by a user by hiding and showing appropriate columns, validating data, and other common tasks required to improve the user experience.
+# Dataverse extensibility
+Completed100 XP
+5 minutes
+In this topic, we're going to explore the extensibility points of Dataverse available to developers. The architecture of Dataverse puts in place a message-driven architecture for processing of requests. Each request message is processed through an event pipeline that has extension points for running custom business logic implemented by plugins. There are many messages provided out of the box and each time a new table is created new messages are added to support that table. By creating a custom API, you also create a new message.
+A key concept is that regardless of how data is accessed it's always processed as a message through the event pipeline, and any custom business logic is executed. This is true whether you use the user interface of an app, or one of the APIs, or perform admin operations like data import. There's no way to modify Dataverse data directly that would bypass running system or registered custom logic.
+## Using the Dataverse API
+Dataverse provides two styles of APIs that developers can use to interact with data: Web API and Organization Service. The following provides a high-level overview of each:
+### Dataverse Web API
+The Web API is available at an OData v4 RESTful endpoint. Use this for any programming language that supports HTTP requests and authentication using OAuth 2.0. Find more examples.
+### Dataverse Organization Service
+The Organization Service is a .NET SDK with .NET assemblies provided by Microsoft along with typed class generators for table classes.
+When the Organization Service from a Dataverse plugin the service is instantiated and available to the plugin code without the need to authenticate. To get an instance from your plugin logic, you would use the serviceProvider that is passed to the plugin to get an instance the Organization service factory (IOrganizationService). Using the factory you can get an instance of the Organization service. The following is an example from a simple plugin that gets an instance and uses it to create an account table row.
+public void Execute(IServiceProvider serviceProvider)
+{
+    IPluginExecutionContext pluginContext = serviceProvider.Get<IPluginExecutionContext>();
+    IOrganizationServiceFactory factory = serviceProvider.Get<IOrganizationServiceFactory>();
+    IOrganizationService orgService = serviceProvider.GetOrganizationService(pluginContext.UserId);
+
+    Entity newAccount = new Entity("account");                  
+    newAccount["name"] = "Fourth Coffee";
+    Guid accountid = orgService.Create(newAccount);
+}
+You can also use the Organization service outside of plugins, for example from an ASP.NET custom portal, an Azure Function, or even a console application. From these type of applications you would use the Organization Service from the Dataverse ServiceClient, which provides support for applications using .NET full framework 4.6.2, 4.7.2, 4.8 and .NET Core 3.0, 3.1, 5.0, 6.0. The ServiceClient class implements the IOrganizationService interface. The ServiceClient also implements the IOrganizationServiceAsync2, which makes asynchronous versions of the methods available also.
+The following example gets an instance of ServiceClient and creates a new account table row.
+ServiceClient serviceClient =
+    new ServiceClient("Url=https://yourenv.crm.dynamics.com;AuthType=OAuth;AppId=;RedirectUri=http://localhost ;LoginPrompt=Always");
+
+    Entity newAccount = new Entity("account");                  
+    newAccount["name"] = "Fourth Coffee";
+    Guid accountid = serviceClient.Create(newAccount);
+More examples of using the organization service are available. You can also review more details about connection strings and options available.
+The APIs support their own approaches to building data queries in addition to supporting FetchXML. FetchXML is a proprietary query language that is used in Dataverse. The FetchXML language allows complex queries to be crafted across related tables and use Dataverse-specific conditions and operators. The Power Automate Dataverse connector also supports FetchXML.
+## Event pipeline
+When you perform an action like create a record in an app or create a record using the API, a Create message is processed by Dataverse. The message is processed in the event pipeline that provides a consistent set of stages that the message goes through. Each stage except for the main operation can have a plugin attached to it to run custom logic. The following are the stages supported as a message starts at the top and progresses through the stages of the pipeline:
+Having a strong understanding of how messages are processed can help you understand behaviors, and how and where best to implement custom logic. Understanding the pipeline is also essential to recognizing how plugins and custom APIs fit in. Read more about event framework details.
+## Building plugins
+Plugins are .NET classes that implement a IPlugin interface provided by the Dataverse SDK assemblies. That interface requires you implement only one method named Execute. The following is an example of a minimal implementation:
+public sealed class MyFirstPlugin : IPlugin
+    {
+        public void Execute(IServiceProvider serviceProvider)
+        {
+               //Business Logic 
+         }
+    }
+The Execute method has one parameter of type IServiceProvider. This interface has one method GetService that you can use to retrieve services available to a plugin. The following are examples of the services available:
+IPluginExecutionContext - this gives you access to the message being processed and information about the requestor.
+ITracingService - this gives you access to write to the Tracelog for diagnostic purposes.
+IOrganizationServiceFactory - this gives you access to retrieve an OrganizationService for use in accessing data from the plugin.
+The following is an example of using GetService to get the execution context:
+IPluginExecutionContext context = (IPluginExecutionContext)                        serviceProvider.GetService(typeof(IPluginExecutionContext));
+Using context.InputParameters can give you access to the originating message and context.OutputParameters can give you access to what is being returned to the caller.
+A good understanding of the execution context is fundamental for a plugin developer. Learn more about the execution context.
+To have a plugin execute, it must be registered to run for a specific message. This can be accomplished using the Plugin Registration tool.
+## Custom APIs
+Operations in Dataverse are defined as messages. Custom APIs offer a code-first way to define new messages that you can extend Dataverse web services. These messages can then be invoked, just like the system messages, but to execute custom business logic. For example, if you have specific requirements to search for a customer using a predefined sequence of API calls then, instead of having each API caller implement that sequence, you could implement a findcustomer custom API. The findcustomer API would now implement the required logic to search for the customer and return the results. This would ensure that instead of each app having to figure out how to find a customer and doing it inconsistently they could call the custom API that would process the search requests the same way on each occasion. And if any changes are required, they would need to be implemented in one place only.
+To define a new custom API, you start by creating a custom API record. This can be done through the maker portal, through code, or using Dataverse solutions. As part of creating the record you identify the custom API name, and the request and response parameters.
+To implement the logic of the custom API, you create a plugin and register it on the Main Operation stage of the pipeline. Custom API implementation is the only scenario where a plugin can be registered on the Main Operation stage. You'll see an example of doing this later in the exercise.
+Once implemented you can use the custom message from the Dataverse APIs, Power Apps and Power Automate. The following is an example of using the findcustomer custom API from C#.
+var req = new OrganizationRequest("fabrikam_findcustomer")
+{
+    ["CustomerName"] = "Contoso",
+    ["CustomerAddress"] = "1 Redmond Way"
+};
+
+var resp = serviceClient.Execute(req);
+You also can't implement a plugin and allow the custom API to be used to trigger other automation. For example, creating a Custom API that contains data about an event that occurred in another system would allow that system to call that API in Dataverse, where many different integration points with Azure, or Web Hooks, or Power Automate, or asynchronous plugins on the API will be able to initiate other automations.
+# Exercise - Create a custom API
+Completed100 XP
+15 minutes
+In this exercise, you'll build a Dataverse custom API to execute some custom logic. You'll then use the custom API from a step in a Power Automate flow.
+Important
+Use a test environment with Microsoft Dataverse provisioned. If you do not have one you can sign up for the community plan.
+## Task 1: Create the custom API project
+Download and install Power Platform CLI.
+Run the powerapps-cli file to start installation.
+Use the setup wizard to complete the setup and select Finish.
+Open Command Prompt.
+Run the command below to create a new folder named CustomAPILab.
+md CustomAPILab
+Change directory to the folder you created.
+cd CustomAPILab
+You should now be in the CustomAPIlAB folder. Run the command below to initialize a new Dataverse plugin class library.
+pac plugin init
+Dataverse plugin class library creation should be successful.
+Run the command below to open the project in Visual Studio.
+start CustomAPILab.csproj
+The project should open in Visual Studio.
+Right click on the Plugin1.cs file and rename it MatchPlugin.cs.
+Select Yes to you're renaming a file dialog.
+Right click on the CustomAPILab Project and select Manage NuGet Packages.
+Search for System.Text.RegularExpressions and select Install.
+Open the MatchPlugin.cs file.
+Add the following statement below.
+using System.Text.RegularExpressions;
+Add the following lines inside the ExecuteDataversePlugin method and after the var context line. These lines get the value from the input parameters passed on the custom API invocation.
+string input = (string)context.InputParameters["StringIn"];
+string pattern = (string)context.InputParameters["Pattern"];
+Add the following line after to get the tracing service.
+ITracingService tracingService = (ITracingService)localPluginContext.ServiceProvider.GetService(typeof(ITracingService));
+Add the below line to will Write the input value into trace.
+tracingService.Trace("Provided input: " + input);
+Add the following line after to call the Regex.Match method.
+var result = Regex.Match(input, pattern);
+Write the result to trace.
+tracingService.Trace("Matching result: " + result.Success);
+And finally, add the following line to set the output parameter Matched.
+context.OutputParameters["Matched"] = result.Success;
+Your execute method should now look like the following.
+Select Build > Build Solution.
+The project should build successfully.
+## Task 2: Register the custom API plugin
+Open command prompt and run the command below to launch the Plugin Registration Tool.
+pac tool prt
+Select + Create New Connection.
+Select Office 365, provide your credentials and select Login.
+Select the correct environment.
+Choose Register | Register New Assembly.
+Select ... and then browse to the CustomAPILab\bin\Debug\net462 folder.
+Select CustomAPILab.dll.
+Select OK.
+Select Register Selected Plugins.
+Select OK to the success message. Your plugin is ready to connect to the custom API we'll create in the next task.
+## Task 3: Create the custom API
+Navigate to Power Apps maker portal and make sure you are in the correct environment.
+Select Solutions on the left navigation.
+Select + New Solution.
+Enter Custom API Lab in the Display Name.
+Select CDS Default Publisher in the Publisher dropdown.
+Select Create. This creates a custom solution that will contain our components.
+Select + New | More | Other | Custom API
+Enter the following information:
+Unique Name: contoso_match
+Name: Match
+Display Name: Match
+Description: Match a string
+Binding Type: Global
+In Plugin Type select the search icon and locate your plugin.
+Select Save and Close.
+Select Done.
+Select + New | More| Other | Custom API Request Parameter.
+For Custom API, select the Search icon and select Match (your Custom API).
+Enter StringIn for Unique Name, Name, Display Name and Description for simplicity.
+Select String for Type.
+Select Save and Close.
+Select Done.
+Repeat steps 13-17 and add another Custom API Request Parameter named Pattern.
+Select New | More | Other| Custom API Response Property.
+For Custom API, select the Search icon and select Match (your Custom API).
+Enter Matched for Unique Name, Name, Display Name and Description for simplicity.
+Select Boolean for Type.
+Select Save and Close.
+Your solution component list should look like the following.
+## Task 4: Use custom API from Power Automate
+In the solution, select + New | Automation | Cloud Flow | Instant.
+Enter String match for Flow name, select Manually trigger a flow trigger, and select Create.
+Select the + New Step.
+Search for perform and choose Perform an unbound action.
+In the Action Name list, locate and select contoso_match.
+Enter any valid email address in StringIn.
+Enter the following Regular expression in Pattern. This is a simple email pattern. Other examples are available.
+^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$
+Your flow should look like the following.
+Select Save.
+After save is complete, select Test.
+Select Manually, then select Test.
+Select Run flow.
+Select Done.
+After your flow completes, select the Perform an unbound action to expand and see results.
+You have now completed building a custom action and using it from a Power Automate flow. The custom API action contoso_match is now also available for calling directly using the platform API.
+# Determine when to configure or when to code
+Completed100 XP
+6 minutes
+As a developer, you should approach apps on Microsoft Power Platform from the perspective that writing code for achieving desired business application functionality should be considered as an exception to no-code and low-code approaches. However, quality areas such as maintainability, upgradability, stability, and performance should also be considered when you're determining what is the best approach for a given scenario.
+Learning what Microsoft Power Platform can do out of the box is important because you don't want to build something that they already do and just needs to be configured. That also applies to the functionality implemented in the available Dynamics 365 apps. For example, invoice calculations using variable multi-currency price lists are complex, but they're well implemented, and time-tested in Dynamics 365 Sales. If this functionality is required, you should consider using Dynamics 365 Sales built-in capabilities instead of implementing your own calculation engine.
+You should also recognize that Microsoft Power Platform often implements something in a particular way that benefits the platform. This may be different if you're used to doing it in custom application code. It isn't uncommon for developers that are new to building Microsoft Power Platform solutions to try to customize the platform the way they used to build custom apps previously. This should be avoided when possible and you should try to take advantage of what the platform does well, rather than try to change it to what you are used to doing. For example, in the past you may have implemented column-level security using custom code. This is, however, not required in Dataverse where column-level security is an out-of-the-box feature and simply needs to be configured.
+## Business rules vs. client script
+The advantage of business rules is that they're easy to understand and implement for a nondeveloper, and they can be included as part of a Dataverse solution for deployment in production. In the organizations where developer skills aren't easily available and application lifecycle management isn't implemented, business rules would be a preferred way to implement logic even if some workarounds are required, for example, intermediate calculated fields holding the values to check in a rule.
+However, at some point, business rules aren't capable of implementing the business requirements, or maybe the complexity that the rules cause developers to prefer writing the logic in client script. One scenario might be if you have a complex nested "if/then/else" logic that would be better achieved in a switch statement or simple sequence of if blocks. The other one is when you're dealing with dynamic values that aren't readily accessible by a business rule. For example, form notifications and filtering out choice values aren't available through business rules.
+## Workflows/Power Automate flows vs. plugins
+Dataverse offers various methods to implement logic to respond to events in the system, in particular to the data changes such as create, update, delete of the data rows. Business requirements can be satisfied by no-code solutions using workflow and Power Automate and by extending Dataverse using either server-side (plugins) or client-side (script) code.
+You can evaluate the options using an approach similar to the one used in the business rules vs. client script discussion: evaluate business requirements and organization capabilities to implement them. There are also some fundamental differences in capabilities. The following table can help you determine when it might be better to use one or another approach.
+Microsoft Power Platform continuously evolves and as a developer you should be aware of new and upcoming features. For example, if your solution required custom settings or configuration values, previously you would have had to use custom tables to store these values and then use custom code or platform tools to deploy the data. The new addition of environment variables simplified this task and reduced it to declaring your variables, including them as part of the solutions, and setting the values, all without any code.
+## Power Apps Component Framework (PCF)
+For many years, HTML web resources used to be a go-to extensibility mechanism for the client-side in model-driven apps. One of the weaknesses of this approach was low reuse of these monolithic and nonextensible elements. Now HTML web resources have been replaced by PCF controls.
+PCF allows developers to create reusable components that can be used by makers instead of the standard controls. This is a good example of when advances in the platform capabilities allow business to focus their development efforts on creating solid infrastructure and enabling app makers.
+## External systems
+Communications with external systems are a common feature of the solution implementations. From simple tasks like sending an SMS message or updating currency exchange rates, to complex data synchronization scenarios, it used to be an exclusive developer domain. Implementations were using plugins, event publishing via service endpoints, and webhooks.
+However, with the adoption of Power Automate with its hundreds of connectors, the interactions with external systems can now be implemented by app makers without using any code.
+It doesn't mean, however, that the developer's role is redundant. There are plenty of complex or high-performance scenarios where code is required. In addition, developers can now concentrate their efforts on creating services and custom connectors while delegating the wiring of the building blocks to the makers.
+## Portals vs. custom sites
+Power Pages provide numerous functionalities out of the box and enable makers to create robust web sites and extend them as needed. Developers often assist with more challenging portal tasks like sophisticated page layouts (using liquid templating language) or extending front-end site functionality using JavaScript.
+For highly specialized scenarios, you can decide to create a complete custom portal using ASP.NET or similar technologies. This approach isn't uncommon but requires highly skilled developers to implement. Again, the decision is often a compromise between a no-code implementation of standard, but generalized functionality and controlled use of developer's resources to deliver specialized features.
+Deciding on when to use code isn't a simple binary decision. You need to take into consideration many factors: what skills and resources do you have available, how mature is your organization when it comes to the application lifecycle management, how complex are the requirements, etc. Often the requirements need to be evaluated on a case-by-case basis because small compromise in the business constraints may simplify the solution and reduce it from a complex development project to a simple configuration exercise.
+Solid, up to date, knowledge, and understanding of the platform capabilities is essential for every developer to be able to make rational, common sense decisions when to use code vs. when to adapt the system so that it can be customized and configured by makers and business users.

@@ -1,0 +1,229 @@
+# Introduction
+Completed100 XP
+8 minutes
+When data is modeled in Microsoft Dataverse, separate tables are used to represent distinct objects and concepts. Organizations can use more tables to help secure specific information, avoid data repetition, describe other properties, or make the reporting easier. Just as real-life objects are related to each other, the relationships are used in Dataverse to link rows from one table to another. Additionally, relationships can provide constraints and behaviors that apply when actions are performed on the records.
+Essentially, Dataverse tables and relationships can work together to tell the story of your data. When building a good user experience in a canvas app from Microsoft Power Apps by using the tables and relationships, you would want to hide unnecessary complexities of the data model. To accomplish that task, your formulas and data usage must efficiently navigate the tables by using the relationships. This module will examine how to use the different types of table relationships that Dataverse offers.
+## Scenario: Contoso shared workspaces
+This module will use a common business scenario to demonstrate how Dataverse relationships work with canvas apps. Contoso, like many companies, has multiple locations and allows employees to work from home. Occasionally, employees need to come into the office and will need a desk to use during their visit. Previously, Contoso instructed employees to walk around the office location on arrival to find an available desk. The company has since discovered that this type of shared workspace system, sometimes referred to as hot desking, has created challenges for IT support and licensing. As a result, the company plans to build a solution that employees can use that will allow them to view the available desks and reserve one in advance. The team that is building the solution has identified the following tables as part of their Dataverse data model.
+## Dataverse relationship types
+When you create a relationship between tables, the relationship type defines the cardinality constraints of each side of the relationship. Dataverse supports one-to-many and many-to-many relationships.
+### One-to-many relationships
+The one-to-many relationship (which is also called 1:N or parent-child) includes a primary (parent) table, where you can associate an individual row with many related (child) table rows using a lookup column in the related (child) table. The primary row is called the parent, and the related table rows are called child rows. You can associate a child row with only one parent row.
+A one-to-many relationship is also referred to as a many-to-one (or N:1) relationship, where you'll use the relationship starting at the child pointing to the parent. It's the same physical relationship definition but from a different angle. In a canvas app, if you're working with the child record and want to display a property from the parent, you would use the many-to-one relationship navigation property on the child row.
+By default, a single table is used as the primary, and the lookup column always points to a row from that table. Dataverse also supports multi-table lookups (occasionally referred to as polymorphic lookups), which allow a lookup field to point to a row from one of the multiple tables, providing flexibility for more complex data models. For example, you can set up a multi-table lookup column by creating a column of data type Customer. Then, you can set the customer lookup value to point to a contact or to an account table row. On all activity tables (for example, email, task, and so on), the corresponding column can point to any table that is enabled for activity tracking. Additionally, you can use the Multi-table lookup column type to set up a custom multi-table lookup column. When working with these multi-table lookup columns in Power Apps, you'll use the IsType and AsType Microsoft Power Fx functions to determine the parent table and to use the data.
+In the module's example data model, the following one-to-many relationships have been defined to support the scenario.
+When setting up a one-to-many relationship, you can also set up the relationship behaviors. Behaviors determine what should happen when the primary table row is deleted, assigned, shared, unshared, or re-parented. The default behavior is reference, which is set up to remove the link between the two tables when the primary table row is deleted. For example, the Location table has multiple desks and uses the default configuration, so if your canvas app deleted a location row, then by default, all associated desks would be orphaned. If the business requirement is to remove associated desk records when a location is deleted, then you can select the ForAll function, which will delete all associated desk records first. A better option is to set up the parental type of behavior for the relationship. This behavior type automatically deletes the associated records when the primary record is deleted. This approach ensures that you won't have orphaned desk records.
+When you're building a canvas app and using related tables, knowing how the behaviors are set up for that relationship will ensure that you implement the correct logic.
+## Many-to-many relationships
+The many-to-many relationship (also called N:N) includes a special hidden table called a relationship table, occasionally referred to as an intersect table. This table will map how the many rows of one table can be related to the many rows of another table. Many-to-many relationships can track the association, but you can't modify the intersect table to add custom columns that describe the relationship.
+In this module's example, Desk and Desk Feature would have a many-to-many relationship. The list of desk features would be shared by all desks, and each desk could have one or more associated features. Many-to-many relationships allow users to know that the desk has chairs but won't let you store how many chairs that each desk had.
+The following video demonstrates how to create relationships between tables.
+After you have created all tables and relationships, the data model for the example scenario should resemble the following diagram.
+Note
+Do not create these tables and relationships now. You'll import a solution with the appropriate tables and relationships as part of the exercise in unit 4.
+# Work with one-to-many relationships
+Completed100 XP
+6 minutes
+One-to-many relationships are the most common Dataverse relationships that you will work with. This unit continues the scenario regarding the shared workspaces (hot desking) solution in Contoso. To help explain how to work with relationships in a canvas app, the ensuing examples will use the relationship between the Location and Desk tables. The following diagram is a visualization of the relationship and the corresponding data.
+If you want to allow a user to select a location and to have that location's desks show in a gallery underneath, you might create a screen similar to the following example.
+As with most data sources, you could use the Filter() function to filter the desks to only show the desks for the selected location. Your formula would appear similar to the following example, where FilterLocation_1 is the name of your drop down.
+Because you are working with a Dataverse one-to-many relationship, you can instead use the dot notation to reference the location's desks by using Control.Selected.Desks, as shown in the following formula.
+In this example, both formulas produce the same list of desks that are related to the selected location. Using the dot notation is simpler and more concise than using the Filter() function.
+When you navigate a one-to-many relationship by using the dot notation syntax, by default you will get all related records. You can use a filter to apply more criteria to the related rows. The following expression uses the one-to-many relationship and also filters the results on the active status.
+Filter(FilterLocation_1.Selected.Desks, Status = 'Status (Desks)'.Active)
+Additionally, you can use the relationship starting from the desk row. Consider an example where, in the gallery, you want to show the location address for each desk. You might be familiar with using a lookup to retrieve the location record and then accessing the address column as a property.
+Instead of using the Lookup() formula, you can use the dot notation and reference: ThisItem.Location.Address
+You are not limited to one level of relationship navigation. For example, if you have a location that has a related primary contact, and you want to show the full name column, you could compose the following formula:
+ThisItem.Location.'Primary Contact'.'Full Name'
+By using the dot notation, you can quickly include related data, regardless of which side of the relationship that you are starting from.
+## Add and update related rows
+The simplest way to establish the one-to-many relationship is by using an edit form to create or update the related row. When you add the lookup column to the form, it uses the Choices() function to present possible values to the user. The following example shows the process of adding a desk row where the location lookup column is added to the form.
+The advanced properties on the dropdown control show how the Items property is set up.
+By using the Choices() function, you will eliminate the need to add the lookup table as another data source. The Choices() function result is a table, so you can add more filtering and sorting, as follows:
+Filter(Choices([@Desks].contoso_Location), Status ='Status (Locations)'.Active)
+If you already had the lookup value that you wanted to set (for example when creating a desk record from the Location screen), you could set the DefaultSelectedItems property on the data card value and then set the form field's Visible property to Off. This setting would allow the default value to be passed when the SubmitForm() function is invoked.
+If you are using the Patch() function to set a lookup column, set the value of the column to a record from the primary table. The following example shows establishing a relationship between a desk row and a primary location row that is currently selected in the location dropdown list.
+Patch(Desks, ThisItem, {Location:FilterLocation_1.Selected})
+You could also achieve the same result by using the Relate() function. The first parameter is the list of the rows (desks) that are related to the primary row (location), and the second parameter is the row (desk) to be added to that list or related.
+Relate(FilterLocation_1.Selected.Desks, ThisItem)
+Similarly, you could use the Unrelate() function to disassociate the rows, for example removing ThisItem (Desk) from the desks that are associated with the selected location FilterLocation_1.Selected.
+Unrelate(FilterLocation_1.Selected.Desks, ThisItem)
+When using the Unrelate() function, remember that it will set the value of the primary lookup on the related record to Nothing (or null). Avoid having rows that are orphaned because the app might not have the ability to display the row without the primary association. In the Contoso example, if the list of desks is displayed only as related to the location, then any desk without a location will be orphaned and inaccessible through the app. This situation can also occur as a side effect of deleting the primary row when the relationship behavior property is set up to remove the link to related rows.
+# Work with many-to-many relationships
+Completed100 XP
+8 minutes
+Many-to-many relationships provide you with the flexibility to track when multiple rows have the same related data. Unlike one-to-many relationships, many-to-many relationships don't have a concept of a primary table. The relationship is entirely symmetrical, and you can access the set of related rows, starting from either side of the many-to-many relationship. To continue with the Contoso workspace-sharing data model, the following sections explore how to work with many-to-many relationships in a canvas app by using the Desk and the Desk feature items. The following diagram illustrates the relationship and the corresponding data.
+Each desk can have multiple associated desk feature rows, and you can associate each desk feature with multiple desks. You could access the set of desk features from a desk row by using the ThisItem.'Desk Features' expression. From the desk features row, you can use the ThisItem.Desks expression to access all desks that are associated with that specific desk feature.
+You could use this expression to show a comma-separated list of values for each desk in a gallery, as shown in the following example.
+To accomplish the task of populating the label text, set the Text property on the label to the following formula:
+Concat(ThisItem.'Desk Features', Name, ",")
+Be aware of performance implications when you use this formula, especially if you have many records, because of how the data is accessed from Dataverse. The following image from Monitor shows that one call to getRows is completed to get the list of desks. For each desk, a call to getNavigatedRowInTableRow is made to retrieve the desk features.
+Alternatively, you might find it more beneficial to only show the desk features after the user has selected a single desk row in a gallery or after they've drilled down into the details of the desk row.
+Another way to use the relationship is to allow a user to pick a desk feature and then use the controlName.Selected.Desks property to populate items in a gallery.
+This approach works well when you only allow a single selection in the combo box. If you enable multiple selections, the logic gets more complex. Currently, Power fx does not have a simple way to express an intersection of two collections, which is required to make the scenario work. Workarounds are possible. For example, you could iterate through all selected features, collect related desks in a single collection, remove the duplicates, and then use the collection as the item's source. However, because of the multiple Dataverse requests (one for each selected feature), the performance of this approach will quickly degrade as the tables grow.
+## Establish the relationship
+The primary way to establish a many-to-many relationship is to use the Relate() function, similar to how you would with a one-to-many relationship. The main difference is that it doesn't matter which record is the first or second parameter to Relate() because the relationship has no primary table.
+Managing many-to-many relationships on a form is more complex than many-to-one lookup columns. The many-to-many relationship is available in the fields list; however, when you add the field to the form, the system doesn't generate the formulas for the control to work, and you will receive an error similar to the following example.
+To resolve the issue, update the Choices() function in the Items property for the table that is on the other side of the many-to-many relationship. To accomplish that task, unlock the card from the Advanced tab.
+In the Contoso example, you want to use desk features. After you unlock the control, verify that the Items property shows 'Desk Features' as the data source.
+Note
+The preceding scenario uses the form to add a row. To support the edit capabilities, make sure that you change the DisplayMode property for the card from the default View setting to Edit.
+After you have adjusted the properties, the form user interface will work, and you can choose items from the combo box. However, if you attempt to submit the form, you will receive an error similar to the following example.
+To work around the issue, clear the Update property and manually process the many-to-many association after the form is submitted.
+After you have cleared the Update property, the form submission will work. However, the relationships between the Desk and the Desk Feature table rows will not be created. To establish the relationships, add the following logic to the OnSelect property of the check icon that is used to submit the form by default:
+Save the desk features that are selected in the combo box as a collection. This step is required because the form submission will reset the fields, and the value will be lost.
+Submit the form.
+Use the saved collection of the desk features to establish the relationship.
+## Other design options
+User experience with many-to-many relationships is similar to experiences where the Choices column is used. Choices values are predetermined by the maker, and they can't be disabled or secured. For that reason, Choices fields are suitable for scenarios with rarely modified data, such as a list of countries/regions. Moreover, rows in the related tables can be deactivated, secured, and added at run time. That ability makes a many-to-many relationship a good option in scenarios where some flexibility is needed at runtime, such as when you are tagging a solution where the contact has a many-to-many relationship with a tag and tags need to be added by the users.
+Many-to-many relationships are beneficial for situations where you want to capture the association between rows of two tables. The relationship between the rows can't store other data. For example, if you had a relationship between a Contact and a Language table, you could track that a person speaks two languages.
+However, you would not know how long the person has spoken each language and how proficient they are at speaking it.
+A common alternative design pattern is to create your own intersect table. The following Language Spoken table is another custom Dataverse table. You can add columns to this table for any other properties that describe the specific relationship. Then, this new table will have N:1 relationships to Contact and Language.
+Working with these tables from your application is similar to working with any other tables that have one-to-many or many-to-one relationships. Because an extra table is involved, you might discover that some extra logic will be required to ensure a smooth user experience. It is important to understand the requirements of your application and to know if a many-to-many relationship needs to track other data, especially considering that you need to make this decision at the time when the tables are related.
+The rest of this module explores how to work with this data model from a canvas app.
+# What is relational data?
+Completed100 XP
+6 minutes
+Relating data is an essential concept when you're diving into the realm of complex app building with Power Apps. It's all about establishing connections between different data sources to enhance functionality and data organization.
+Consider a travel expense app, you might want one primary record for the entire trip and then other records detailing individual expenses like food and lodging. By relating these records, you establish a connection or link between them. This connection allows for a structured relationship, enabling you to associate various expenses with a specific trip record, maintaining a coherent and organized dataset.
+The following table is an example of storing all of the expense data in one Microsoft Dataverse table.
+The example above shows that there's redundant data because each row has all of the information for the entire trip. A better way to store this data would be with parent and child tables, and then create a relationship between the two entities. The next example shows what the two tables would look like.
+First, the parent table with only one entry per trip.
+Then, the child table that has one entry per expense item with a reference to the parent record.
+Here you see one entry for each expense. There's also a new column for TripID. This column creates the relationship by specifying the record ID of the parent record. This allows you to query the details of the associated trip.
+Power Apps offers the flexibility to establish relationships between data from distinct sources. For instance, you might store customer information within a CRM system like Dynamics 365 and then utilize that data within a Microsoft Lists setup for managing sales regions.
+In Power Apps, referencing the customer ID from Dynamics 365 in your sales region list follows a uniform approach. The beauty lies in the seamless integration and handling of these diverse data sources within a single app. The capability to connect and work with multiple data sources without any fuss is one of the many advantages of Power Apps. It simplifies the process, allowing you to use information from different sources cohesively within your app environment.
+Note
+Dataverse can define relationships using Lookup columns, creating the structure and connecting the tables for you. This is outside the scope of this primer on relationships but worth noting as you consider data sources.
+In the next section, you'll learn the functions and formulas for using relationships in Power Apps.
+# Work with relationships in Power Apps
+Completed100 XP
+10 minutes
+Power Apps offers a rich set of functions and controls tailor-made for establishing and utilizing relationships within your apps. Relationships typically find two primary applications in most apps.
+Firstly, as discussed earlier, it involves storing data across multiple tables and then utilizing relationships to seamlessly connect this data. This unit guides you through connecting tables, such as customers and invoices, demonstrating how to forge meaningful associations between them.
+Secondly, relationships are often employed to fetch information from the parent record when directly accessing the child record. In this case, you learn how to retrieve the customer name while working within the context of an invoice record. This functionality allows you to efficiently access and display relevant information from related records, enhancing the usability and comprehensibility of your app.
+## Connecting a parent and child table in Power Apps
+In this example, we walk through how to reference a parent and child relationship using the Power Apps filter and LookUp functions.
+The Customer table is the parent in this relationship, meaning one customer can have many invoices. Notice there's no reference in the Customer table to the Invoice table. For this example, the data source name for this table is CustomerTable. The table looks like the following.
+The Invoice table is the child in this relationship. For this example, the data source name for this table is InvoiceTable. The table looks like this:
+In Power Apps, if you have these tables built as data sources, you could use a Gallery control to display the contents of the Customer table. You would use the Gallery control with the following steps:
+Insert a Gallery control onto your canvas.
+Set the Items property to your CustomerTable.
+The Gallery displays a list of all of the customer records in the table. This is Gallery1.
+To display the full contents of the InvoiceTable, use the following steps:
+Insert a Gallery control onto your canvas.
+You can set the Items property to your InvoiceTable.
+This Gallery displays a list of all of the invoice records in the table. This is Gallery2.
+Now to display only the invoices for the customer selected in Gallery1, you would need to modify the items property of Gallery2 with something like this:
+Filter(InvoiceTable, CustomerID = Gallery1.Selected.ID)
+The formula does the following.
+The formula causes Gallery2 to display the invoice records for the selected customer in Gallery1.
+## Looking up information stored in the parent from the child
+Sometimes the need arises to navigate upwards, or "bottom-up", from a child record to its associated parent record. In the scenario where you're examining the details of an invoice record, say with an ID of 2, and you're aware of its association with the customer having an ID of 3, you might want to extract more details from the parent table.
+In this case, you can use the relationship between the tables to retrieve information related to the customer, such as their name or phone number, by referencing the associated records in the parent table. This technique allows you to gather pertinent details from linked records in the parent table based on the information available in the child record, providing a comprehensive view and facilitating cross-referencing between related data. In Power Apps, you can use the LookUp function to do just that!
+The LookUp function allows you to query a data source for a single record that meets the evaluation criteria. In the following example, we use the same tables as the previous one, but we start with a blank screen to avoid confusion.
+To display the full contents of the InvoiceTable, you would use the following steps:
+Insert a Gallery control onto your canvas.
+Set the Items property to InvoiceTable.
+Set the Layout to Title, Subtitle, and body.
+In the Data pane set Title to InvoiceDate, Subtitle to InvoiceAmount, and Body to CustomerID.
+This Gallery displays a list of all of the invoice records in the table. If you want your date fields to look like the image below, you would modify your Title field to read: Text(ThisItem.InvoiceDate,DateTimeFormat.ShortDate) This is Gallery3.
+Showing the ID value for each customer doesn't provide much information for the app user. So, to display the customer name, instead of the ID, we can do the following:
+In Gallery3, select the label for Body and set the Text property to:
+LookUp(CustomerTable, ID = ThisItem.CustomerID, CustomerName)
+The formula does the following:
+After making that change, Gallery3 now provides the vendor name.
+## Performance Notes
+Performing lookups from a child record to its parent within a Gallery can have significant performance implications. In the demonstrated scenario, utilizing the LookUp function within a Gallery would trigger data source queries multiple times—once for each record in the InvoiceTable.
+Consider this: if your InvoiceTable contains hundreds of records, the LookUp function would execute just as many times. This means that potentially hundreds of separate data source calls would occur. As a result, this could lead to increased network traffic and longer processing times, ultimately impacting the performance of your app.
+Before implementing data source calls, especially within a Gallery where multiple records are processed, it's crucial to weigh the performance trade-offs. Optimizing these queries, perhaps by caching data or restructuring the logic to minimize repetitive calls, is essential for maintaining optimal app performance. Always consider the scale of your data and the potential impact on performance when implementing such operations within a Gallery context.
+A better option to consider for this scenario is using a collection or other means to query and store all of the customer records, and then do your lookup against the collection. For more information about data performance, see the blog post on Performance considerations with Power Apps.
+In the next unit, you'll learn how Microsoft Dataverse removes all of the issues associated with related data by automatically drilling down for you.
+# Exercise - Work with relational data
+Completed100 XP
+10 minutes
+In this exercise, you learn how to access related data and how to create related records in multiple tables. For this example, we're using collections, which only temporarily stores your data. If you want a solution that saves to Dataverse or SharePoint, use the Patch function.
+We're going to create a shopping cart. We use a parent table (the receipt header), a child table (the receipt line items), and a products table (reference table). The relationships look like this:
+The diagram above shows three tables with primary keys, but the ReceiptLineItems table (on the right) has two foreign keys referring to the ReceiptHeader ID and the Products ID, respectively. The diagram symbols of the lines going from the ReceiptHeader and Products tables to the ReceiptLineItems table signify a one-to-many relationship. So one ID field (from each) could be entered for many different items in the ReceiptLineItems.
+## Start exercise
+Go to make.powerapps.com.
+Select + Create
+Select Blank app, and then Blank canvas app.
+Name the app Shopping Cart, ensure Tablet is the format, then select Create.
+Now select Insert from the top menu and select Button.
+In the OnSelect property of this button, input the following code (you can copy and paste):
+PowerApps Formula
+ClearCollect(Products,
+ {ID:1, Name:"T-Shirt", Category: "Clothing"},
+ {ID:2, Name:"Sweatshirt", Category: "Clothing"},
+ {ID:3, Name:"Socks", Category: "Clothing"},
+ {ID:4, Name:"Necklace", Category: "Jewelry"},
+ {ID:5, Name:"Ring", Category: "Jewelry"},
+ {ID:6, Name:"Coffee Mug", Category: "Misc."},
+ {ID:7, Name:"Keychain", Category: "Misc."}
+)
+Hold the Alt Key and select the button. You now have a collection in memory titled Products that is the data for our first gallery. You can move this button out of the way.
+Add a Vertical Gallery to the screen and select the Products collection as the data source. Doing that replaces CustomGallerySample with Products in the Items property.
+Change the Layout to Title and Subtitle.
+Select the Fields from the Property pane, and make sure that the Title is Category and the Subtitle is Name.
+Move your new Gallery to the far left side of the screen and set the OnSelect property of the gallery equal to:
+powerappfl
+Collect(colCart, ThisItem)
+Now add a second vertical Gallery (Gallery2), with the Data source set as colCart and the Layout set to Title and subtitle. Select the Fields from the Property pane, and make sure that the Title is Category and the Subtitle is Name. Delete the Right-pointing chevron icon from the gallery.
+Position this gallery on the right side of the screen so that it looks like the screen below, with Gallery1 on the left and Gallery2 on the right:
+Press your Alt key and select the Right-pointing icon in the top row of the Gallery1. Gallery2 should now have an item in it. You can continue to press your Alt key to select items from Gallery1 to populate Gallery2.
+Now add a second Button to the screen. Make the Text property of the button "Check Out," and set the button's OnSelect property to the following formula (you can copy and paste):
+powerapps
+Collect(
+  ReceiptHeader,
+   {
+        ID: If(
+            IsEmpty(ReceiptHeader),
+            1,
+            Last(ReceiptHeader).ID + 1
+        ),
+        Name: User().FullName,
+        Date: Today()
+    }
+);
+ForAll(
+    colCart,
+    Collect(
+        ReceiptLineItems,
+        {
+            ID: If(
+                IsEmpty(ReceiptLineItems),
+                1,
+                Last(ReceiptLineItems).ID + 1
+            ),
+            ProductID: ThisRecord.ID,
+            ReceiptHeaderID: Last(ReceiptHeader).ID
+        }
+    )
+);
+Clear(colCart)
+This code creates a single-item ReceiptHeader collection that includes information on the current user, the current date, and sets an ID for the user. Then for every item in colCart, it adds a line item to ReceiptLineItems. This line item includes an autonumbered ID field, the ID of the newly created ReceiptHeader record (that ties the item to the buying event), and the ID of the product in colCart. It then clears colCart, since it is submitted. So you want to fill your cart prior to selecting!
+Press your Alt key and select the "Check Out" button to load this collection.
+Create a New Screen (Screen2) so we can have a fresh canvas to see what the newly created data looks like.
+Go to your new screen and add two vertical Galleries, formatted the same way as the two on our last page. Set data source or Items property for the left Gallery (Gallery3) to ReceiptHeader, and select ReceiptLineItems as the source for the second Gallery (Gallery4).
+On the left Gallery (Gallery3), change the Text property of the Subtitle to ThisItem.Date.
+Go to the right Gallery (Gallery4) and modify the Items property to the following:
+PowerApps Formula
+Filter(ReceiptLineItems, ReceiptHeaderID=Gallery3.Selected.ID)
+Now (still in Gallery4), change the Text property of the Title to the following:
+PowerApps Formula
+LookUp(Products, ID=ThisItem.ProductID).Name
+Next (still Gallery4), change the Text property of the Subtitle to the following:
+PowerApps Formula
+LookUp(ReceiptHeader, ID=ThisItem.ReceiptHeaderID).Name
+You now have a functioning order history page, with the order header information on the left in Gallery3 and the items purchased on the right in Gallery4. You can select a Receipt Header item from left-hand side to see the line items from that receipt on the right.
+You can go back to the first screen and select new items from Gallery1 to fill the cart (represented by Gallery2). Then you can press the Check Out button, go to Screen2 and see another order under your name. Selecting either order shows you the items purchased for that particular order.
+You can continue to work on and complete your solution. You can add more descriptive labels, navigation pieces, and define what the user would do with an app like this.
+Hopefully, you see the possibilities of using relational data. Though this is far from a full solution, you can begin to see the possibilities of using techniques like this in your apps.
+# Microsoft Dataverse for apps makes relationships even easier
+Completed100 XP
+10 minutes
+In the previous unit, you gained insights into using functions to establish connections between related tables. This capability enables you to construct apps that effectively utilize relational data. Particularly with Microsoft Dataverse, relationships are defined at the table level, laying a structured foundation for your data connections.
+With these relationships established, Power Apps offers a convenient dot (.) notation that allows you to navigate into related data directly. This dot notation serves as a shortcut, minimizing the necessity for numerous LookUp functions within your app. By using dot notation, you can access and work with related data seamlessly, reducing complexity and streamlining your app's logic. This approach simplifies your codebase, making it more intuitive and efficient when dealing with relational data in Power Apps.
+The following video shows how to configure a relationship in Dataverse.
+Now that we have a relationship configured in Dataverse, let's take a look at how to use a relationship in a Power Apps app.

@@ -1,0 +1,233 @@
+# Introduction to client-side scripting
+Completed100 XP
+5 minutes
+Client scripting allows you to use JavaScript in Power Apps model-driven apps to implement custom business logic. Client scripting is an alternative for when declarative business rules don't meet the requirements. Client scripting runs on a model-driven form in response to form events. The following are the most common events you can use event handlers for:
+Form load
+Data in a column changed
+Form is saved
+In addition, you can configure a command bar button to invoke a client script function when pressed.
+Some of the common tasks that you can accomplish using client scripting include:
+Get or set column values on the form.
+Show and hide user interface elements.
+Reference multiple controls per column.
+Switch between forms where multiple forms are available for a table.
+Open forms, views, dialogs, and reports.
+Interact with the business process flow control.
+Using the provided client scripting API, you can implement your interaction with your data, form content changes, or app behavior modifications. While you write your logic in JavaScript, it's important to note that even though the form uses standard HTML, direct manipulation of the form content isn't supported. Client scripting provides an object model with methods for interacting with the various form components. This approach ensures any changes in the layout or specific HTML used in the form rendering don't affect your business logic. It's equally important to only use documented objects and functions, not any that you may discover, as these can change or not be available at any time. For more information about supported and unsupported customizations, see Microsoft Dataverse app building practices - Power Apps in the Dataverse developer guide.
+This is the high-level structure of the client scripting API object model and namespaces:
+App - Enables adding event handlers for any app level notifications.
+Device - Allows, with consent, access to device content such as image, video, audio, location, and more.
+Encoding - Quick access to HTML encode/decode functions.
+Navigation - Provides platform-independent navigation functions including open dialogs, forms, files, and URLs.
+Panel - Displays the web page represented by a URL in the static area in the side pane, which appears on all pages in the model-driven apps web client.
+Utility - Collection of utility functions including access to metadata and several context objects.
+WebAPI - Provides properties and functions to use Web API to create and manage records and execute Web API actions and functions.
+Another key high-level concept is that context objects are either available as event handler parameters or retrieved using special methods. These context objects help avoid writing code that you hard-wire to a particular form control layout or specific control. The following are the contexts you work with:
+Execution - Defines the event context in which your code executes. The execution context is passed when an event occurs on a form or grid, which you can use in your event handler to perform various tasks such as determine formContext or gridContext or manage the saved event.
+Form - Provides a reference to the form or to an item on the form, such as a quick view control or a row in an editable grid, against which the current code executes. Form context is retrieved using getFormContext() method of the execution context or included as an argument when code is executed from a ribbon action. Form context has the following key namespaces within it:
+data - This namespace provides access to the data for the table row presented on a form, including functions like save and refresh. An example of using this method is: formContext.data.entity.save("saveandnew");
+ui - This namespace allows you to manipulate controls on the form such as tabs, sections, and controls. Common tasks include hiding, showing, and making fields require or not required. An example of using this method is: formContext.ui.refreshRibbon(true);
+Grid - Provides context information to event handlers registered on subgrids on a form.
+As you can tell from these high-level descriptions, using the client scripting API gives you more flexibility to implement client-side logic. It's important to remember that logic implemented with client-side scripting only enforces your logic when the user is using the application. In many cases, client scripting must be paired with server-side implementation to ensure the logic always runs, regardless of the method used to access the data and functionality. The rest of this module dives deeper into how to use client scripting.
+# Upload scripts
+Completed100 XP
+4 minutes
+To use client scripting on a form, a script must first be uploaded as a script web resource. You can use script web resources to maintain libraries of client script functions written in JavaScript or TypeScript, and you can use them either from within a model-driven app form or from the command bar definition. If you use TypeScript, you must transpile it to JavaScript before uploading it as a web resource.
+To upload a script web resource, create a new Forms Library from the form editor.
+The Add JavaScript Library pop up will appear. Select + New web resource in the top right. In the New web resource pane, be sure to select JavaScript (JS) as the type.
+For a table column data to be available to include in a script's logic, make sure you've configured the form to display the column. If somebody later removes the column from the form, it causes your script to break because the referenced column is no longer available. You can add the column as a dependency to ensure the column data is always available for your script logic. The following image shows adding the Idea Score column from the Idea table as a dependency.
+## Web resource dependencies
+In addition to data dependencies, you can also configure dependencies on other web resources. This dependency saves time and simplifies loading logic because the form doesn't need to explicitly load multiple dependent web resources when you register a script for a form event, ribbon command, or ribbon enable rules. With dependency configuration, you can register the primary script and let the dependency configuration load the other resources your code needs.
+It's important to note that web resource dependencies don't provide any control over the order in which the web resources load. All the web resources are loaded asynchronously and in parallel. If you have a JavaScript web resource that depends on another JavaScript web resource to load and initialize before it can initialize, you need to manage that dependency in another way.
+## Use client script libraries
+Once configured as a script web resource, client script libraries can be associated with ribbon commands and form events. To associate a script with a form, select the Form libraries in the tool bar and then Add library.
+From the Add library dialog, you can either associate an existing uploaded script web resource or create a new one.
+Associating the script library with the form is only required once per script for each form, regardless of how many event handlers you register on that form.
+If you need to make changes as you're building your client script logic after the initial upload, you'd return to the script web resource in the solution and upload the new version of the file. After uploading, you must publish the script web resource so the app uses the latest changes.
+# Event handlers
+Completed100 XP
+4 minutes
+Client scripting logic runs as event handlers for form events. You must register your event handlers for your logic to be executed. Registration for common events can be done via either the form properties dialog or from code. Some events can only be registered with code. Event handlers can run on multiple forms but must be registered separately on each form.
+## Register via form properties
+Registering an event handler using form properties creates a static configuration of the event handler at design time. Each time the form loads, the same event handlers run. Unlike when you register the event handler with code, logic can determine what should be registered.
+In the form designer you can register event handlers for the following events:
+Form - This handler allows you to register OnLoad and OnSave event handlers.
+Tabs - This handler allows you to register events for each tab on the form for a tab state change. This is commonly used to know if a tab is expanded so you can do something like dynamically load data.
+Columns - This handler allows you to register an event handler if column data is changed.
+The following is an example of registering an OnLoad event handler for the account table. This is an example of the Form event handler.
+One common pattern is registering an OnLoad handler and then registering the remaining event handlers via code in the OnLoad event handler logic. The benefit of this approach is that when you need your logic to run on multiple forms, you don't have to register all the event handlers on each form. Another advantage is if you need to dynamically determine some of the event handlers, you can use logic to decide whether to register a handler. For example, you may want to skip registering an event handler for a column if you can determine when the form is loaded and if this column is read-only or hidden.
+## Register using code
+Registering event handlers using code is possible for all handlers except OnLoad, which must be registered using configuration. You can then use the OnLoad handler to register other handlers using code. The following is an example of registering an OnChange handler on the account number column in the account table by performing the following steps:
+Create a function that runs in the OnLoad event of the account form.
+In that function, call addOnChange to register the function to call when the account number column changes.
+Register the OnLoad event handler on the account form properties.
+JavaScript
+function LearnLab_handleAccountOnLoad(executionContext)
+{
+    var formContext = executionContext.getFormContext();
+    formContext.getAttribute('accountnumber').addOnChange(LearnLab_handleOnChangeAccountNumber)
+}
+function LearnLab_handleOnChangeAccountNumber(executionContext)
+{
+    var formContext = executionContext.getFormContext();
+    formContext.ui.setFormNotification('Check other systems', 'INFO', 'AcctNumber');
+}
+This code displays a form level notification whenever the account number column data changed.
+There are many other client side events for which you can register handlers.
+# Context objects
+Completed100 XP
+7 minutes
+When creating event handlers and using the client scripting API, you should understand the context objects available and how to use them. The purpose of context objects is to give you information about the context in which your code is executing. This context ensures you don't have to hardcode the information in your logic. Context allows you to create more generic functions and makes your functions less sensitive to the specific layout of the UI components you're working with.
+## Execution context
+When you register an event handler, you can have the execution context passed as the first parameter. When you register the event handler using form properties, which is an option that you can enable. The image shows registering an OnLoad handler and enabling execution context.
+Typically, it's a good idea to always have this option selected when you register an event handler using form properties. When you register an event handler using code, this option is automatically selected.
+Your function definition that takes execution context as the first parameter would look like this:
+The most common use of the execution context is to retrieve the form and grid contexts. Another useful method in this context is getEventSource. The event source returns a reference to the object that triggered the event. This object allows you to write generic handlers that interrogate the event source at run time to find out which control triggered the event occurred. This object can be helpful when you want to write a single method that can be registered on events on multiple controls, rather than creating a separate event handler for each control. For example, if you have an OnChange event for multiple fields, you can use the getEventSource to identify which field triggered the event and use it accordingly.
+## Form context
+The Client API form context (formContext) references the form or an item on the form, such as a quick view control or a row in an editable grid, against which the current code runs. You can retrieve the formContext object from the execution context using the getFormContext function.
+Previously, the item or form was accessed using the global Xrm.Page object. However, in the latest version, the Xrm.Page object is deprecated. Instead, you should use the getFormContext method from the execution context object to get a reference to the appropriate form or item on the form. So, instead of writing code like the following.
+JavaScript
+var firstName = Xrm.Page.getAttribute("firstname").getValue();
+You would instead write the below code using formContext.
+JavaScript
+var formContext = executionContext.getFormContext();
+
+var firstName = formContext.getAttribute("firstname").getValue();
+You can learn more about the deprecation of Xrm.Page.
+The below diagram is a high-level overview of the properties and methods that are available within the form context:
+### Data object
+The data object (formContext.data) is intended to be used for any table to manipulate data within the form.
+This table is a summary of each of the data object's objects and collections:
+### UI object
+The UI object (formContext.ui) provides both methods to retrieve information about the user interface and also collections for several sub components of the form or grid.
+This table summarizes each of the UI object's objects and collections:
+It's common to use the data object, instead of the UI object, to get or set a table column value. The data object has only a single attribute representing the table column value. By comparison, the UI object has multiple controls for the same table column on the form, each with a reference to the attribute. So, it's easier to work with the data object to manipulate the attribute value and the UI object to work with the controls that represent that attribute on the form.
+Using the context objects in your scripts makes them more resilient to change on the form and in the client API.
+# Client scripting common tasks
+Completed100 XP
+8 minutes
+The client API object model is extensive and rich. As you get familiar with client scripting, you'll realize that you can use many API objects and methods to implement your logic. In this unit, we look at some of the common tasks you can perform and the techniques to use to accomplish them.
+## Access Dataverse column data
+A Dataverse column is represented as an attribute object in the object model. You can use the getAttribute() method of the formContext object to quickly locate either a specific attribute or all attributes present on the form. Each attribute object includes some common methods that are available regardless of data type. There are also other methods available for specific attribute data types (text, number, date, etc.).
+Note
+This sample code assumes that the attributes and controls used are present. Some methods (such as getAttribut) return null if objects aren't available, and usual defensive checks should be used in practice.
+Tip
+Collections returned by Client API methods have some helpful methods that you can use to iterate through the elements. For more information, see Collections (Client API reference) in model-driven apps - Power Apps.
+## Use attributes
+## Access form controls
+## Use form controls
+Similar to attribute objects, control objects have a common set of methods, regardless of the type. They also have specialized methods based on the type of control.
+## Use tabs and sections
+Each form has collection of tabs. Each tab has a collection of sections. Each section has a collection of controls. You can programmatically access these elements and use their methods.
+## Use entity data
+The following table contains methods you can use to get information about the current record.
+# Exercise - Use client script to hide a form section
+Completed100 XP
+9 minutes
+In this exercise, you use client script to implement the business requirement of hiding the Status section when a project start date either isn't provided or is in the future.
+Important
+Use a test environment with Microsoft Dataverse provisioned and the sample apps enabled. If you don't have one you can sign up for the community plan.
+## Task 1 - Prepare solution with the form
+In this task, you create a solution, add an existing table to the solution, and prepare the main form of the table you added to the solution.
+Navigate to Power Apps maker portal and make sure you are in the correct environment that has the sample apps enabled.
+Select Solutions and then select + New solution.
+Enter Innovation Challenge Enhancements for Display name, select CDS Default Publisher for Publisher, and select Create.
+The Innovation Challenge Enhancements you created should open.
+Select + Add existing and then select Table.
+Enter team in the search textbox, select Team Project, and then select Next.
+Note
+If you're unable to locate Team Project table you may not have the sample apps in your environment. Select another environment or create a new one with the sample apps installed.
+Select the Edit objects button.
+Select the Forms tab, select the Information form of Form type Main, and then select Add.
+Select Add again.
+Open the Team Project table you just added to the solution.
+Select Forms in the Data experiences card.
+Open the Information form that is Form type Main.
+Select the Status section.
+In the Properties pane, change the Name to section_status. By default, a GUID is assigned as the section name. Change it to a more meaningful name to reference in your scripts. Next, check the Hide checkbox. This hides the section by default to reduce the jarring effect of showing and then hiding on load of the form.
+Go to the Tree view and select the General tab.
+In the Properties pane, change the Name to tab_general.
+Select the Project start column.
+Go the Properties pane and select the (i) button next to the Table column name.
+Copy the Logical name (sample_projectstart) and paste it into a notepad. You use this name in your script to reference this column.
+Select Save and publish to save your changes. Wait for the publishing to complete.
+Select the Back button.
+Select All.
+Select Publish all customizations, and wait for the publishing to complete.
+## Task 2 - Build the client script
+In this task, you create a script that shows/hides the status section based on the project start date.
+You'll hide the status section if the project start date is empty or in the future. Otherwise, the status section shows.
+Start a new instance Visual Studio Code or use your favorite code editor. You can download and install Visual Studio Code.
+Select Open Folder.
+Create a folder in your Documents folder and name it ClientScriptLab.
+Select the ClientScriptLab folder you created and Select Folder.
+Hover over the CLIENTSCRIPTLAB folder and select New File.
+Name the file FormTeamProject.js.
+Add the below functions to FormTeamProject.js. Your functions should have either unique names or use a namespace to ensure uniqueness.
+JavaScript
+function LearnLab_handleTeamProjectOnLoad(executionContext) {
+
+}
+function LearnLab_handleProjectStatusOnChange(executionContext) {
+
+}
+function LearnLab_hideOrShowStatusSection(formContext) {
+
+}
+Add this script to the code's OnLoad function. Notice the project start column name here sample_projectstart. This is the logical name you saved earlier. This code registers an onChange event handler and calls a common function to show/hide the section. You need to handle on change in case a project start date input changes the hide/show requirement.
+JavaScript
+var formContext = executionContext.getFormContext();
+formContext.getAttribute('sample_projectstart').addOnChange(LearnLab_handleProjectStatusOnChange);
+LearnLab_hideOrShowStatusSection(formContext);
+Add this script to the OnChange function. This code simply gets the formContext and then calls the common function to hide/show.
+JavaScript
+var formContext = executionContext.getFormContext();
+LearnLab_hideOrShowStatusSection(formContext);
+Add this script to the hideOrShowStatusSection function. Notice the tab name tab_general, the section name section_status, and column name sample_projectstart.
+JavaScript
+var tabGeneral = formContext.ui.tabs.get('tab_general');
+var sectionStatus = tabGeneral.sections.get('section_status');
+var startDate = formContext.getAttribute('sample_projectstart').getValue();
+var CurrentDate = new Date();
+if (startDate == null || startDate > CurrentDate) {
+  sectionStatus.setVisible(false);
+} else {
+  sectionStatus.setVisible(true);
+}
+Your script should now look like this image.
+Select File and Save.
+## Task 3 - Upload the script
+In this task, you load the script you created into your environment.
+Navigate to Power Apps maker portal and make sure you are in the correct environment.
+Select Solutions and open the Innovation Challenge Enhancements solution.
+Select + New and then select More | Web resource.
+Enter FormTeamProject.js for Name, enter FormTeamProject.js for Display name, select Java script (JS) for Type, and select Choose File.
+Select the FormTeamProject.js file you created earlier and then select Open.
+Select Save.
+Your solution should now have the Team Project table and the FormTeamsProject.js web resource.
+Don't navigate away from this page.
+## Task 4 - Edit form
+In this task, you add JavaScript library to the Team Project main form and add an event handler for the On Load event.
+Make sure you're still in the Innovation Challenge Enhancements solution.
+Expand Tables and then expand the Team Project table.
+Select Forms and open the Information form.
+Go to the Properties pane, and select the Events tab. Expand OnLoad if it's collapsed, and select + Event Handler. In Configure Event, select + Add library.
+Enter team in the search textbox and press Enter. Select FormTeamProject.js, and select Add.
+Enter LearnLab_handleTeamProjectOnLoad under Function, check the Pass execution context as first parameter checkbox, and select Done.
+Select Save and publish and wait for your changes to be saved.
+Once your changes have been saved and published, select the Back button.
+Select All.
+Select Publish all customizations and wait for the publishing to complete.
+## Task 5 - Test
+In this task, you test your script.
+Navigate to Power Apps maker portal, and make sure you are in the correct environment.
+Select Apps, and open the Innovation Challenge application.
+Select Team Projects, and open the Cloud Computing team project.
+The Status section should be hidden because the Project start column is empty.
+Press calendar icon next to the Project start and select today's date.
+The Status section should become visible.
+Change the Project start to a future date.
+The Status section should now become hidden.
+Change the Project start to a date in the past.
+The Status section should become visible again.
+You have now used JavaScript and Client API to implement business requirements that aren't possible to implement using declarative options like business rules.

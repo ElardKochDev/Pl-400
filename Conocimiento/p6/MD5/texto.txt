@@ -1,0 +1,41 @@
+# Introduction
+Completed100 XP
+1 minute
+Solutions are written, packaged, and maintained by a publisher. As a result, you can customize components that extend your Microsoft Power Platform organization. In this module, you'll learn about solution layering basics and about the best practices around solution architecture.
+# Solution layering
+Completed100 XP
+2 minutes
+Solution layering is implemented at a component level. The following video provides an overview of the two distinct layers: managed and unmanaged solutions. These solutions exist at different layers within a Microsoft Dataverse environment.
+## Managed layers
+In Dataverse, managed layers have the following characteristics:
+The system layer is at the base of the managed layers level. The system layer contains the entities and components that are required for the platform to function.
+All imported, managed solutions and the system solution exist at the managed level.
+When multiple managed solutions are installed, the last one that's installed is above the managed solution that was previously installed. Essentially, the second solution that's installed can customize the one that was installed before it.
+When two managed solutions have conflicting definitions, the runtime behavior is "last one wins" or a merge logic is implemented.
+If you uninstall a managed solution, the managed solution below it will take effect.
+If you uninstall all managed solutions, the default behavior that's defined within the system solution will be applied.
+## Unmanaged layer
+All imported unmanaged solutions and impromptu customizations exist at the unmanaged layer. All unmanaged solutions share a single, unmanaged layer.
+Certain components are available that have a merge behavior, such as site maps and forms. Each layer is merged to produce the runtime behavior as opposed to the "last layer wins" behavior.
+For more information, see Solution layers.
+# Solution architecture tools and techniques
+Completed100 XP
+2 minutes
+With segmentation, you can export solutions with selected table assets, such as columns, forms, and views. Segmentation also enables granular development.
+Make sure that you avoid selecting the Add All Assets option. Choosing the Add All Assets option often leads to dependency issues and defeats the purpose of segmentation.
+A patch solution contains only the changes for a parent-managed solution, such as adding or editing components and assets.
+More items that you should keep in mind concerning patches include:
+Use patches when making small updates (similar to a hotfix).
+When patches are imported, they're layered on top of the parent solution. You can't delete components with a patch.
+Using patches isn't recommended. For more information, see Create solution patches.
+## Managed solution updates and upgrades
+Using solution updates allows you to take advantage of an optimized import process. The following video provides an example of a solution upgrade.
+# Use version control for solutions
+Completed100 XP
+1 minute
+When exported from an environment, solutions are in the form of a zip file. In the zipped format, the schema definition is contained in one massive file labeled customizations.xml.
+## Microsoft Power Platform CLI
+Microsoft Power Platform CLI is a simple, one-stop developer CLI that empowers developers and independent software vendors (ISVs) to perform various operations in Microsoft Power Platform that are related to environment life cycle, authentication, and work with Microsoft Dataverse environments, solution packages, portals, code components, and an extra collection of application lifecycle management (ALM) related tasks for Microsoft Power Platform.
+It's compatible with Linux, Mac, and Windows, and you can install it through automation, making it ideal for DevOps processes.
+## Solution unpack command
+Solution unpack reversibly decomposes a solution .zip file by dividing it into a logical folder structure. Resulting output can be more readily maintained by a source control system.

@@ -1,0 +1,25 @@
+[
+  { "t": "single",
+    "q": "In solution layering, which layer determines the effective behavior of a component?",
+    "o": ["The topmost active layer wins", "The oldest layer always wins", "The unmanaged base always overrides managed", "Layers are chosen at random"],
+    "a": 0,
+    "why": "Managed layers stack over the unmanaged base; the top active layer determines behavior." },
+  { "t": "single",
+    "q": "How does a managed UPGRADE differ from a managed UPDATE?",
+    "o": ["An upgrade replaces the solution and removes components deleted in the new version; an update patches in place", "They are identical", "An update deletes the environment", "An upgrade only changes the theme"],
+    "a": 0,
+    "why": "Upgrades fully replace (removing deleted components); updates/patches apply changes without removing." },
+  { "t": "yesno",
+    "q": "Decide whether each layering/ALM statement is true.",
+    "rows": [
+      { "s": "pac solution unpack turns a solution into source-control-friendly files.", "v": true },
+      { "s": "Version control helps manage solution changes over time.", "v": true },
+      { "s": "The unmanaged base sits above all managed layers.", "v": false }
+    ],
+    "why": "Unpack aids source control; version control tracks changes; the unmanaged base is at the bottom, not top." },
+  { "t": "single",
+    "q": "Which practice best supports healthy long-term solution architecture?",
+    "o": ["Version-controlled, layered managed solutions with automated ALM", "One giant unmanaged solution edited in production", "Manual copies between environments", "Screenshots as the source of truth"],
+    "a": 0,
+    "why": "Layered managed solutions under version control with automated ALM is the healthy architecture." }
+]

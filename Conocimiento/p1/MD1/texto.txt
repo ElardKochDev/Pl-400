@@ -1,0 +1,214 @@
+# Imperative versus declarative development
+Completed100 XP
+6 minutes
+This module includes some concepts that might appear to be very developer focused but don't worry. The goal is to help you understand and apply some of these concepts to build better apps.
+## Imperative versus declarative
+There are two main ways to approach development:
+Imperative development focuses on how to achieve a goal. Declarative development focuses on what result you want.
+Imperative development gives you more control because you define each step of the process. That flexibility often comes with more complexity. Declarative development is simpler and easier to read, but it can limit how much control you have over execution.
+### Imperative
+To better understand imperative programming think about the sandwich that you want for lunch. In imperative programming, you focus on creating the sandwich in your "code." You go to the kitchen, get the ingredients, put the sandwich together, and then send it to the user. You spend numerous time on the steps, but you have all of the specific functions you want to make it exactly the way you want. No tomatoes? No problem. In a completely made up programming language, your code might look something like this.
+Function Create Sandwich
+{ Go to kitchen;
+Get ingredients;
+Remove tomato;
+Assemble sandwich;}
+Function Send Sandwich
+{ Destination Mouth;}
+As you can see, there are lots of steps in the process, but you get a sandwich exactly the way you want. This is the approach you see in languages like C# or other popular coding languages. The focus is on pushing the data.
+### Declarative
+For declarative programming, think of the same scenario, your sandwich for lunch. The difference is now you're focused on producing the sandwich, not how to make a sandwich. This is much less complex, but you might also run into the issue with tomatoes. If the function you use to get the sandwich doesn't support the option of no tomato you're out of luck. Your code may be as straight forward as follows.
+GetSandwich(Kitchen, Mouth)
+That made up function takes two inputs, where to get the sandwich from and where to send it. There was no option to remove tomatoes. It would be up to the creator of the GetSandwich function to add an option for no Tomato, which might look like this.
+GetSandwich(Kitchen, Mouth, {Tomato: false})
+Low-code tools like Excel use this approach to development. The focus is on pulling data.
+### Power Apps supports both imperative and declarative methodologies
+Power Apps has capabilities for both imperative and declarative logic. Throughout this training, there has been a focus on declarative formulas. In the remainder of this module, the focus is on imperative concepts and methodologies in Power Apps. The key component of imperative logic in Power Apps is variables.
+The next unit covers the different types of variables and how to use them in an imperative mode.
+# The three types of variables in Power Apps
+Completed100 XP
+5 minutes
+In Power Apps, you can use variables to temporarily store information that you need to reference while an app is running. Common scenarios include keeping a running count, managing UI state, improving performance by avoiding repeated calculations, or temporarily storing lists of data.
+Variables are a key driver for imperative logic in Power Apps because they allow you to "build the sandwich" piece by piece.
+To support you in these needs, Power Apps has three different types of variables.
+Global variables -- The most traditional type of variable. You use the Set function to create and set its value. Then you can reference its values anywhere within your app. A common use is to store a user's DisplayName when the app loads and then reference the variable throughout the app.
+Context variables -- A context variable is only available on the screen where you create it using the UpdateContext function. Context variables are commonly used for functionality that controls a pop-up screen, for example, where you want to use the same variable name on multiple screens but maintain the value separately.
+Collections -- A collection is a special type of variable for storing a table of data. You can create the collection manually or by loading another data sources table into it. Collections are available throughout your app, like global variables, and they're created using the Collect or ClearCollect function.
+When choosing which type of variable to use, consider where you'll use it and the structure of the data you want to store. When in doubt, use a global variable as it has the most flexibility.
+## How all of the variable types are the same
+With Power Apps, variables are easy to use. You don't have to initialize, declare, or type a variable. You create the variable with the appropriate function, and Power Apps does the rest. When you assign the value to a variable Power Apps will automatically determine the type.
+It's also important to note if you're new to variables that variables are temporary and only available to the current user in their current session. When the user closes Power Apps, all of the information stored in variables is no longer available. If you need to store information for use later or by other users, then you'll need to write that information to a data source. Variables are temporary by nature.
+In the next units, you'll explore each variable type in more detail. The next unit covers the global variable.
+# Global variables
+Completed100 XP
+8 minutes
+Global variables are the most commonly used variables because of their flexibility. After you set the variable, you can reference it or update it throughout your app. This allows you to avoid repetitive query for the same information repetitively, to build out the information you need in an imperative way, or sometimes just as a place holder.
+## Storing information for your user
+A common design pattern in apps is personalization. For example, you might display a welcome message that includes the user’s name on every screen. In Power Apps, you can retrieve the user’s name in a declarative way by using the following formula in a Label control:
+"Welcome " & User().FullName
+This formula displays the string Welcome and then queries Azure Active Directory for the user's DisplayName property and displays it as text. But if you include that function on every screen then each time a screen opens Power Apps has to query that data from Microsoft Entra ID directly. This creates repetitive calls to the network that slow down your app.
+A better approach would be to store that information in a global variable when the app opens, and then reference that variable throughout your app. You could do this by Modifying the OnStart property of the app with the following formula.
+Set(varUserDisplayName, User().FullName)
+Now for your Label control, you would change the formula to the following.
+"Welcome " & varUserDisplayName
+This formula gets you the same output as the previous formula, but instead of having to go back to Microsoft Entra ID on every screen, Power Apps can reference the value stored in the variable.
+## Tracking status in a variable
+In a declarative mindset, you might hide or show controls based on a query for data. For example, if you had an app for managing customer's orders, you might have a warning icon that displays only if the customer has more than three outstanding invoices. In addition to the warning, you might have a requirement to get approval from a manager if the customer would like to submit a new order when they have more than three outstanding invoices. This approval workflow starts by the user selecting an approval button.
+With a declarative mindset, you would set the Visible property for the warning icon to the following.
+CountRows(Filter(InvoiceEntity, CustomerNumber = ThisCustomersNumber 
+And Status = "Outstanding")) > 3
+If that's true, then the icon displays, and if it's false the icon doesn't display. You would then repeat that same formula on the Visible property of the Approval button.
+The problem is this becomes a complex formula that you maintain in two different locations, and that query will generate duplicate network traffic, processing in the app, and processing on the data source.
+A better approach is only to run the complex call once, store the result in a variable, and then use that variable to control the Visible property of each control.
+To do this, configure the OnVisible property of the screen to set the variable.
+Set(varOustandingExceeded, CountRows(Filter(InvoiceEntity, CustomerNumber = 
+ThisCustomersNumber And Status = "Outstanding")) > 3)
+The variable varOutstandingExceeded is either true or false based on the result of the formula. Now set the Visible property of the icon and button control to varOutstandingExceeded.
+No additional formula or functions are necessary. This is because those controls accept either true or false for the Visible property and the variable will be either true or false. Based on your Set function in the OnVisible property of the screen, Power Apps will set the type of variable to Boolean and set the value to true or false based on the result of the formula.
+Small changes like this make your app both more performant and easier to maintain. You should incorporate variables anytime you're repetitively retrieving information that isn't going to change while you're using it.
+# Contextual variables
+Completed100 XP
+4 minutes
+Contextual variables are similar to global variables except they're only referenced on the screen where you create them. Although it’s possible to set the user's name to a variable to reference throughout your app, there are still advantages to the fact that contextual variables can't be used on other screens.
+Sometimes you have functionality you want to use on multiple screens that is variable driven. For example, many apps use pop-up dialog boxes to confirm things like deleting a record. A common way to implement is to set a Contextual variable to true when the user selects the delete button. You do that by setting the OnSelect property of the button to the following.
+UpdateContext({varShowPopUp: true})
+You then set the Visible property of the pop-up controls to varShowPopUp. This is similar to the example from the global variables. The major difference is reusability. If you copy the controls (using Ctrl+C) to another screen, then you have two instances of varShowPopUp. These two instances use the same name, but can have different values. The value of varShowPopUp on screen1 doesn't affect the value of varShowPopUp on screen2 because each contextual variable, even when they have the same name, are scoped to the screen they are on.
+Typically reusing variable names isn't recommended because it can be confusing, but it’s great if you want to reuse functionality independently on different screens.
+If you are in doubt about whether you should use global or contextual variables, typically global variables are the default answer. Global variables are available everywhere, making them the most flexible.
+One unique behavior of the UpdateContext function is that you can declare more than one variable at a time. This isn't possible with the Set function. To create more than one context variable with a single formula, use a comma between the variables.
+UpdateContext({varCount: 1, varActive: true, varName: User().FullName})
+Note
+In the previous module, we mentioned that using the User() function inline will unnecessarily slow down your app and for that reason a global variable should be used OnStart. While using a contextual variable to store User information improves performance over inline use of the User() function, it's ultimately less performative than a global variable, as you'll still be calling on the data source each time that page opens. As such, it's recommended to store User information in a global variable.
+To do the same thing with Global variables, you would use the following.
+Set(varCount, 1);Set(varActive, true);Set(varName, User().FullName)
+In the next unit, you'll learn about storing tables of data in a collection variable.
+# Collections
+Completed100 XP
+8 minutes
+In the previous units, you learned how global and context variables store single values. The third variable type, collections, allows you to store a table of data in memory.
+Collections are useful when you need to temporarily store structured data for reuse within your app. This data can come from a data source, be created within the app, or be a combination of both.
+## Using collections to increase performance
+One common reason for using collections is to reduce repeated calls to the same data source. For example, if your app needs to reference a list of active projects multiple times, you can retrieve the data once and store it in a collection. To store a copy of the Projects table in a collection named collectProjects, use the following formula:
+Collect(collectProjects, Projects)
+This creates a collection named collectProjects that will have the same rows and columns as the Projects table from your data source. Here's a couple of considerations that you need to understand about using collections:
+The Collect function isn't delegable. This means by default only the first 500 records from the data source will be retrieved and stored in the collection. For more information about working with delegation, see Work with data source limits (delegation limits) in a Power Apps canvas app
+Collections aren't linked to the data source after you create them. This means changes to the data in the collection don't automatically save to the data source. This includes changes you have made to the data. If you want to update the data source based on your changes to the collection, you'll need to build formulas to do so, such as recollecting from the data source.
+Collections are temporary. When you close the app, the collection and all of its contents are removed. If you need to store collection data, you need to write it to a data source before closing the app.
+## Using dynamic collections
+Collections don’t have to come from a data source. You can also create collections directly within your app. This is commonly done to populate drop-down controls, combo boxes, or to stage data before writing it to a data source.
+The following formula creates a collection named collectColors:
+Collect(collectColors, {Name: "Shane", FavoriteColor: "Orange"},
+{Name: "Mary", FavoriteColor: "Blue"}, {Name: "Oscar", FavoriteColor:
+"Yellow"})
+After creating a collection, you can reuse it throughout your app and apply standard table functions such as Filter, Sort, and CountRows.
+One important limitation is that collections can’t be used directly with the Form control, even though they store tabular data.
+For more information about working with collections and the table data they store, see Author a basic formula that uses tables and records in a Power Apps canvas app.
+Additionally, collections store table data no differently than tabular data sources. The learning path Work with data in a Power Apps canvas app has many concepts that allow you to work with and extend the power of your collections.
+In the final unit of this module, you'll learn about some additional variable concepts and how to apply them to your apps.
+# Additional variable concepts
+Completed100 XP
+6 minutes
+Now that you have an understanding of Power Apps logic concepts and variable types, there a few additional concepts to expand on that will help you integrate variables into your app.
+## Variables can self-reference
+This concept applies to both global and context variables. Sometimes you need to make a variable that points to itself. This is often done when you want to either do a counter type variable where it increments a value or you're appending a string. With Power Apps this is easy to implement. Place the following formula on the OnSelect property of a button to set up a counter.
+Set(varCounter, varCounter + 1)
+Next to the button put a Label, and in the Text property, put varCounter. The first time that you select the button your value will be 1. If you select the button a second time the value will be 2. Use the following table to see the literal translation.
+When the app first starts, the value of varCounter is 0, and it's incremented by 1 each the time the button is selected. It's important to remember that the default value of a variable varies based on the variable type if you don't set the default property.
+Text variables are ""
+Number variables are 0
+Boolean variables are false
+## A variable can store a single record
+This concept applies to global and context variables. Collections differ slightly because they're a table made up of one or more records, meaning storing and retrieving a record is different for a collection.
+In the previous units, you learned how to store a single value in a global or context variable. You can also store a record in the variable. When you do this, you can then reference the different fields or columns by using the dot (.) notation.
+In this example, you'll store the entire user record in a global variable named varUser. To do so, use the following function.
+Set(varUser, User())
+This stores the entire user record in the variable. The user record has three columns Email, FullName, and Image. You can retrieve the values of the individual columns using the dot (.) notation. To display the user's email address, add a Label control to the screen and set the text property to:
+varUser.Email
+This example stores the record from an action-based data source. You could also use the LookUp function as a way to retrieve and store a record from a tabular data source, like Microsoft Dataverse, in a variable.
+## Variables don't auto update
+A common point of confusion for people who are new to variables is that variables don't automatically update. For example, they can use a variable to store the number of customer invoices using OnStart for the app. Then in the app, the user creates a new invoice. The variable doesn't distinguish the number of invoices in the system that have changed. The variable will only update when:
+The user closes the app and then opens it again. This causes OnStart to perform the operation to calculate the number of invoices.
+You implement functionality to update the variable after the user creates an invoice.
+Be aware of this common point of confusion if you're new to using variables to track data.
+# Exercise - Using the variables and collections
+Completed100 XP
+7 minutes
+This hands-on lab shows you how to create and use Global, Contextual, and Collection functions.
+Sign into the Power Apps maker portal (make.powerapps.com).
+From the Home screen left-side navigation panel, select + Create, then select Blank app and in the Create popup window under Blank canvas app select Create.
+Name your app Collection exercise, leave the format as Tablet, and select Create.
+After a few moments, your new app will appear. You can skip past the welcome dialog (if it appears). In the Tree view panel, find and select the App object, then select the OnStart property.
+Set the OnStart property to this formula that we're using to create a collection of customer numbers and the associated invoice numbers (just copy and paste it into the fx formula bar):
+PowerApps Formula
+ClearCollect(colCustomer,
+{CustomerNumber: 7470, InvoiceNumber: "INV70817"},
+{CustomerNumber: 4259, InvoiceNumber: "INV29595"},
+{CustomerNumber: 8251, InvoiceNumber: "INV74302"},
+{CustomerNumber: 2338, InvoiceNumber: "INV35115"},
+{CustomerNumber: 1524, InvoiceNumber: "INV82337"},
+{CustomerNumber: 1530, InvoiceNumber: "INV82338"}
+);
+Set(varUserDisplayName, User().FullName)
+Select the ellipsis (…) next to the App object and select Run OnStart. This runs the OnStart formula you just entered and populates your collection colCustomer.
+To view the collection, select the Insert tab (or + Insert from the command bar) and add a Vertical gallery, set its Items property to colCustomer.
+Make the changes below to your new Gallery1 by using the Properties panel on the right of the screen:
+Layout: Title and subtitle
+Height: 650
+Fields: change Title to reflect CustomerNumber in the Data panel (alternatively, you can select the Title label inside of the gallery and change Text property to ThisItem.CustomerNumber)
+Delete the NextArrow icon (select it from within the gallery)
+In the Gallery, select the circled edit pencil or the Title label, and use the Insert tab to add an Icon . Search for and select the Trash icon. Move the Trash icon to the right side of the gallery.
+Your Gallery now includes the Trash can icon.
+Select the Trash icon and the below formula to its OnSelect property:
+Remove(colCustomer,ThisItem)
+Press and hold Alt Key, and select the first Trash can icon.
+This deletes the selected row from the collection. While this process works, you probably want to give a warning message that the row will be deleted.
+By employing a Contextual variable, let's create a popup warning to inform the user about the pending deletion and give them an option to cancel.
+First change the OnSelect of the Trash can icon to the below:
+UpdateContext({varPopup:true})
+To create the popup, select the screen (outside of the gallery control) and use Insert to add a Rectangle (you can enter "rectangle" in the search box in the Insert menu to find it fast).
+Make the Rectangle properties as follows:
+Name: rectangle_backgrd
+Size: 744 (width); 720 (height)
+Fill: RGBA(166, 166, 166, .50)
+Position the rectangle to cover your gallery.
+Add another Rectangle and update its properties to:
+Name: rectangle_foregrd
+Size: 744 (width); 348 (height)
+Fill: RGBA(255, 255, 255, 1)
+BorderThickness: 1
+Position this rectangle to fit in the top portion of the other rectangle.
+Select Insert >Text label.
+Make the following changes to the Text label properties:
+Name: lbl_popup
+Font size: 15
+Font weight: Bold
+Text alignment: Center
+Set the lbl_popup Text to the below formula:
+PowerApps Formula
+varUserDisplayName & "
+Please click Delete to confirm deletion of Invoice#" & " " & Gallery1.Selected.InvoiceNumber
+Select Insert > Button and name your new button: button_Delete; set its Text property to: Delete
+Set the Delete Button OnSelect property to the below:
+PowerApps Formula
+Remove(colCustomer,LookUp(colCustomer,CustomerNumber=Gallery1.Selected.CustomerNumber));
+UpdateContext({varPopup:false})
+Select Insert > Button and name the new button: button_Cancel; set its Text property to: Cancel
+Set the Cancel Button OnSelect property to:
+UpdateContext({varPopup:false})
+Arrange the new controls you created over top of Gallery1 like this:
+Now let's select all of these controls together so we can group them. While holding down the Ctrl-key Select the following controls:
+rectangle_backgrd
+rectangle_foregrd
+lbl_popup
+button_Delete
+button_Cancel
+With all of them selected, right-click, and select Group. Set the Visible property of Group1 to:
+varPopup
+That should make them all disappear from the screen, but if not, press and hold the Alt key and select your Cancel button.
+You created a popup box that deletes the selected Customer from the gallery.
+Let's test the Delete function.
+Press and hold Alt Key and select the Trash can icon for invoice# INV29595.
+Select the Delete button, INV29595 is removed from the gallery and your popup disappears.
+Now press and hold Alt key again and select the Trash can icon for invoice# INV74302.
+This time, select your Cancel button. The popup window closes, and INV74302 remains in the gallery.
+We created a dynamic collection, a global variable, and a pop-up that uses a contextual variable.

@@ -1,0 +1,279 @@
+# Delegation overview
+Completed100 XP
+6 minutes
+Before picking a data source in Power Apps, understanding delegation is key. Delegation helps Power Apps work better with data sources by reducing how much data gets moved around. Basically, when possible, it lets Power Apps hand over some data processing work to the source itself. This includes tasks like filtering, searching, and sorting.
+Whether your data can be delegated depends on both the source and the function you're using. If you're dealing with lots of data and need the data source to do heavy lifting like filtering, it might be wise to shift or copy your data to a system that's delegation-friendly, like Microsoft Dataverse.
+To do this, you can use the Data Integrator tool to transfer data into Dataverse from another source.
+## Delegation in action
+Here’s an example to help you understand delegation. You have a list of 5,000 projects stored in SharePoint. The ProjectStatus column stores the values Active or Inactive. Half (2,500) of the records are set to each of these values. You could show the list in a gallery and filter it by using this formula.
+Filter(SharePointList, ProjectStatus = "Active")
+Because the Filter function is delegable to a SharePoint data source, Power Apps would send your formula to SharePoint. SharePoint would process all 5,000 records and return to Power Apps the 2,500 records for which ProjectStatus is set Active. Those records would all be available in your gallery. In this scenario, Power Apps didn't process any data, and only the matching records were sent from SharePoint to Power Apps, which is efficient.
+## When delegation isn't available
+Some functions can't be delegated to some data sources. An example of a nondelegable action is the Search function against the SharePoint data source. The Search function is similar to Filter, but you can use Search to check across multiple fields and to find partial matches. For example, Search(SharePointList, "Rob", "FirstName","LastName") would return all of the records where the string "rob" is in either the FirstName or the LastName column. In this example, Power Apps would return records for Robert Smith, Rob Jones, and Suzy Robinson.
+The Search function doesn't work with SharePoint as a delegable action, which means Power Apps has to handle the records itself. Initially, all the records are sent from SharePoint to Power Apps. By default, SharePoint only sends the first 500 records, not the first 500 matching your formula but the first 500 in the entire data set.
+For instance, if you use this formula in your gallery, SharePoint sends Power Apps the initial 500 records from the list, and then Power Apps performs the search locally. Imagine your list has 5,000 items; the remaining 4,500 records aren't processed or shown.
+You can adjust the default limit of 500 records to a maximum of 2,000 in Power Apps Studio's advanced settings. However, even with this increase, if you had 5,000 items, 3,000 records would still not be processed or displayed.
+## Consider delegation when choosing a data source
+Delegation gets its own module because it's crucial when you're selecting a data source. Think about the specific functions you use, such as Search, and also the volume of data you're handling. These factors play a large role in picking the perfect data source for your app.
+In the following unit, you learn more about how delegation works with various data sources.
+# Functions, predicates, and data sources combine to determine delegation
+Completed100 XP
+8 minutes
+Figuring out when delegation applies depends on various factors, starting with the data source itself. Take a look at this table for Microsoft Dataverse functions and their delegation support:
+Yes: Data source handles processing across all records.
+No: Data source sends only the initial 500 records (default) to Power Apps, which then processes the function locally.
+Numbers with arithmetic expressions like Filter(table, field + 10 > 100) aren't delegable. Language and TimeZone aren't delegable.
+Doesn't support Trim[Ends] or Len. Supports other functions such as Left, Mid, Right, Upper, Lower, Replace, and Substitute.
+DateTime can be delegated except for the DateTime functions Now() and Today().
+Supports comparisons. For example, Filter(TableName, MyCol = Blank()).
+The aggregate functions are limited to a collection of 50,000 records. If needed, use the Filter function to select 50,000 records from a larger set before using the aggregate function.
+Dataverse has more info about using the Dataverse as a data source, and about its delegable functions.
+This table is only for supported delegable functions if you use the Dataverse as a data source. But what if you use a different data source, like SharePoint or SQL?
+## Other data sources: SharePoint and SQL
+When working with SharePoint or SQL as your data source, it's crucial to check the supported delegable functions by referring to the associated documentation. As mentioned earlier, each data source has its own set of delegable and nondelegable functions.
+Before diving into app creation, we highly recommend exploring these differences among data sources. This helps in understanding their capabilities and limitations upfront. Every Power Apps project comes with unique business needs, so ensuring that your chosen data source supports those needs and the required functions for your data volume is key.
+Additionally, if you use the Filter or LookUp function, then you also must use a predicate. The predicate is what allows you to evaluate the formula. The function FirstName = "Rob" uses the = predicate. Some data sources don't support certain predicates. For example, Salesforce doesn't support the IsBlank predicate. So, although the formula Filter(SalesforceCustomers, Name = "Contoso") is delegable, the formula Filter(SalesforceCustomers, IsBlank(Name)) isn't delegable.
+## The Column type can also factor in
+Column types wield a surprising influence on delegation possibilities. Take complex columns, such as SharePoint lookup columns—they're not delegation-friendly. Their intricate logic means Power Apps can only process them locally.
+The silver lining? Power Apps has your back! It offers visual warnings for these issues. Imagine a squiggly underline highlighting a formula in your app—this is your cue! It signals a delegation hiccup that could mean not fetching all your records. Correcting it ensures your app performs seamlessly.
+In the next section you'll learn more about delegation warnings, limits, and how to work around them if you ever run into a delegation issue.
+# Delegation warnings, limits, and non-delegable functions
+Completed100 XP
+10 minutes
+Power Apps uses visuals to help you, the app maker, understand when delegation is occurring. The maker portal also has one setting you can adjust to increase the amount of data returned when delegation isn't possible.
+## Delegation warnings
+Anytime you use a nondelegable function, Power Apps underlines it with a squiggly line and displays a yellow warning triangle as shown below.
+This gives you a clear visual indicator that delegation isn't happening, which means you might not see all of your data. It's important to understand a couple of things about this visual indicator.
+Power Apps provides this warning whatever the size of your data source. Even if your data source only has a few items and delegation isn't technically causing you a problem, the warning still shows. Remember the first 500 items are returned by default and processed locally. The warning appears anytime that your formula isn't delegated.
+The warning indicator only processes on the first thing that causes the delegation issue. Notice in the above screenshot that only the field underlined with a squiggly underline is "FirstName". That is because it was the first item that caused delegation. "LastName" would also cause delegation in this scenario, but it isn't underlined. This can be confusing because people try to troubleshoot what is the difference between FirstName and LastName instead of the real issue, which is the Search function. If you come across this confusion, rearrange your formula to validate that whichever field is first shows the issue.
+This visual indicator is only present when you are in the maker portal, building the app. When a user is running the app, they don't receive any notification that delegation isn't occurring and that they might only be seeing partial results. Keep this in mind when designing your app and build accordingly.
+## Change the number of records returned when delegation isn't available
+When a formula can't delegate to the data source for any reason, then by default Power Apps retrieves the first 500 records from that data source and then processes the formula locally. Power Apps does support adjusting this limit from 1 to 2000. You can adjust this limit in the Advanced settings.
+From the Maker portal, select Settings from the menu across the top of the screen. If you don't see Settings, click on the three ellipses.
+Under App settings, keep the General tab selected and scroll down to the Data row limit.
+Set the Data row limit for nondelegable queries for any value between 1 to 2000.
+After you set the limit, select the close in the lower right to save your change and return to the Maker portal.
+There are two primary reasons that you might want to adjust this limit.
+To increase the limit if you're working with data where 500 records aren't enough, but less than 2000 is. For example, if you have a customer list and you know you'll never have more than 1,000 customers, then you could design your app to ignore delegation and always return all 1,000 records.
+To lower the limit to 1 or 10 to help with testing. If you run into scenarios where you aren't sure if a nondelegable function is causing problems with your app, you can lower the limit and then test. If you set the limit to 1 and your gallery is only presenting one record, you know that you have a nondelegable function. This setting speeds up your troubleshooting process.
+## Nondelegable functions
+In the previous unit, you learned about the functions that are delegable and how they relate to the various data sources. These other functions, not covered in that unit, aren't delegable. The following are notable functions that don't support delegation.
+First, FirstN, Last, LastN
+Choices
+Concat
+Collect, ClearCollect (Neither of these functions return a delegation warning, but they aren't delegable)
+CountIf, RemoveIf, UpdateIf
+GroupBy, Ungroup
+All of these functions aren't delegable. So by adding them to a formula you might take a previously delegable function and make it not delegable, as seen in the previous example.
+## Partially supported delegable functions
+The Table shaping functions below are partially delegable. This means, formulas in their arguments can be delegated. However, the output of these functions is subject to the nondelegation record limit.
+AddColumns
+DropColumns
+ShowColumns
+RenameColumns
+A common pattern is to use AddColumns and LookUp to merge information from one table into another, commonly referred to as a Join in database parlance. For example:
+PowerApps Formula
+AddColumns( Products, "Supplier Name", LookUp( Suppliers, Suppliers.ID = Product.SupplierID ).Name )
+Although Products and Suppliers are potentially delegable data sources, and the LookUp function is delegable, the AddColumns function possesses partial delegability. So the outcome of the entire formula remains constrained to the initial segment of the Products data source.
+While the LookUp function and its associated data source allow for delegation, facilitating the discovery of Suppliers across a vast dataset, it comes with a caveat. LookUp necessitates separate queries to the data source for each of the initial records in Products, resulting in increased network activity. However, if the Suppliers dataset is relatively small and remains stable, an alternative approach involves caching the data source within the app. Employing a Collect call during app initialization (using OnVisible on the opening screen) allows subsequent LookUp operations directly within the cached data source, mitigating network chatter.
+# The importance of thinking about performance
+Completed100 XP
+8 minutes
+The performance of an app is important to keep users happy. Apps can go from mediocre to great based on performance. And sometimes it can be a simple change like caching data in a collection or removing redundant calls to the data source.
+In this module, you'll learn about common performance problems, ways to mitigate their impact, and how to perform testing to discover the issues.
+## The most common performance bottleneck - Data sources
+The most common app performance problems come from interactions with data sources. Almost every app has one or more data source. Power Apps natively supports over 200 different connections to these data sources and using these connections is key to a great app.
+Calling these data sources from your app is often the largest bottleneck in your app because of the time it takes to call across the network to the data source, process the request on the data source side, return the data to Power Apps across the network, and then for Power Apps to process and display the data. Optimizing these interactions with data sources are key to great performance. The following sections highlight some of the most common mistakes.
+### Too many refreshes
+Using the Refresh function, you can force Power Apps to update the data it has gathered from a given data source. This seems like a great function to run because you get the freshest data in your app. But, Power Apps will often handle this refresh for you. For example, when you use a Form to submit a new record to a data source displayed in a Gallery control, Power Apps will automatically refresh that connection. If you include a Refresh function when you navigate to the Gallery screen you're now refreshing the data that Power Apps already refreshed. This is redundant and slows down your app for no reason.
+Note
+Do not use the Refresh function until you are certain it is needed.
+### Too many lookups
+As you start to use relational data (covered in Learning Path Use advanced data options and connectors in Power Apps - Module 1 Work with relational data in a canvas app in Power Apps) a common mistake is not to consider the ramifications of a LookUp function inside of a Gallery. When you place a LookUp function on a Label inside of the Gallery, then that LookUp will be performed once for every record in the Gallery. That means if you have 100 records in the Gallery the app has to perform 100 individual LookUp calls to the data source to render. Depending on the data source, this could take minutes to render. A better approach is only to display the related data using a details screen or to use a Collection to cache the data from the data source, then the LookUp doesn't have to execute across the network.
+Note
+Be careful when making additional calls to remote data sources if you use controls that display multiple records.
+### Storing data in the wrong data source
+Different data sources are optimized for different workloads and this should be a consideration when choosing where to store data. One example is storing images or files. A common use of Power Apps is to capture images either using the Camera control or the device's built-in camera app. After the user has taken the image, it needs to be saved. One option is to store the image in the same SQL Server database as the other app data. While possible, it's important to note that SQL Server is inefficient in storing images. Writing and reading the image file to an SQL database is slow, causing your app to run slow. A better option is to store Power Apps images in the Azure Blob Storage. Azure Blob Storage is faster than writing the same data to SQL Server. This minor change to the underlying structure of your app can have a useful impact on user satisfaction.
+Note
+Choose the optimal data source for your app to get maximum performance.
+## Other performance considerations
+While data sources might be the largest bottlenecks, there are other easily overlooked changes you can make to get optimal performance. Some other common issues include:
+Asset size - When you're designing your app it's great to include company logos and other visual assets. When you add these assets to your app, make sure the assets are optimized for the size of your app. The higher the resolution of a file, the larger the file size, and the more resources it takes for your app to store and display the image. Use an image editing tool to resize your files to the size you need for your app.
+Republish your app - The Power Apps team is constantly updating Power Apps to bring new features and to increase performance. The only way that your app takes advantage of these advancements is for you to open the app and publish again. Your app stays on the version that it was published on until you do this. So periodically revisiting your app to move to the latest version provides you with the best possible performance.
+Build focused apps - Power Apps supports building apps with as many screens as you can imagine, but too many screens aren't a good idea. You should build your apps focused on a specific audience and process. This allows you to optimize the user experience for one audience, makes building and troubleshooting the app easier, and reduces the size of the app. If you have one app for everything, consider breaking it into smaller apps by role.
+## Optimize performance in small steps
+As you work through this module, you're going to learn about the different techniques and options for optimizing performance. Before you get too deep in optimizing your app, remember that the most important thing is that your app works. A fast-performing app that only throws errors when the user uses it has no value.
+It's often easier to build your app so that it accomplishes its goals and is fully functional. After the app works, you can then revisit the app for changes you can make to increase performance - making those changes one at a time confirming they don't break functionality. This methodology of making small changes will have the highest rate of success. As you become more comfortable with the different performance concepts, you'll learn to build the app with them from the start. But in the meantime, build an app that works and then optimize.
+## Additional information
+To supplement the concepts in this module, there are two additional reading options to help you increase your performance mindset.
+Performance considerations with Power Apps - Discusses better ways to load data, patterns, limits, custom APIs, and file optimization.
+Power Apps Canvas App Coding Standards and Guidelines - This is a living document that not only covers performance and testing techniques but also explores standards and documentation of your app.
+Now that you're aware of the benefits of optimizing performance and some of the common issues to look out for, the remainder of this module will provide you with techniques to increase performance and how to use various methods for testing your app.
+# Improve performance with data sources
+Completed100 XP
+9 minutes
+In the previous unit, you learned that data sources are often the main reason for slow performance in your app. In this unit, you learn about some of the common techniques you can apply to mitigate those performance issues.
+## Use collections to cache data
+Often in your app, you find yourself querying the same data repeatedly, like in the case of pulling the lists of departments for your drop-down menus. In those instances, you can query for the data once and then reuse that data throughout the app. This reduces the repetitive calls to the data source across the network. The following is an example of this process.
+In your app, you have several screens where you provide a drop-down menu for selecting the department. The list of departments is kept in Microsoft Dataverse in a table named DepartmentList. On each instance of the menu, you use the following formula.
+PowerApps Formula
+Filter(DepartmentList, Status = "Active")
+This works and performs okay.
+When you finish the app, you realize that you're querying the DepartmentList table multiple times even though it's static information. You could modify your app to create a collection with the OnStart property of the app that stores the information using the following formula.
+PowerApps Formula
+ClearCollect(colDepartmentList, Filter(DepartmentList, Status = "Active"))
+Now that you stored that information, you can change the Items property of the drop-down controls to be colDepartmentList instead of Filter(DepartmentList, Status = "Active"). These small changes add up to increase performance in your app. Also, as you become more familiar with this technique, you can build your app this way from the onset, which reduces the number of formulas you have to write and maintain.
+### Watch out for delegation
+One thing to keep in mind is that the Collect function isn't delegable. That means by default only the first 500 items are returned from your data source and stored in the collection. Be sure to plan for this limitation as you implement the use of collections in your app.
+## Delegation also affects performance
+When you learned about delegation, you focused on returning the right number of rows for your data source. It's also important to remember that delegation, especially for mobile apps, can affect performance.
+When a formula delegates to the data source, all of the processing is handled by the data source, and only the matching rows are returned across the network to the app to be displayed. If a function isn't delegable, then it's common to change the delegation limit to 2,000 rows. This means that the first 2,000 rows are downloaded across the network and then processed locally. In scenarios where you are on a slow cellular connection or a low-end mobile device, this processing can take a considerable amount of time, causing a poor experience for the user.
+Try to use only delegable functions as much as possible. If your function isn't delegable, then plan for the impact on the end user.
+## Use the Concurrent function to load multiple data sources
+Previously you learned to use collections to cache data in your app. As you implement that functionality in your app, it's common to have several collections load when the app launches. Your OnStart property might look like the following.
+PowerApps Formula
+ClearCollect(colDepartmentList, Filter(DepartmentList, Status = "Active")); 
+ClearCollect(colCompanyList, CompanyList); 
+ClearCollect(colRegions, RegionList)
+In that example, you're creating three collections, but the collections are processed one at a time. So if each one takes 3 seconds to process, then your user has to wait 9 seconds for the app to start.
+The Concurrent function allows you to process all of those calls at the same time. You can change your code to the following.
+PowerApps Formula
+Concurrent(
+ClearCollect(colDepartmentList, Filter(DepartmentList, Status = "Active")),
+ClearCollect(colCompanyList, CompanyList),
+ClearCollect(colRegions, RegionList)
+)
+Now all three formulas run at the same time, reducing your load time to three seconds. Concurrent is a great way to avoid long delays from asynchronous calls.
+## Preview and experimental features
+Within Power Apps, there are other, advanced features you can implement in your app. You can access them by selecting File on the menu bar, then choosing App settings and Advanced settings. The list of options you see are ever changing, but often there are one or more features that relate to performance.
+### Preview features
+Preview features are features that are well-tested and are close to being released. They'll be available for all apps soon. Testing and understanding these features helps you to prepare for when they become standard, and most are enabled by default in new apps.
+An example of a current preview feature that helps to increase performance is Optimize for devices. This feature lets makers build stunning, native apps for mobile users with device-optimized screens that use native UI elements, instead of rendering inside of web view.
+### Experimental features
+Experimental features are features that might change, break, or disappear at any time. The features are off by default. You can sometimes find performance features here as well, so it is worth taking a look. However, keep in mind you do run a risk by incorporating them into production apps as they can evolve, completely change, or disappear.
+On occasion, you might see an experimental feature that relates to app performance. You can always enable it and test it, and then go back into Settings to disable it.
+## OnStart versus OnVisible
+OnStart and OnVisible are part of your toolkit for building great apps, but from a performance point of view, they can have a major impact.
+OnStart - This is an app-level property. Formulas in this property are run once (when the app starts) and never again. All of the formulas must process before the app opens. This is often used to initialize data that you need throughout the app.
+OnVisible - This is a per-screen property. Formulas in this property are run every time a user navigates to the screen. The screen renders before the formula is finished processing.
+From a performance perspective, the key consideration is when the code runs. Once, when the app starts, or every time a screen is shown. The collection for departments from earlier in this module is a great example. That code loads in the OnStart property of the app. This means it was loaded once and is then always available. If you moved that code from OnStart to OnVisible, you would lose the advantage of the collection. If the formula was in the OnVisible property, each time the user navigated to the screen the data source would be queried. In that case, it would perform as well as leaving the code in the drop-down.
+This doesn't mean you shouldn't use OnVisible. OnVisible is great for formulas that pertain to the current screen that you need to run. Additionally, OnVisible is non-blocking. So your users don't have to wait on the formula to finish to view the screen, which reduces the amount of that user needs to view a blank screen.
+In most apps, you use a mixture of OnStart and OnVisible to get the optimal experience.
+## Summary
+As you can see, there are many options for how you build your app and interact with data sources. The list in this unit is far from exhaustive. The guidance here's to guide you toward better performance, but your results might vary. As you begin applying these techniques to your apps, you learn what works best for you and your environment.
+In the next unit, you'll learn about testing and troubleshooting techniques.
+# Testing and troubleshooting your app
+Completed100 XP
+8 minutes
+Now that you learned about performance bottlenecks and some of the ways to mitigate them, this unit discusses testing techniques. These techniques are a combination of guidance, techniques, and discovery that apply both to performance testing and general debugging.
+## Using the Timer control to get metrics
+When it comes to working with data connections for retrieving or uploading data, hard numbers are helpful. In Power Apps, you can use a Timer control to capture how long your formula takes to run. The following scenario shows you how to do that with the following controls:
+Button
+Timer
+Text label
+Assume you have a data source called 'Workout tracker', your Timer control is called Timer1 and your Button control has an OnSelect property set to the following:
+PowerApps Formula
+Collect(colWorkoutTracker, Filter('Workout tracker', Status = "Active"))
+To set this up, we first modify the OnSelect formula of the button control to:
+PowerApps Formula
+Reset(Timer1);
+UpdateContext({StartTimer: true});
+Refresh('Workout tracker');
+ClearCollect(colWorkoutTracker, Filter('Workout tracker', Status = "Active"));
+UpdateContext({StartTimer: false})
+This formula starts by resetting the timer. Then it updates a context variable that we use to start/stop the timer to "true." Then it builds the collection and then sets the context variable back to "false."
+You need to update a property on the Timer control next; set the Start property to the following: StartTimer.
+Now insert a Text label control to display the time.
+For the Text property of the Label control, set the formula to the following: Timer1.Value
+Now preview the app and select the Button.
+With your app in preview mode, selecting your button displays how long the collection took to create in milliseconds.
+Note
+The timer control will not start counting unless the app is in Preview mode.
+This technique works when you want to understand exactly how long a specific query is taking. You could log this data to a different collection and then average the numbers to determine how long it takes. You can also apply this concept when submitting data. Remember to test not only from your local computer but from all of the scenarios for your user's environments.
+## Test where your users use the app
+This is more advice than technique. For most app builders, the best place to run an app is from the local PC they use to build the app. Testing from that machine generally gives the best case results but might not match your user's experience. Far too often they forget to test the way the user runs the app. For example, if you're going to build a mobile app that runs over a cellular network then make sure your testing includes the same. Understanding the smaller form factor of the mobile device and the latency of a varying internet connections needs to factor into your app's design. The previous timer testing method is great here. Compare the app's query or upload performance between your PC, your mobile phone on Wi-Fi, and your mobile phone on cellular data. Determine if you're satisfied with all three scenarios or if you need to optimize your app for the slower network.
+## Use labels to help with testing
+As your app incorporates more complex logic and more behind the scenes variables to facilitate that logic, consider using label controls as part of your testing toolkit. Simply adding a label to the screen that displays the value of the variable can go a long way to helping you understand why your app is or isn't doing something. You can use this during the building and testing phase. When your app is live, you can add other functionality for hiding and showing these troubleshooting tools.
+While you are in the Power Apps Studio you can also select File and Variables to see all of your variables, their values, where they were created, and where they're used in the app.
+Another way to use labels during the build process is to add a label to the welcome screen where you manually display a version number. Power Apps caches your app to optimize your experience. When you're publishing repetitively, like when customizing a SharePoint form, it can be confusing to know which version of the form you're seeing as you might see a cached version. By adding a label with v1 or v2 in the corner, you can always check the version.
+## Preview versus Published apps
+Using the preview capability of the Power Apps Studio gives you great insight into how your app runs when you publish it. But sometimes you might find some inconsistency due to cache or other things your local PC is doing versus what the published app does in the player. Always remember to test your app after it publishes in a manner that is consistent with how the user uses the app.
+## Looking at the network activity of your app
+Now that you learned about testing from within the app you need to look at actual network calls and performance. To do this, you can use the built-in Monitor function. This allows you to view the individual network calls made by your app and view details, such as time that each call takes. From a performance point of view, this can be valuable.
+To access Monitor, you can either select the Advanced tools icon from the left-side toolbar, or you can select the App checker icon from the command bar. With both options, you see a link to Open Monitor.
+Once you select Open Monitor, a monitor session opens up in a separate browser tab with a blank event list and a message saying "You have started a new Monitor session."
+Monitor now tracks and logs every app action, including network performance. You can use this to see calls to the data source, how long they're taking, and what information is coming/going.
+One example of a way you can use this is to determine if a performance lag, as measured by the Timer control from the previous example, is within your app, the network, or the data source. You place the app in Preview mode and begin using it as a user would. In the example below, we used our example with the button and the timer control to see how long it takes to get the data from our source and build the collection. Notice the information that comes back provides time stamps, category, operation, result, result info, status, duration (in milliseconds), data source, and the selected control (from the app).
+In this instance, most of the time was spent waiting on the data source to filter the data and respond. This tells you that you can't make the call faster by changing the app. Instead, you would need to focus on refining the query or speeding up the data source.
+Monitor allows some nice functionality that we don't completely cover in this module. Look for a link in the summary unit if you want to learn more about it. All of the techniques we covered can help you test and troubleshoot your app.
+# Exercise - Use the Concurrent function to test performance
+Completed100 XP
+4 minutes
+This hands-on exercise explores how to use the Concurrent function to enhance performance.
+Sign into Power Apps.
+From the Home screen left side navigation menu, select + Create > Blank app > Create (from under the Blank canvas app).
+Name your app with an appropriate title and select Create.
+First, we build two collections without using the Concurrent function. Insert a Button control, name it btnCollection, set its Text property to "Collection" and set its OnSelect property to this formula:
+PowerApps Formula
+Set(varStart,Now());
+ClearCollect(colFruit,
+{Name: "banana", Category: "fruit",AvgCost: .49},
+{Name: "peach", Category: "fruit",AvgCost: 1.12},
+{Name: "strawberry", Category: "fruit",AvgCost: 2.99},
+{Name: "apple", Category: "fruit",AvgCost: 0.98},
+{Name: "orange", Category: "fruit",AvgCost: 1.49},
+{Name: "pear", Category: "fruit",AvgCost: 0.97},
+{Name: "cantaloupe", Category: "fruit",AvgCost: 3.99},
+{Name: "pineapple", Category: "fruit",AvgCost: 2.49},
+{Name: "cherry", Category: "fruit",AvgCost: 4.99},
+{Name: "mango", Category: "fruit",AvgCost: .99}
+);
+ClearCollect(colVegetable,
+{Name: "carrot", Category: "vegetable",AvgCost: .95},
+{Name: "lettuce", Category: "vegetable",AvgCost: 1.69},
+{Name: "potato", Category: "vegetable",AvgCost: 5.14},
+{Name: "zuccini", Category: "vegetable",AvgCost: 1.99},
+{Name: "broccoli", Category: "vegetable",AvgCost: 1.49},
+{Name: "cabbage", Category: "vegetable",AvgCost: 2.48},
+{Name: "celery", Category: "vegetable",AvgCost: 1.65},
+{Name: "asparagus", Category: "vegetable",AvgCost: 2.99},
+{Name: "kale", Category: "vegetable",AvgCost: 1.99},
+{Name: "cauliflower", Category: "vegetable",AvgCost: 3.24});
+Set(varSpeedCollect, Text(DateDiff(varStart, Now(), TimeUnit.Milliseconds)));
+Insert a Text label, set its BorderThickness property to 3, rename it to lblSpeedCollect, and set its Text property to:
+PowerApps Formula
+varSpeedCollect
+Press and hold Alt Key, and select the Collection button. The txtSpeedCollect label displays in milliseconds the amount of time it took to run the process.
+Now lets add the Concurrent functionality to our app to compare the performance. Insert another Button control, name it btnConcurrent, set its Text property to "Concurrent" and set its OnSelect property to this formula:
+PowerApps Formula
+Set(varStart,Now());
+Concurrent(
+ClearCollect(collectFruit,
+{Name: "banana", Category: "fruit",AvgCost: .49},
+{Name: "peach", Category: "fruit",AvgCost: 1.12},
+{Name: "strawberry", Category: "fruit",AvgCost: 2.99},
+{Name: "apple", Category: "fruit",AvgCost: 0.98},
+{Name: "orange", Category: "fruit",AvgCost: 1.49},
+{Name: "pear", Category: "fruit",AvgCost: 0.97},
+{Name: "cantaloupe", Category: "fruit",AvgCost: 3.99},
+{Name: "pineapple", Category: "fruit",AvgCost: 2.49},
+{Name: "cherry", Category: "fruit",AvgCost: 4.99},
+{Name: "mango", Category: "fruit",AvgCost: .99}
+),
+ClearCollect(collectVegetable,
+{Name: "carrot", Category: "vegetable",AvgCost: .95},
+{Name: "lettuce", Category: "vegetable",AvgCost: 1.69},
+{Name: "potato", Category: "vegetable",AvgCost: 5.14},
+{Name: "zucchini", Category: "vegetable",AvgCost: 1.99},
+{Name: "broccoli", Category: "vegetable",AvgCost: 1.49},
+{Name: "cabbage", Category: "vegetable",AvgCost: 2.48},
+{Name: "celery", Category: "vegetable",AvgCost: 1.65},
+{Name: "asparagus", Category: "vegetable",AvgCost: 2.99},
+{Name: "kale", Category: "vegetable",AvgCost: 1.99},
+{Name: "cauliflower", Category: "vegetable",AvgCost: 3.24}));
+Set(varSpeedConcurrent, Text(DateDiff(varStart, Now(), TimeUnit.Milliseconds)));
+Insert another Text label, set its BorderThickness property to 3, rename it to lblSpeedConcurrent, and set its Text property to:
+PowerApps Formula
+varSpeedConcurrent
+Press and hold Alt Key, and select the Concurrent button. This creates the same two collections and you should notice that it takes half the time to build.
+You can see that by adding the Concurrent function, we enhanced the performance of building our collections. You can use this to run multiple processes at once, bearing in mind that you can't predict the order in which formulas within the Concurrent function start and end. As long as your results aren't dependent on other results within your Concurrent function, all tasks can run at the same time. This technique can provide a significant performance boost for your app.

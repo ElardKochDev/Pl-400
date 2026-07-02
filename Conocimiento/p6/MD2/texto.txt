@@ -1,0 +1,269 @@
+# Introduction
+Completed100 XP
+4 minutes
+This module explores using policies with custom connectors and explains how you can configure them by using policy templates.
+In this module, you will:
+Discover how policies can modify the behavior of custom connectors at runtime.
+Apply policy templates to a custom connector.
+Policies allow you to modify the behavior of a custom connector at runtime. You can use policies to perform data conversion, route requests, set parameter values, and more. You can configure policies directly in the custom connector API properties file before import, or you can do it from the maker portal in the custom connector designer by applying policy templates.
+Common policy use cases are:
+Set host URL - By default, the host URL is hardcoded into the connector configuration. A policy, combined with a connection parameter, allows the host URL to be specified every time you create a connection by using the connector. For example, this use case could handle a dev, test, and production version of the system API.
+Set header - Use to promote data from the connection parameters, query, or body of the request to the header. Commonly, this process is done to accommodate APIs that want specific information configured in the header. For example, this use case could be a correlation ID to track the full business process that is being performed.
+Set query parameter - Use for handling default values, if necessary, but the maker doesn't configure one. For example, if an API required a top parameter for how many records to return by using a policy, you could set a default value to be used if the maker doesn't configure one.
+You can use policies to handle specific API needs and make the connector easier to use by hiding unnecessary complexities.
+## Apply a policy
+Applying a policy template to a custom connector allows you to select a policy that you want to use from a list of templates. Each selected template prompts you to fill out the necessary configuration for that policy. When you complete the form, the policy is activated after you update the connector. The following screenshot shows an example of creating a new policy by using one of the templates.
+When you're applying a policy template, you can choose to have it apply to all actions and triggers or only for specific ones.
+For example, the Set host URL template is typically applied to all actions and triggers. Contrarily, the Convert an array to an object (Preview) template might only be applied to one or two actions that return similar data.
+When configuring a policy to run on all actions and triggers, you need to ensure that any data paths that are used in the policy parameters are valid for all actions and triggers; otherwise, you encounter runtime errors.
+In the list of configured policies, you can select the ellipsis (...) next to each policy and move it up or down in the list. This feature allows you to configure the order in which policies are applied at runtime, which can be helpful in scenarios where you use multiple policy templates to accomplish your data conversion. For example, one policy could parse a delimited string into an array, and another policy could convert the array into an object. In this example, the order of implementation would be important.
+Configuring a policy template results in modification of the connector's API properties. API properties are stored separately from the API definition for the connector. You can import an updated API definition through the portal without overwriting the policies that you've configured.
+## View and modify by using CLI
+In addition to viewing policies in the portal, you can also export them as part of the API properties file by using the paconn download command from CLI.
+The download includes four files (apiDefintion.swagger.json, apiProperties.json, icon.png, settings.json).
+If you open the apiProperties.json file and locate the policyTemplateInstances section, you'll see all policies configured.
+The following screenshot is an example of the policyTemplateInstances section.
+You can also modify the apiProperties.json file directly if you're familiar with working in JSON. With some policies, such as Set host URL, if you want to prompt for the URL when a connection is created, you'll have to modify connectionParameters in the apiPropertiess.json file to complete the policy configuration. The paconn update command can be used to import the changes.
+It might be beneficial to consider how other connectors use policies. The Microsoft Power Platform Connectors GitHub repository has many great examples of certified and noncertified connectors that you can look at. Additionally, you can browse through and look at the connectors' apiProperties.json file. Searching the repository by using a policy template name, such as setHeader, can also quickly reveal which connectors are using that policy.
+# Use expressions to access runtime values
+Completed100 XP
+5 minutes
+Expressions enable policy template parameters to get their values from runtime data. The functions can access and transform runtime data from the headers, query, and body of the request and response from the API. It's also common to use expressions to access data from the connector's connection properties. For example, @connectionParameters('HostUrl') would get the value configured for the connection property HostUrl, which would allow a maker to change the service URL as part of the connection, similar to test versus production API scenarios. This unit reviews some common expressions that are used with policy templates.
+## Expression basics
+Expressions are evaluated at runtime. An expression is a sequence of one or more functions, operators, or explicit values. When defining an expression in a parameter, you'll prefix the expression with the at sign (@). If your expression results in a numeric value, where string input is expected, you can use the braces ({}) notation and it will automatically convert the numeric value into a string.
+The following example shows how both notations are used:
+@{connectionParameters('HostPortNumber')}
+To ensure that your expressions don't fail due to null properties, make sure that anything in the path isn't null. The following example would fail if summary was null:
+@body().summary.amount
+If you're including explicit values (string literals) in your expressions, use a single quotation mark. Don't use double quotation marks because it will conflict with the markup that is used around the expression.
+## Work with response body
+You can use the body() functions to access the response body at runtime. For example, the List Invoice action returns the following data:
+{
+“invoices”: [ { “invoiceid”:”1234”}]
+}
+In this example, the body() function is referencing the outer braces ({}), and it has a property invoice that is an array.
+You could build an expression that references the invoices array by using the following logic:
+@body().invoices
+You could also build an expression that accesses the invoiceid from the first item in the array by using the following logic:
+@body().invoices[0].invoiceid
+## Work with header values
+By using the @headers('headerName') expression, you can access values from the header. You can also use the @headers expression as a destination template parameter when you're using the Set header from URL policy template. This approach allows you to retrieve a value from a URL and then set it in the header. For example, a connector could use this expression to get an access token from the service to allow posting to a page. The following example shows what the policy template configuration might look like to get the access token for the Post to Page action.
+## Work with query values
+Similar to working with headers, you can use the @queryParameters('queryParameterName') expression to access the query parameters of the request. The following example is similar to the previous example regarding headers; however, this example places the retrieved token into the query parameters.
+## Work with connection values
+By using the @connectionParameters('connectionParameterName') expression, you can access values that were entered when the connection was set up for the custom connector. This expression allows you to collect information from the user of your custom connector, such as authentication or host URL values. You can use these parameter values to build URLs and fill in other connection-specific configuration values.
+Connection parameters that are configured in the apiProperties.json file are used to build the connection dialog box that the user fills out when they create a new connection.
+When you configure authentication on a custom connector, it automatically edits the apiProperties so that you can add the required authentication properties. If you downloaded your connector definition by using paconn, if you look in the apiProperties.json file, you'll see the following logic added if you configured API Key authentication.
+JSON
+"api_key": {
+        "type": "securestring",
+        "uiDefinition": {
+          "displayName": "API Key",
+          "description": "The API Key for your environment",
+          "tooltip": "Provide your API Key",
+          "constraints": {
+            "tabIndex": 2,
+            "clearText": false,
+            "required": "true"
+          }
+        }
+As a result, you'll see the following input field when you create a connection.
+You can manually add other input fields to collect other data that is unique to each user of the custom connector. For example, a common field to add is Host URL so that you can allow the connector to work with multiple endpoints of the underlying API. The following example shows the apiProperties.json file where, in addition to the API key, you're allowing entry of a host URL and a billing code.
+JSON
+"properties": {
+    "connectionParameters": {
+      "hostUrl": {
+        "type": "string",
+        "uiDefinition": {
+          "constraints": {
+            "required": "true"
+          },
+          "description": "Specify your API URl e.g. https://test.contoso.com",
+          "displayName": "API URL",
+          "tooltip": "Specify your API URl e.g. https://test.contoso.com"
+        }
+      },
+      "billingCode": {
+        "type": "string",
+        "uiDefinition": {
+          "constraints": {
+            "required": "true"
+          },
+          "description": "billing code",
+          "displayName": "Billing Code",
+          "tooltip": "Billing Code"
+        }
+      },
+      "api_key": {
+        "type": "securestring",
+        "uiDefinition": {
+          "displayName": "API Key",
+          "description": "The API Key for your environment",
+          "tooltip": "Provide your API Key",
+          "constraints": {
+            "tabIndex": 2,
+            "clearText": false,
+            "required": "true"
+          }
+        }
+      }
+    }
+Using this configuration results in the following connection dialog box being shown.
+Then, you can use the @connectionParameters('hostUrl') and @connectionParameters('billingCode') expressions to use the values in your policy template configurations.
+The rest of this module shows examples of using expressions while it further explains how you can use policy templates.
+# Use policies for data conversion
+Completed100 XP
+5 minutes
+Policy templates can be used to convert data from one structure to another. This process is commonly done to simplify the maker's task of using a custom connector to provide data to the actions or to work with the response data from the action results. For example, the API might provide a comma-separated list of users who have access to the record. Converting that list to an array would make it easier to use the list in an app or flow. The following policy templates currently support converting data structures:
+Convert an array to an object
+Convert an object to an array
+Convert delimited string into an array of objects
+Each policy can be run against the request (input data) or the response (output data) from one or more actions. When you run a policy on the request, you're shaping the data that is provided by the maker to determine how the API wants to see it. For example, the Microsoft Planner connector uses the Convert array for an object on its Update task details action. This action allows the user to provide an array of external reference links and then associate them with the task. By allowing the maker to specify them as an array, users are presented with a user-friendly interface that allows them to add multiple links by selecting Add new item.
+If you use the peek feature on the action step, you can see how the data is structured and will be presented to the API if no transformations were done by the policy templates on the connector.
+If you look at the Microsoft Planner API docs for this operation, notice that it wants the data structured like the following example.
+To convert what was provided by the flow action to what is expected by the API, the connector is configured to multiple policy templates to transform the data. The policy templates are used as follows:
+Set Property - To set the previewPriority field to "!"
+Set Property - To set the @odata.type expression
+Convert array to object - To reshape the array and include type and alias as properties
+The Convert array to object policy would resemble the following example.
+Policy templates that run on the response allow you to reshape the output from the API. For example, the Contoso Invoicing response from its Get Invoice action includes a semicolon-separated list of tags as part of the invoice object. The data that is returned from the API resembles the following screenshot.
+A string with multiple values is more difficult for apps and flows to work with than an array. To improve the usability, you could use the Convert delimited string policy template on the response. The following example shows the policy template that you would configure.
+This action would result in a new array named taglist being added to the response, as shown in the following image.
+Now that you've explored some examples of policy templates in use, you can review a few key configuration details. The Run policy on parameter decides if the policy applies to the request or response. If you need both, you'll need to configure two policy templates.
+Each convert policy template has a target object or collection parameter. This factor gives the starting point for where the policy logic will get the data to transform. The most common starting point is using the @body() expression, which points to the body of the request or response. In the following example, the @body() expression is an object and has a property named tags.
+Alternatively, if the response was an object with a property named invoices that was an array of invoice objects, each having a tags property, the configuration would resemble the following image.
+As you're configuring policies, make sure that you apply them only to the actions with request/response data that matches these configurations. For example, the Get Invoice action, which returns a single invoice object, would need different policy templates applied than the List Invoice action, which returns an array of invoice objects. If you're adding policy templates to an existing connector with all actions enabled, make sure that you test all actions and triggers to ensure that they work with the new policy.
+After you have configured response policy templates, make sure that you reimport the sample data on the action response. This step is required so that apps and flows can have visibility to the transformed data.
+If your configuration of a policy template creates an error, you'll typically see it in the tester as an HTTP status of 500 or it will fail to do any processing. While it isn't possible to disable a policy, you can remove an action from the list of operations to allow testing to isolate if the policy is causing problems. The following image shows only two operations selected.
+Convert policy templates offer a configuration-focused approach to transforming data to and from your underlying API. They can be used to make your connector actions easier to use.
+# Configure host URL and routing
+Completed100 XP
+3 minutes
+A common use of policy templates is to allow dynamic configuration of the API that endpoint triggers and actions will use at runtime. The following policy templates are available:
+Set host URL - Replaces the full host URL with one that is built by the policy.
+Route request - Routes an incoming request to a specified endpoint on the configured host URL.
+## Set host URL
+By default, the host URL that is used is statically configured, similar to all triggers and actions on your connector. By using the Set host URL policy template, you can configure the URL for the triggers and actions individually. An example of this scenario would be if you had order-related actions at one URL (for example, ordersapi.contoso.com) and user-related actions at another (for example, userapi.contoso.com). In this scenario, you would configure two policy templates, each selecting the appropriate user or order actions to apply the new host URLs.
+Likely, the most common use is allowing people to provide the host URL at runtime when they create a new connection by using your custom connector, as previously shown in this module. In that example, a property named hostURL was added to the connectionParameters expression and the user provided the full host URL at connection time.
+Another common way of using the Set host URL policy template is dynamically building part of the host URL and making part of it static. By using this approach, the user only has to provide their account name or other key data that would make the full URL. An example of this scenario is the Azure Key Vault connector, where the host URL is unique for each vault. Instead of asking the user to provide the full vault URL (https://contosokv.vault.azure.net), you can add a connection property named keyVaultName and then prompt the user to provide that part of the URL only (contosokv, in this example). The following example shows what this policy template would look like.
+You can also include data by using the @headers and @queryParameters expressions in addition to using @connectionParameters.
+## Route request
+Each action on your custom connector has a fully qualified URL (such as https://api.contoso.com/AddInvoice) that is used to make the request to the underlying API. This URL comes from the combination of the Host (for example, api.contoso.com) that you specify on the General tab and the path (such as /AddInvoice) that either came from a definition that you imported or was extracted from a sample request when you did an import sample request. The Set Host URL policy allows you to modify the host, and the Route request allows you to modify the path.
+Another scenario that you can accomplish with the Route request policy is having multiple actions that point to the same path. For example, if you had the List Invoices action that took fromAmount as a parameter, and you wanted to create a List Big Invoices action that had a default value for fromAmount, you would get an error because they both pointed to the same path: /ListInvoices. Instead, you can define the List Big Invoices action with a path of /ListBigInvoices, which doesn't exist on the API. Then, you can use a Route request to send these action calls to /ListInvoices. The following example shows what the policy template would look like.
+You can also include parameters and other expressions to help you build the path. For example, the Microsoft Outlook Tasks connector has a default path on the List folders in a group of /v2/me/taskgroups('{group_id}')/taskfolders. By using the following Route request, the requests will route to the new path.
+Notice that, in {group_id}, the requests referenced one of the parameters on the action, similar to how it was done in the original path.
+Using the Set Host URL and the Route request policy templates gives you some flexibility to route requests as needed to the underlying API.
+# Add or update values
+Completed100 XP
+4 minutes
+This unit explores the policy templates that you can apply to set data values in the request to and response from the API. The most common scenario is to set values that are required by the API in the body, header, or query of the request so that the maker doesn't have to provide it. The policies are flexible to handle various tasks that are related to setting data on request and response. The following policy templates are available and focused on setting data values:
+Set property - Add or update a property on an object or collection.
+Set query string parameter - Add or update a parameter in the query string.
+Set HTTP header - Add or update a value in the request and/or response header.
+## Use the Set property policy template
+The Set property policy template can be used to set or update values in the body of either the request or the response objects. You can set a constant value by using a string value or an expression by using @body() to get another existing value from the body object. The following example shows how to set a constant value on the response body.
+If you looked at the response after the policy template was implemented, you would see the following image.
+The preceding example shows that the ListInvoice operation returns an object with a property invoice that is an array of invoice objects. If you wanted to set the prefix property on each invoice in the invoices array, you would change your Parent object or collection path to resemble the following image.
+The output that you would have after making that change would be similar to the following image.
+You can also reference other values in the body that are already set. For example, the following image shows that the FullValue property includes the Prefix property.
+Notice that the Value to add field contains the {@body().Prefix} expression to get the prefix value from the body. You must surround the expression with braces ({expression}) for it to work.
+Only referencing the @body expression works in this field; using other expressions such as @connectionProperties, @headers, or @queryParameters isn't supported.
+## Use the Set query string parameter policy template
+The Set query string parameter template policy can be used to add or update query parameters on the request. Because the query string only matters on the request, you don't have to set the Run policy on value. Unlike the Set property policy that always sets the value even if it exists, this policy is configurable. You can set the action, if the parameter exists, to one of the following options:
+Override - Replaces the existing value.
+Skip - The existing value isn't replaced.
+Append - The policy template value is appended to the existing value.
+This feature can give you control over when the value is used, making it a good approach for providing default values. An example of this approach is the Microsoft Outlook connector that has a Set query string parameter policy to set a default value of 50 for its $top parameter. The following example shows what the policy template would look like.
+Notice that the skip option was used for the Action if query parameter exists value to ensure that this policy is only used as a default.
+## Use the Set HTTP header policy template
+You can use the Set HTTP header policy template to add or update values in the header of the request, response, or failure. Similar to the Set query string policy template, you can choose the action if the value exists already. The policy template is used most frequently to set header values that are expected by the API, such as sender identification, ETag for change tracking, or special API key headers that aren't handled by the normal connector settings. For example, the Azure Cognitive Services connector uses a Set header policy template to set the X-Ms-Sender header value to Microsoft Azure Logic Apps. The following example shows what that policy template would look like.
+Using these policy templates allows you to set values that are expected by the API. You can also use them to set values in the response that might simplify the maker's task of consuming the data. These policies can also be used to set default values when one isn't already provided. You can use multiple policies in a specific order to compose more complex values.
+# Exercise - Use a policy template to dynamically set the host URL
+Completed100 XP
+10 minutes
+In this exercise, you'll create a policy template to set the host URL at connection creation. This process will allow a connection to work with either test or production.
+This exercise requires you to install Python and access the command prompt on the machine that you're using for the exercise.
+Important
+Use a test environment with Microsoft Dataverse provisioned. If you don't have one, you can sign up for the community plan.
+Note
+Download the following file to your local computer to complete this exercise Contoso Invoicing Triggers. Select the download button on the middle-right of the screen.
+## Task 1: Import a solution
+In this task, you'll import an unmanaged solution that contains a Contoso Invoicing custom connector. You'll use this connector to complete the tasks in this exercise.
+Go to Power Apps maker portal and make sure that you are in the correct environment.
+Select Solutions > Import solution.
+Select Browse.
+Select the ContosoInvoicingPolicyTemplates_1_0_0_2.zip solution and then select Open.
+Select Next.
+Select Import and then wait for the import to complete. You should get a success message after the import completes.
+Select Publish all customizations and then wait for the publish to complete.
+Open the Contoso Invoicing - Policy Templates solution that you imported.
+You should see the Contoso Invoicing - Policy custom connector component.
+## Task 2: Install Microsoft Power Platform CLI
+Microsoft Power Platform CLI includes the paconn command-line tool, which is designed to aid Microsoft Power Platform custom connectors development. The paconn tool uses the Python runtime, so you'll be installing that as well.
+Go to Download Python and select Download Python. You can use any version greater than 3.5.
+Select the downloaded .exe file to start installation.
+Select the Add Python xx to Path check box, select install, and then wait for the installation to complete.
+Close the installation wizard after the installation completes.
+Start the command prompt and then run the following command to install paconn.
+pip install paconn
+Wait for the installation to complete.
+## Task 3: Download the connector locally
+In this task, you'll download the connector definition files locally so that you can add the Host URL property.
+Run the login command.
+paconn login
+Copy the provided Code.
+In a browser, sign in with the same credentials as your environment. Go to Microsoft Device Login, paste the Code that you copied, and then select Next.
+Provide your credentials.
+Select Continue.
+You should get a successful sign-in message.
+Go back to the command prompt and run the download command.
+paconn download
+When prompted to select an environment, enter a number for the environment where you installed the solution, and then press the Enter key.
+Only one connector should be listed: Contoso Invoicing Policy. Press the Enter key again to select that connector.
+The download should complete successfully. Note the location where the connector was downloaded.
+## Task 4: Edit apiProperties.json to add the Host URL property
+In this task, you'll edit the apiProperties.json file to configure the hostUrl property. When the property is configured, users who are creating a connection will be prompted for this value along with the API key.
+Go to the folder that you downloaded in the previous task, and then open the apiProperties.json file.
+Paste the JSON inside the ConnectionParameters, before the api_key property.
+JSON
+"hostUrl": {
+        "type": "string",
+        "uiDefinition": {
+          "constraints": {
+            "required": "true"
+          },
+          "description": "Specify your API Url e.g. https://test.contoso.com",
+          "displayName": "API URL",
+          "tooltip": "Specify your API Url e.g. https://test.contoso.com"
+        }
+      },
+Save your changes.
+Go to the command prompt and change the directory to the folder that you downloaded.
+Run the update command.
+paconn update --api-def apiDefinition.swagger.json --api-prop apiProperties.json --icon icon.png
+Select the correct environment where you installed the solution.
+Select the Contoso Invoicing - Policy connector.
+The update should complete successfully.
+## Task 5: Add the Set Host Name policy
+In this task, you'll configure a Set Host Name policy template to use the connection property that you configured in the previous task.
+Go to Power Apps maker portal and make sure that you have the correct environment selected.
+Select Solutions and then open the Contoso Invoicing - Policy Templates solution that you imported.
+Select the Contoso Invoicing - Policy custom connector and then select Edit.
+Select the Definition tab.
+Scroll down to the Policies section and then select + New policy.
+Enter Host URL Policy for Name and then select Set host URL for Template.
+Enter @connectionParameters('hostUrl') for URL Template and then select Update connector.
+The connector should update successfully.
+Don't navigate away from this page.
+## Task 6: Test
+In this task, you'll create a connection by using the new configuration and then you'll test it.
+Start a new browser window and then go to Contoso Invoicing.
+Select the API Key link.
+Copy the API Key.
+Return to the connector.
+Select the Test tab.
+Select + New connection.
+Enter https://contosoinvoicingtest.azurewebsites.net/ for API URL, paste the API Key that you copied, and then select Create connection.
+Select Refresh connections.
+Select ListInvoice > Test operation.
+The test should return invoices.

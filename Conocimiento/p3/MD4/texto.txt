@@ -1,0 +1,477 @@
+# Introduction to creating a code component
+Completed100 XP
+15 minutes
+Power Apps provides numerous built-in functionalities for app makers to build their apps, but sometimes, you'll need to create custom user experiences to handle your unique requirements. Examples might be replacing a percentage value with a gauge, rendering a bar code rather than an ID, or replacing existing controls with controls that have more functionality—like a drag-and-drop grid view. You can also wrap the Power Apps component framework around existing components you've written in other web frameworks, like React or Angular.
+Creating these components allows you to use the full breadth of the modern web development ecosystem: the libraries, frameworks, and other tools you might be familiar with, and packages that capability into a form that allows app makers to build apps with your code as if it were an out-of-the-box part of the platform.
+Note
+Other sample components, including those that use Angular or React are available.
+Custom Power Apps components are frequently referred to as code components because they require custom code to build them. They consist of three elements: a manifest, an implementation, and resources.
+In the following exercise, you'll create a custom code component to handle a scenario for your company. Your company would like to have some fields on the form in the application that are read-only until the user manually initiates an edit on the data value. The team has identified that none of the built-in controls will work so they have asked you to create a custom code component.
+To solve this requirement, you'll create an editable field custom component that will look like the following image. The value will be read-only until the user selects edit.
+This component will listen to changes coming from the host app and allow the user to make changes that are then pushed to the host app. The following steps will help you build this component.
+## Install Power Platform CLI
+To prepare your computer to build code components, follow these steps:
+Install Node.js (comes with npm). We recommend that you use an LTS (Long-Term Support) version such as the one located here. You'll want to verify that you don't have Node/NPM already installed. You can do this by going to a command prompt and typing the following:
+TypeScript
+// Launch a standard command prompt and type both of the following
+
+npm --version
+Node --version
+If you receive an error running these commands, you'll need to install Node.js using the links above.
+A successful installation of node will return the Version Numbers in the command window when entering the commands above as seen below:
+TypeScript
+// If installed properly you will see something like the output below. The version numbers may be slightly different based on the version installed.
+
+C:\npm --version
+10.5.0
+
+C:\Node --version
+v20.12.2
+Install Visual Studio Code.
+Install Power Platform Tools extension. Be sure you have completed the Visual Studio Code install before installing the Power Platform Tools.
+The Power Platform Tools won't allow you to run CLI commands for Power Platform in a command prompt outside of Visual Studio Code. It's recommended that you install the CLI MSI for PowerPlatform as well.
+To install the CLI at the Windows level follow these instructions. You can have the CLI and the Power Platform Tools extension installed simultaneously.
+## Create a new component project
+Before starting the component builds verify that the installed components listed above are working properly. NPM and CLI Commands will work from a Terminal Window in Visual Studio Code. If you have issues with running them properly from within VS Code, you can elect to run the Terminal commands given in the steps below in a Command Prompt if you have installed the CLI for Power Platform.
+In Visual Studio Code, navigate to Terminal > New Terminal (or press CTRL+SHFT+`). In the Terminal window in VS Code, repeat the npm and Node version statements. If everything returns proper version numbers you can proceed to creating the solution.
+TypeScript
+// Test installs from Steps 1-3 listed above
+
+// This will verify NPM installation
+C:\npm --version
+10.5.0
+
+// This will verify Node installation
+C:\Node --version
+v20.12.2
+
+// This will launch Visual Studio Code from the command line.
+C:\Code
+Now you're ready to create a new component project, follow these steps to get started:
+Create a directory where you'll build your component. In this sample, you'll place the component in C:\source\Editable-pcf. To create your own directory, you'll use Visual Studio Code. Alternatively you can create the folders using the command prompt if you have issues with VS Code Terminal usage.
+Start Visual Studio Code.
+Select Terminal and select New Terminal.
+Your Terminal session will default to the last folder you used. This will be illustrated in the TERMINAL command prompt area as illustrated below:
+TypeScript
+//Note Your PS will not list exactly what is seen below, but will be specific to your starting path.
+
+PS C:\Users\Name\Folder
+Change directory to a location where you want to build this solution. You can use the CD command to navigate to an appropriate location.
+Note
+Be aware that the folder you execute NPM or other commands is important. Always be sure you are in your Projects folder before executing build commands. Failure to do so can corrupt the build and cause issues producing optimal results.
+To create a new folder in the default location use md (make directory) as shown below in your VS Code Terminal Window.
+Console
+md source
+cd source
+This will create a directory called source and navigate you to that directory using the cd (change directory) command.
+From your source directory created, create a directory named editable-pcf. This will be your PROJECT directory where all of your project files will be stored. We'll also change the directory to our new Project directory.
+Console
+md editable-pcf
+cd editable-pcf
+Initialize your component project by using Power Platform CLI with the following command:
+pac pcf init --namespace SampleNamespace --name EditablePCF --template field
+The following image shows an example of the output that you should see.
+Caution
+If the PAC PCF INIT command will not run in a terminal window in VS Code and you installed the Power Platform CLI you can opt to run a command prompt and CD to your editable-pcf directory. Once you are there you can enter the command in the Command Prompt and it will work properly. You should see the same output as listed above.
+Install the project build tools by using the command npm install. You might see some warnings displayed; however, you can ignore them. Be sure you are in your PROJECT directory before issuing this command.
+npm install
+Caution
+If the npm install will not run in a terminal window in VS Code and you installed the Power Platform CLI you can opt to run a command prompt and CD to your editable-pcf directory. Once you are there you can enter the command in the Command Prompt and it will work properly.
+You can verify everything is working by executing a DIR command in the Terminal Window in VS Code or in the Command Prompt is you opted to build outside of Visual Studio Code. You should see a series of files and folders in your editable-pcf directory. This is the project you created in the steps above that we'll build against using VS Code.
+Run the command below to open project in Visual Studio Code or if you're using a command prompt in the command prompt window. This should launch your created project in VS Code.
+code -a .
+The project contents should look like the image below.
+## Update your code component's manifest
+Update the manifest file to accurately represent your control.
+Expand the EditablePCF folder and open the ControlManifest.Input.xml file.
+Change the version to 1.0.0 and description-key to Edits project name.
+Locate the property node.
+Change the name value to Name, display-name-key to Name, and description-key to A name.
+Locate the resources node.
+Include a reference to a CSS file named editable-pcf.css that you'll create in the steps below.
+css
+<css path="css/EditablePCF.css" order="1" />
+Save your changes by selecting File and then Save or press CTRL+S to save the file.
+## Add styling to your code component
+To add styling to your code component, follow these steps:
+Make sure you still have the ControlManifest.Input.xml file selected and then select New Folder.
+Name the new folder css.
+Select the css folder you created and select New File.
+Name the new file EditablePCF.css (or whatever you named the css file in Step 6 above).
+Open the new EditablePCF.css file you created, and paste the following CSS snippet. This is the Resource reference name you used earlier when you added the css path code to the manifest file.
+css
+.SampleNamespace\.HelloPCF {
+      font-size: 1.5em;
+    }
+The content of the CSS file should now look like the image below.
+Select File and select Save or press CTRL+S to save the file.
+## Build your code component
+Before you can implement your component logic you need to run a build on your component. This makes sure that the right TypeScript types are generated to match the properties in your ControlManifest.xml document.
+Go back to the terminal in VS Code and build your project by using the following command. If for any reason, you have issues using Terminal in Visual Studio Code you can navigate to your folder using the command prompt and run the command from there.
+Caution
+Be sure you are in your PROJECT folder in your terminal before issuing this command.
+css
+npm run build
+The component is compiled into the out/controls/EditablePCF directory. The build artifacts include:
+css folder
+bundle.js - Bundled component source code
+ControlManifest.xml - Actual component manifest file that is uploaded to the Microsoft Dataverse organization
+Warning
+The most common error usually received here is a typo in the file name for the CSS file you created earlier. If that happens simply rename the files accordingly and rerun the npm run build command until it runs to completion without error. Check your RESOURCE section in he COntrolManifest.Input.xml file against the file created in the CSS folder. They must match 100%.
+## Implement your code component's logic
+To implement your code component's logic, follow these steps once the build completes from the above steps. In Visual Studio Code, in the EXPLORER look for a file called index.ts. That is where we'll begin writing the code for our component.
+Open index.ts file in Visual Studio Code.
+Above the constructor method, insert the following private variables:
+TypeScript
+// The PCF context object\
+private context: ComponentFramework.Context<IInputs>;
+// The wrapper div element for the component\
+private container: HTMLDivElement;
+// The callback function to call whenever your code has made a change to a bound or output property\
+private notifyOutputChanged: () => void;
+// Flag to track if the component is in edit mode or not\
+private isEditMode: boolean;
+// Tracking variable for the name property\
+private name: string | null;
+Locate the public init method and replace it with the method below.
+TypeScript
+public init(context: ComponentFramework.Context<IInputs>, notifyOutputChanged: () => void, state: ComponentFramework.Dictionary, container: HTMLDivElement) {
+
+    // Track all the things
+    this.context = context;
+    this.notifyOutputChanged = notifyOutputChanged;
+    this.container = container;
+    this.isEditMode = false;
+
+    // Create the span element to hold the project name
+    const message = document.createElement("span");
+    message.innerText = `Project name ${this.isEditMode ? "" :context.parameters.Name.raw}`;
+
+    // Create the textbox to edit the name
+    const text = document.createElement("input");
+    text.type = "text";
+    text.style.display = this.isEditMode ? "block" : "none";
+
+    if (context.parameters.Name.raw) {
+        text.value = context.parameters.Name.raw;
+        // Wrap the two above elements in a div to box out the content
+        const messageContainer = document.createElement("div");
+        messageContainer.appendChild(message);
+        messageContainer.appendChild(text);
+
+        // Create the button element to switch between edit and read modes
+
+        const button = document.createElement("button");
+        button.textContent = this.isEditMode ? "Save" : "Edit";
+        button.addEventListener("click", () => { this.buttonClick(); });
+
+        // Add the message container and button to the overall control container
+        this.container.appendChild(messageContainer);
+        this.container.appendChild(button);
+    }
+
+}
+Warning
+You may notice that the EventListener for the buttonClick is underlined in red. Don't worry, we will create the method for that event below. If you see other sections in red you will want to verify everything was either copied or entered properly.
+Add button select handler method. Add the following method below the init method.
+TypeScript
+public buttonClick() {
+    // Get our controls via DOM queries
+    const text = this.container.querySelector("input")!;
+    const message = this.container.querySelector("span")!;
+    const button = this.container.querySelector("button")!;
+
+    // If not in edit mode, copy the current name value to the textbox
+    if (!this.isEditMode) {
+        text.value = this.name ?? "";
+    } 
+    else if (text.value != this.name) {
+        // if in edit mode, copy the textbox value to name and call the notify callback
+        this.name = text.value;
+        this.notifyOutputChanged();
+    }
+
+    // flip the mode flag
+    this.isEditMode = !this.isEditMode;
+
+    // Set up the new output based on changes
+    message.innerText = `Project name ${this.isEditMode ? "" : this.name}`;
+    text.style.display = this.isEditMode ? "inline" : "none";
+    text.value = this.name ?? "";
+    button.textContent = this.isEditMode ? "Save" : "Edit";
+}
+Locate the updateView method and replace it with the method below.
+TypeScript
+public updateView(context: ComponentFramework.Context<IInputs>): void {
+
+// Checks for updates coming in from outside
+
+this.name = context.parameters.Name.raw;
+const message = this.container.querySelector("span")!;
+message.innerText = `Project name ${this.name}`;
+}
+Locate the replace getOutputs and replace it with the method below.
+TypeScript
+public getOutputs(): IOutputs {
+return {
+// If our name variable is null, return undefined instead
+Name: this.name ?? undefined
+};
+}
+Locate the destroy method and replace it with the method below.
+TypeScript
+public destroy() {
+// Remove the event listener we created in init
+this.container.querySelector("button")!.removeEventListener("click", this.buttonClick);
+}
+Your final Index.ts should now look like the code below:
+TypeScript
+import { IInputs, IOutputs } from "./generated/ManifestTypes";
+
+export class EditablePCF implements ComponentFramework.StandardControl<IInputs, IOutputs> {
+
+    /**
+    * Empty constructor.
+    */
+
+    // The PCF context object\
+    private context: ComponentFramework.Context<IInputs>;
+    // The wrapper div element for the component\
+    private container: HTMLDivElement;
+    // The callback function to call whenever your code has made a change to a bound or output property\
+    private notifyOutputChanged: () => void;
+    // Flag to track if the component is in edit mode or not\
+    private isEditMode: boolean;
+    // Tracking variable for the name property\
+    private name: string | null;
+
+    constructor()
+    {
+
+    }
+
+    /**
+    * Used to initialize the control instance. Controls can kick off remote server calls and other initialization actions here.
+    * Data-set values are not initialized here, use updateView.
+    * @param context The entire property bag available to control via Context Object; It contains values as set up by the customizer mapped to property names defined in the manifest, as well as utility functions.
+    * @param notifyOutputChanged A callback method to alert the framework that the control has new outputs ready to be retrieved asynchronously.
+    * @param state A piece of data that persists in one session for a single user. Can be set at any point in a controls life cycle by calling 'setControlState' in the Mode interface.
+    * @param container If a control is marked control-type='standard', it will receive an empty div element within which it can render its content.
+    */
+    public init(context: ComponentFramework.Context<IInputs>, notifyOutputChanged: () => void, state: ComponentFramework.Dictionary, container: HTMLDivElement) {
+
+        // Track all the things
+        this.context = context;
+        this.notifyOutputChanged = notifyOutputChanged;
+        this.container = container;
+        this.isEditMode = false;
+
+        // Create the span element to hold the project name
+
+        const message = document.createElement("span");
+        message.innerText = `Project name ${this.isEditMode ? "" :context.parameters.Name.raw}`;
+
+        // Create the textbox to edit the name
+        const text = document.createElement("input");
+        text.type = "text";
+        text.style.display = this.isEditMode ? "block" : "none";
+
+        if (context.parameters.Name.raw) {
+            text.value = context.parameters.Name.raw;
+            // Wrap the two above elements in a div to box out the content
+            const messageContainer = document.createElement("div");
+            messageContainer.appendChild(message);
+            messageContainer.appendChild(text);
+
+            // Create the button element to switch between edit and read modes
+
+            const button = document.createElement("button");
+            button.textContent = this.isEditMode ? "Save" : "Edit";
+            button.addEventListener("click", () => { this.buttonClick(); });
+
+            // Add the message container and button to the overall control container
+            this.container.appendChild(messageContainer);
+            this.container.appendChild(button);
+        }
+
+    }
+
+    public buttonClick() {
+        // Get our controls via DOM queries
+
+        const text = this.container.querySelector("input")!;
+        const message = this.container.querySelector("span")!;
+        const button = this.container.querySelector("button")!;
+
+        // If not in edit mode, copy the current name value to the textbox
+
+        if (!this.isEditMode) {
+            text.value = this.name ?? "";
+        } 
+        else if (text.value != this.name) {
+
+            // if in edit mode, copy the textbox value to name and call the notify callback
+            this.name = text.value;
+            this.notifyOutputChanged();
+        }
+
+        // flip the mode flag
+        this.isEditMode = !this.isEditMode;
+
+        // Set up the new output based on changes
+        message.innerText = `Project name ${this.isEditMode ? "" : this.name}`;
+        text.style.display = this.isEditMode ? "inline" : "none";
+        text.value = this.name ?? "";
+        button.textContent = this.isEditMode ? "Save" : "Edit";
+    }
+
+    /**
+    * Called when any value in the property bag has changed. This includes field values, data-sets, global values such as container height and width, offline status, control metadata values such as label, visible, etc.
+    * @param context The entire property bag available to control via Context Object; It contains values as set up by the customizer mapped to names defined in the manifest, as well as utility functions
+    */
+    public updateView(context: ComponentFramework.Context<IInputs>): void {
+
+        // Checks for updates coming in from outside
+        this.name = context.parameters.Name.raw;
+        const message = this.container.querySelector("span")!;
+        message.innerText = `Project name ${this.name}`;
+    }
+
+    /**
+    * It is called by the framework prior to a control receiving new data.
+    * @returns an object based on nomenclature defined in manifest, expecting object[s] for property marked as "bound" or "output"
+    */
+    public getOutputs(): IOutputs {
+        return {
+        // If our name variable is null, return undefined instead
+        Name: this.name ?? undefined
+        };
+    }
+
+    /**
+    * Called when the control is to be removed from the DOM tree. Controls should use this call for cleanup.
+    * i.e. cancelling any pending remote calls, removing listeners, etc.
+    */
+    public destroy() {
+        // Remove the event listener we created in init
+        this.container.querySelector("button")!.removeEventListener("click", this.buttonClick);
+    }
+}
+## Rebuild and run your code component
+To rebuild and run your code component, follow these steps:
+Now that your component's logic is implemented, go back to the terminal and rebuild it by using the command below. You can run this directly in VS Code or through the command prompt so long as you navigate to your editable-pcf folder first.
+Console
+npm run build
+The build should succeed.
+Run your component in Node's test harness by running the command below. If you haven't done this before it should launch a browser with your newly created component displayed.
+Console
+npm start
+Note
+You can also enable watch mode to ensure that any changes to the following assets are made automatically without having to restart the test harness by using the npm start watch command.
+index.ts file.
+ControlManifest.Input.xml file
+Imported libraries in index.ts
+All resources listed in the manifest file
+A new browser window should load the test harness. (The window should open automatically, but you can also reference the address as found in the command window).
+Select Edit.
+Enter Project One and select Save.
+You can change the container size.
+The test harness should now look like the image below.
+Close the test harness browser window.
+Go back to the terminal or your command prompt (if you aren't using VS Code Terminal) and stop the watcher by holding [CONTROL] + C.
+Type Y and then [ENTER].
+# Create a code component solution package
+Completed100 XP
+15 minutes
+You must deploy a code component to a Microsoft Dataverse environment before using it in Power Apps or Power Pages. Your first task to deploy a component is to package your code component into a solution, allowing you to import it into an environment. You can accomplish this in two ways. You can use the CLI Push command to create a temporary solution to push your component to an environment to facilitate testing. This approach is great for use during the development of the component. The other option is to create a solution for the component and import it separately into your Dataverse environment. This option is good for use in build pipelines or manual deploys to other than your development environment. Let's explore both options in more detail.
+In the following steps, you'll practice both techniques using the code component that you built in the last topic or one of the samples components available.
+## Prerequisites
+You must have an existing code component project that is already built. You can follow these steps for any other code component project, such as the Sample components.
+## Push a component to a Dataverse environment during development
+To push a code component using the Power Platform CLI, follow these steps:
+Start Visual Studio Code and select Explorer.
+Select Open Folder.
+Select the editable-pcf project folder you created in the previous lab and select Select Folder.
+Select the Power Platform tab and select Add Auth Profile.
+Look for a Sign in to your account popup and select the account you wish to use. Enter the appropriate username, select NEXT, and enter the password. You might need to provide MFA if it has been set up in your tenant.
+The profile you added will show up under Auth Profiles, along with the associated Environments & Solutions. Be sure that you select the appropriate environment under Environment & Solutions. There will be a star you can select. Be sure the environment selected has the Component Framework enabled as well in the Environment Features section of the Power Platform Admin Center for the selected Environment.
+Select Terminal and select New Terminal.
+Build the project by running the command below and make sure it builds successfully.
+Console
+npm run build
+Push the custom control to your environment by running the command below.
+Console
+pac pcf push --publisher-prefix msl
+Notice in the image the red box that indicates the Connected as and Connected To sections. Ensure these match the AUTH PROFILE and selected ENVIRONMENT from your previous steps.
+The solution should get imported into your environment and published.
+You can ignore the Yellow warning message if it's received.
+Navigate to Power Apps maker portal and make sure you are in the correct environment.
+Select Solutions.
+You should see PowerAppsTools_msl solution. Select to open the solution.
+You should see the custom control you created.
+## Create a solution file with Power Platform CLI
+To create a solution file with Power Platform CLI, follow these steps:
+Go back Visual Studio Code and make sure you have the EDITABLE-PCF project open.
+Go to the terminal and to Command prompt.
+Create new folder by running the command below.
+Console
+md Solution
+Change the directory to the Solution folder you created. Run the command below.
+Console
+cd Solution
+Initialize your Dataverse solution project with the following command:
+Console
+pac solution init --publisher-name mslearn --publisher-prefix msl
+Inform your solution project its components will be added during the build. To accomplish this task, use the following command:
+.NET CLI
+pac solution add-reference --path ..
+To generate your solution's zip file, use Microsoft Build Engine, or msbuild for short. You'll only need to use the /restore flag the first time the solution project is built. In every subsequent build, you'll need to run msbuild only. The path to your MSBuild.exe can be different depending on the version of Visual Studio you've installed on your machine.
+Console
+"C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\MSBuild\Current\Bin\MSBuild.exe\" /t:build /restore
+The build should succeed.
+Locate the Solution folder you created and expand it.
+Expand the bin\debug folder.
+You should see the solution.zip file here.
+Note
+To run MSBuild, you need to have either Visual Studio or the Visual Studio Build Tools installed. You can install the build tools from the Visual Studio Downloads. To access MSBuild, you might need to add it to the path directory of your Windows environment variables. For example, Visual Studio 2022 stores MSBuild at C:\Program Files (x86)\Microsoft Visual Studio\2022\Enterprise\MSBuild\Current\Bin. You can also use the Visual Studio Developer Command Prompt to access MSBuild, or run it by using the full qualified path ("C:\Program Files (x86)\Microsoft Visual Studio\2022\Enterprise\MSBuild\Current\Bin\MSBuild.exe"/t:build /restore).
+The default package type is a Managed solution. If you want to export as Unmanaged (or Both), you can clear (or uncomment) the comment in the following section from your Solutions.cdsproj and edit the SolutionPackageType node accordingly:
+TypeScript
+<!-- Solution Packager overrides un-comment to use: SolutionPackagerType Managed, Unmanaged, Both)-->
+        <PropertyGroup>
+        <SolutionPackageType>Unmanaged</SolutionPackageType>
+        </PropertyGroup>
+You can set the msbuild configuration to Release to issue a production build, for example, msbuild /p:configuration=Release.
+You can manually import the containing zip file that is found in bin\Debug or bin\Release, depending on your release configuration. You can also programmatically deploy your code components by using the Power Platform CLI. For more information, see Connecting to your environment and Deploying code components sections of the Package a code component documentation.
+# Test and debug code components
+Completed100 XP
+10 minutes
+As you develop more complex components, you might need to test and debug their logic in interactive ways. One useful utility that you have is the Power Apps component test harness, which allows you to test different data and context inputs to ensure that your component is functioning correctly. Also, because you build code components with standard web technologies like TypeScript, CSS, and HTML, you have numerous utilities provided through that ecosystem, such as client debugging capabilities available in most modern browsers.
+## Test and debug your code component in the Power Apps component test harness
+The Power Apps component test harness is a utility built by Microsoft that helps you quickly render a Power Apps component in a localized environment. If you've gone through the exercise in this module on writing a code component, you've already seen this utility in action. You can start a local test harness from within a Power Apps component project by using the npm start command.
+After the test harness has started, your component will display in a browser window, like the one that you built in the previous exercise.
+### Context inputs
+Within the test harness, you can provide your component with various inputs to specify how it's rendered (which is useful for ensuring that the component renders properly under different display contexts).
+In the Context Inputs drop-down menu, you can select Form Factor such as Web, Tablet, and Phone. You can also provide explicit width and height fields to see how the component renders in various dimensions.
+### Data inputs
+The Data Inputs drop-down menu helps you ensure that the component functions as expected when different data parameters are provided and also allows you to determine how the component will render based on the type specified in a given field.
+If your component is a dataset component, you can load CSV files with mock data. You can export a CSV from a sample target environment against which you're building your component, or you can build a new one.
+In the previous example, if you wanted to build a new CSV file, it should look similar to the following sample:
+name, telephone1, address1_city
+Joe, 123-555-0100, Seattle
+Mary, 123-555-0101, Atlanta
+Steve, 123-555-0102, Redmond
+After the CSV has successfully loaded, the component will display its records and, as with your property controls, you can assign various types as specified by the component's corresponding type group (which is defined in the component's ControlManifest.Input.xml file).
+## Debug a code component by using browser debugging
+Most modern browsers have various built-in debugging capabilities. Microsoft Edge, Google Chrome, Mozilla Firefox, and Apple Safari each have built-in developer tools that allow for interactive debugging experiences. For more information on each browser, see the following links.
+For this exercise, you'll use Microsoft Edge. With an active Microsoft Edge browser open, start Microsoft Edge's DevTools by pressing F12 on your keyboard.
+## Inspect your HTML with the elements panel
+In DevTools, the first available tab after Welcome is Elements. Select Elements and the Elements panel provides you with a way to view the HTML that is rendered within the page. You can go to where your control is being rendered by using the Inspect functionality, which can be accessed in one of three ways:
+Select the Select an element in the page to inspect it icon at the top left of the Elements panel, and then select the element in the Component Test Harness. This action selects that element in your viewer on the right (see 3 in the diagram below).
+Highlight and right-click an element within your component and then select Inspect.
+Select any element from the Elements panel.
+## Inspect console logs and run script in the console panel
+A frequent mechanism for providing debug context within client script is to use the console.log() method. If you want to provide logging inside of your component's logic, you can use this method. These logs are displayed in the DevTools console panel whenever they're run, which provides a valuable way to trace logic as it runs within your component. The following image shows an example of a couple of logs from the test harness.
+You also have the ability to run your own script from within the console. This method can be valuable for testing various method calls and logic from within the context of a live environment.
+## Set debugger breakpoints in the sources panel
+One of the most valuable utilities in DevTools is the ability to set debugger breakpoints in your code so that you can inspect variables and the flow of your method implementation. This example sets a breakpoint in your index.ts file that you developed as part of your Power Apps component. In the following example, you'll stop at a breakpoint on each run of the refreshData method.
+If you select the button of your control, this breakpoint is hit, providing you with the ability to manually step through the logic of the event handler. Additionally, you can inspect values, such as those that have changed, as shown in the following image.

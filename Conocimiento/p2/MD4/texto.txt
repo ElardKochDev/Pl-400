@@ -1,0 +1,217 @@
+# Introduction to developer Power Platform tooling
+Completed100 XP
+3 minutes
+Developers can use many of the traditional development tools when building solutions for Microsoft Power Platform. But there are various distinct tools exclusively targeting Microsoft Power Platform development. Microsoft provides official tooling via Power Platform CLI, NuGet package manager, and other published tool installers. There's also a vibrant community of tools and libraries complementing what Microsoft publishes. In this module, we explore the tools with which a Microsoft Power Platform developer should be familiar.
+## Microsoft Power Platform CLI
+The Power Platform CLI is a command-line interface to create code components. The CLI is intended to be the primary CLI for developers to perform various operations. For example, this is how you would initialize and manage the lifecycle of a Power Apps Component Framework component. The tool also can help with developing plug-ins as well. The tool is solution-aware and can help you deploy the supported platform extensions to a development environment for testing. The CLI can be installed standalone or as a Visual Studio Code extension. With the extension, commands can be executed from the Visual Studio Code terminal windows.
+The following describes some of the common tasks you can perform with the CLI:
+## Microsoft Power Platform Connector CLI
+The Connector CLI provides a command-line tool to create, download, update, and validate Power Platform custom connectors. The tool allows for advanced editing of the custom connector definition. You also must use the tool if you're preparing a custom connector for open-sourcing or certification. Review the documentation on the CLI for more specifics on how to install and use the tool.
+## Power Platform Tools for Visual Studio
+Power Platform Tools for Visual Studio provide support for building Dataverse plug-ins using Visual Studio. Additionally, it includes project templates for other developer tasks like managing solutions and packaging for deployment. This tool can be installed from the Visual Studio Marketplace.
+## Application Lifecycle Management (ALM) tools
+An important part of implementing application lifecycle management for your projects is having a repeatable process that allows you to modify the solution components and have these changes recorded in a source control system. While the steps to accomplish these tasks can be performed manually, having an automated process is better to ensure consistency and repeatability. To support building these automations Microsoft provides build tasks for Azure DevOps and Actions for GitHub.
+Review the complete list of the Azure DevOps build tasks for more specifics on each task.
+Review the complete list of GitHub Actions for more specifics on each action.
+## Microsoft NuGet tools for Dataverse
+The following are Microsoft-provided tools that help with various aspects of development when Microsoft Dataverse is used. Each NuGet package contains tools that you download, unpackage and launch to run the tool locally. You can install each of these tools using the Power Platform CLI tool command or by downloading from NuGet and unpackaging the NuGet package.
+## Copilots
+Each Power Platform component is adding copilots that makers can use when building components. For example, a maker could add a button to a screen or ask to describe what some Power Fx logic is doing. While the component copilots aren't focused on traditional code, they may be helpful as you get up to speed testing a code component.
+GitHub Copilot chat can also be used as you build your Power Platform extensions. For example, in the following image it shows asking "What does this code do?" for a selection of Dataverse plugin logic.
+## Community tools
+There are many community tools, libraries, and solutions, most of them open source, available to improve the Microsoft Power Platform developer experience and fill in the gaps in the official Microsoft development tools and libraries. Some of the tools are listed on Community tools for Microsoft Dataverse page.
+Tools created by the community aren't supported by Microsoft. If you have questions or issues with community tools, contact the publisher of the tool.
+# Exercise - Use the Power Apps CLI
+Completed100 XP
+15 minutes
+In this exercise, you'll install the Power Platform CLI and create your first Power Apps Component Framework (PCF) component.
+## Task 1: Install the CLI
+Install npm (comes with Node.js) or Node.js (comes with npm). We recommend that you use LTS (Long-Term Support) version 10.15.3 or higher.
+Install Visual Studio Code.
+Install Power Platform Tools extension.
+Start Visual Studio Code.
+Select Terminal and select New Terminal.
+Run the pac command to see what commands are available:
+pac
+You can enter pac and then a command to see what options it has. For example, try the following:
+pac admin
+Navigate to Power Apps Maker Portal and make sure you have the Dev environment selected.
+In the upper right corner of the screen, select the Settings icon and choose Session details.
+In the Power Apps session details dialog, select Instance url value and copy it for use later in the exercise.
+Go back to the Visual Studio Code terminal, type the following command to establish a connection from the CLI and sign in to your test environment when prompted.
+pac auth create --name Lab --url <Your Instance URL>
+Type the following who command that displays the environment and the user information. This is good to ensure you are in the correct environment.
+pac org who
+## Task 2: Create a PCF component
+Run the command below to create a new folder named labPCF inside your user's folder.
+md labPCF
+Change directory to the folder you created.
+cd labPCF
+Run the command below to initialize the component project.
+pac pcf init --namespace lab --name FirstControl --template field
+Type the following command and then press enter. This pulls down any dependencies from the npm repository.
+npm install
+Open the folder in Visual Studio Code.
+code -a .
+Explore the files that have been created.
+Open index.ts in the FirstControl folder.
+Paste the following two variables inside the export.
+private label: HTMLInputElement;
+private _container: HTMLDivElement;
+Paste the following inside the init() function to create the HTML controls and set the label value.
+this.label = document.createElement("input");
+this.label.setAttribute("type", "label");
+this.label.value = "My First PCF";
+this._container = document.createElement("div");
+this._container.appendChild(this.label);
+container.appendChild(this._container);
+Save the file.
+Go to the terminal and input the following command and then enter. This will start the test harness with the latest code.
+npm start
+The test harness is useful early in the project to visualize your control without deploying it to an environment. You can adjust property values to change the size of the control area. After you're done exploring the test harness, switch back to the terminal and press Ctrl-C to terminate the execution of the test harness.
+If prompted, type Y and [ENTER].
+Run the following command to list solutions in your environment.
+pac solution list
+These are the current solutions that are in your environment. The next step will add one for the component.
+Type the following push command to push our control to the environment.
+pac pcf push --publisher-prefix lab
+Run pac solution list command again. You should see a PowerAppsTools_lab solution listed. This is how your component is installed in the dev environment for unit testing before being packaged for user testing or production or included as part of another solution.
+## Task 3: Use the component in an app (optional)
+Navigate to the Microsoft Power Platform Admin Center.
+Select Environments from the menu on the left.
+Select the environment you're using for the lab.
+Select Settings.
+Expand Product area and select Features.
+On the right side, enable the Allow publishing of canvas apps with code components feature.
+Navigate to Power Apps maker portal and make sure you are in the correct environment.
+Select Solutions.
+Select to open the PowerAppsTools_lab solution.
+You should see your component listed.
+Select + New | App | Canvas app.
+Select Phone for Format, enter First PCF for App name, and select Create.
+On the left pane, select Add (+), and then select Get more components.
+Select the Code tab.
+Select your component.
+Select Import.
+On the left tool bar, select + and expand Code components.
+Select the FirstControl. You should now see the control with the text My First PCF on the canvas.
+Select Save to save the application.
+You have now built your first PCF component and used it in a canvas app.
+# Solutions overview
+Completed100 XP
+3 minutes
+Microsoft Power Platform uses the solution feature of Microsoft Dataverse to track and manage apps, flows, tables, and even developer code components like JavaScript and plug-ins. Solutions are containers that can be used to transport project assets from one environment to another. Solutions are a core part of Microsoft Power Platform application lifecycle management (ALM) strategy.
+## Solutions can be unmanaged or managed
+Unmanaged solutions - Used in development environments while you make changes to your components. New components can be created within the solution, and any existing components within the Dataverse environment can be added as well. Unmanaged solutions can be exported either as unmanaged or managed. Exported unmanaged versions of your solutions should be checked into your source control system. A tool named SolutionPackager can be used to prepare solutions to be checked in. You can automate this process using the Microsoft Power Platform Build Tools.
+Managed solutions - Used to deploy to any environment that isn't a development environment for that solution. Managed solution components can't be directly modified in or removed from the managed solution, nor can any new components be added. However, you can include the component in another unmanaged solution and make changes there. This creates a dependency on the managed solution. Managed solutions can be serviced independently from other managed solutions in an environment. While you can manually export an unmanaged solution as managed, managed solutions are recommended to be generated as a build artifact from an automated build process.
+Solutions can be created and managed via the Maker Portal and can also be created and managed by developers using the platform API. There are also tools like SolutionPackager, Package Deployer, and DevOps and GitHub build tasks and actions that can be used by developers to perform and automate various solution-related tasks.
+## Solutions can be layered
+Multiple solutions can co-exist within an environment. To manage these solutions, Dataverse tracks them using a layer concept at the individual solution component level. All unmanaged solutions are tracked as a single layer, while each managed solution is tracked separately. When multiple layers of managed solutions exist, the managed solution last installed in an environment is used over previously imported managed solutions. Some components support merging instead of a last-one-wins approach. For example, a form for a Power Apps model-driven app, might be modified by three managed solutions, each changing different sections of the form. In this example, the merged result would be a combined form, including changes from all three managed solutions. The unmanaged layer, however, is always at the top, and a change in the unmanaged layer overrides any change from managed solutions in an environment. Ultimately, a user sees a combination of all the solution layers in an environment. The following image illustrates this concept.
+The layering concept is key to allowing multiple solutions to work together in a single environment. It also allows further customizations of components from a managed solution.
+## Solution dependencies
+Solution components often depend on other solution components. The solution runtime tracks dependencies to ensure solutions can't be removed if another solution depends on them.
+## Use Power Platform CLI to work with solutions
+In addition to using the maker portals, developers can also use the Power Platform CLI to perform many solution management tasks.
+For example, the following would initialize a directory with a new Dataverse solution project, and then adds a reference to a slider PCF component that the developer created.
+pac solution init --publisher-name developer --publisher-prefix dev
+pac solution add-reference --path c:\Users\Downloads\SliderComponent
+## Solution packaging
+Solutions exported from a Dataverse environment are simply a compressed zip file with the metadata included. As a single binary file, it isn't effective or useful when placed into a source control repository.
+To facilitate source control, solution packaging tooling can unpack a Dataverse solution into a series of XML files and other files so that these files can be easily managed by a source control system. Solution packaging tools can also repack the solution zip file using the extracted components.
+Developers can use the following tools that implement solution packaging support:
+Power Platform CLI
+Power Platform Build Tools to implement automation
+SolutionPackager tool
+## Solution packaging using Power Platform CLI
+For example, the following would export a solution from Dataverse and unpack all the individual files using the SolutionPackager logic.
+pac solution pack --zipfile C:\MyProject.zip --folder .\MyProjectUnpacked\.
+pac solution unpack --zipfile C:\MyProject.zip --folder .\MyProjectUnpacked\.
+## SolutionPackager tool
+The SolutionPackager tool is distributed as part of the NuGet package Microsoft.CrmSdk.CoreTools.
+The SolutionPackager tool is an executable that you can use to conduct the following actions:
+Extract: Extract solution .zip file to a folder
+Pack: Pack a folder into a .zip file
+It supports various command-line arguments that you can use to perform specific actions as part of your solution extract/pack operation. For in-depth details on how to use the SolutionPackager tool, see the SolutionPackager Tool article.
+Sometimes it's necessary to manage items, such as web resources or plug-in assemblies that are created and managed in separate projects. This requires mapping solution files from their default location in an extract folder to their corresponding project directory. For example, a plug-in assembly will typically be located in the bin output folder of the plug-in assembly project. To accomplish this, you can use the /map argument to manage the mapping of these locations. For a detailed explanation on how to build an XML mapping document, see Use the /map Command Argument.
+Although SolutionPackager can be run manually, it's more commonly used in automated build processes. Both Microsoft Power Platform Azure DevOps builds tasks and GitHub Actions have steps that use SolutionPackager to unpack and pack a solution.
+# Deploy apps with Package Deployer
+Completed100 XP
+4 minutes
+Package Deployer lets administrators deploy packages into Microsoft Dataverse environments. These packages are also used by Independent Software Vendors (ISVs) to deploy certified solutions to customer environments. Developers can help configure the package and build code that runs during the installation phases.
+A deployment package is different from a single Dataverse solution in that it can install a complete app including multiple solutions, reference data, and installation of custom logic. A package can consist of any or all of the following:
+One or more Dataverse solution files
+Flat files or exported configuration data file from the Configuration Migration tool
+Custom code that can run before, while, or after the package is deployed to the Dataverse instance
+HTML content specific to the package, which can display at the beginning and end of the deployment process. This can be useful to provide a description of the solutions and files that are deployed in the package.
+## Building a package
+Microsoft provides a Visual Studio template for creating packages. The level of effort can vary depending on how much custom code is included for execution during installation. Frequently a package only includes one or more solutions and data. The following are the steps to build a deployment package:
+You can initialize a folder with the deployment project template and create your initial package using the Power Platform CLI. The following command is used to populate a folder:
+pac package init --outputDirectory MyPackage
+Once initialized you can begin to customize it for your specific needs. For example, if you wanted to create a package to deploy two Dataverse solutions you would run the following commands to configure the package to include them.
+pac package add-solution --path ..\MySolution1_1_0_0_2_managed.zip
+pac package add-solution --path ..\MySolution2_2_0_0_0_managed.zip
+You can add custom logic by editing the PackageImportExtension.cs class and adding logic to the appropriate event handler. The following are the available events you can add your logic to run:
+InitializeCustomExtension - Called to initialize any functions in the custom extension.
+BeforeImportStage - Called before the main import process begins, after solutions and data.
+PreSolutionImport - Raised before the named solution is imported to allow for any configuration settings to be made to the import process.
+RunSolutionUpgradeMigrationStep - Called during a solution upgrade when both solutions, old and new, are present in the system. This function can be used to provide a means to do data transformation or upgrade while a solution update is occurring.
+AfterPrimaryImport - Called after all import steps are complete, allowing for final customizations or adjustment of the environment.
+You can also make other customizations by making changes to the configuration files directly.
+Once configured and with any custom code added, you can build the package to prepare it for deployment. You can load .csproj file into Visual Studio or use the dotnet command to run MSBuild. The following shows the command to build the package from the command line:
+dotnet publish
+Building the package creates a .zip file containing everything needed to deploy the package.
+## Deploying a package
+Once a package is configured, it can be deployed to Dataverse environments using one of the following methods:
+CLI - This approach uses the Power Platform CLI to authenticate to the target environment and run the pac package deploy command.
+Interactively - Using this approach provides a wizard-like experience for a user with administrative access to the environment to install the package. As the install progresses the user is visually advised of the progress. This option uses the Package Deployment Tool windows application that can be launched using the command pac tool pd.
+Windows PowerShell - Using this approach allows command-line installation. This approach is suitable for packages deployed as part of an automated process.
+AppSource - This approach is used when an ISV offer is selected for install from the AppSource portal.
+You can read more about how deployment works with these approaches in Deploy packages using Package Deployer and Windows PowerShell.
+## Including data
+One of the key things that differentiates Package Deployer from simply installing a solution is that you can include reference / configuration data as part of a deployment package.
+The Configuration Migration tool is used to transport configuration and test data from one environment to another. It provides the means to capture such data, include that data in the source control repository, and use that data to automate testing. This tool can be used standalone, however, the data.zip file it produces as output can be included as part of a deployment package. The high-level steps are:
+Define the schema of the source data to be exported
+Use the schema to export data
+Import the exported data
+The following diagrams the process to use the tool:
+When used with Package Deployer the output .zip file can be included in the deployment package.
+The following are some of the key benefits of using Configuration Migration for preparing data:
+Select the tables and columns from which to export the configuration data.
+Analyze relationships between records and run the import using multiple passes to ensure data integrity.
+Use a query to define a subset of records to be included in the package.
+Avoid duplicate records on the target system by defining a uniqueness condition for each table based on a combination of columns in the table, which is used to compare against the values on the target system.
+If there are no matching values, a unique record is created on the target system. If a matching record is found, the record is updated on the target system.
+Validate the schema for the selected tables to be exported to ensure that all the required data/information is present.
+Reuse an existing schema to export data from a source system.
+Automatically move values for date and datetime columns forward at import to keep data up to date in demo environments.
+Using Package Deployer to deploy apps allows you to include multiple solution files, data, and execute custom logic during the installation process. Administrators can use a wizard-like installer experience and don't have to worry about how to install the individual components or import configuration data.
+# Exercise - Install and use developer tools
+Completed100 XP
+15 minutes
+In this exercise, you'll install some of the developer tools from NuGet.
+Important
+Use a test environment with Microsoft Dataverse provisioned. If you don't have one you can sign up for the Developer Plan.
+## Task 1: Install developer tools
+In this task, you'll use a Power Platform CLI to install tools.
+Launch Command Prompt.
+Run the command below to install the Configuration Manager Tool.
+pac tool cmt
+The Configuration Manager Tool should install and launch. Close the Configuration Manager Tool.
+Run the command below to install the Package Deployer Tool.
+pac tool pd
+The Package Deployer Tool should install and launch. Close the Package Deployer Tool.
+Run the command below to install the Plugin Registration Tool.
+pac tool prt
+The Plugin Registration Tool should install and launch. Don't close the Plugin Registration Tool.
+## Task 2: Explore a registered plug-in with the plug-in registration tool
+Select Create New Connection
+Select the radio button next to Office 365.
+Check Display list of available organizations.
+Select Login and sign in with your Dataverse environment credentials when prompted.
+On the list of organizations (environments), pick your environment and select Login again.
+You'll see a list of system plug-ins. If you do this on an environment with custom plug-ins you would see them in the list as well. The (Assembly) are .NET DLLs that implement the plug-ins.
+Locate Microsoft.CDS.DataLakeDataProvider.Plugins and expand it.
+Each of the child items is implemented in the assembly. Expand one of the items to see the step registrations for that individual plug-in.
+Step registration connects the plug-in as an event handler to the event. In the above example, this is handling a create on the insightsstorevirtualentity table.
+Double-click on the step to see the step configuration details including what message and entity it's registered on, the pipeline stage when the plugin is invoked, whether execution is synchronous or asynchronous, etc.
+When you create your own custom plug-in, you use this tool to load the assembly and register the steps for the events that you want to handle.

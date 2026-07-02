@@ -1,0 +1,468 @@
+# Introduction to the Microsoft Dataverse Web API
+Completed100 XP
+10 minutes
+## Web API vs. the organization service
+The Web API and the organization service are the two main ways to interact with data and metadata in Microsoft Dataverse. You can use the organization service when writing plug-ins or workflow extensions using the SDK for .NET that Microsoft provides.
+Regardless of your approach, all data operations go through the underlying organization service. As such, the Web API allows you to perform the same operations as the organization service but in a RESTful style.
+The following graphic is a decision tree that can help you determine when to use the Web API versus the organization service (through the SDK assemblies available in the Microsoft.CrmSdk.CoreAssemblies NuGet package). It also shows when to use the Dataverse Service Client Assemblies (available in the Microsoft.PowerPlatform.Dataverse.Client NuGet package) for Windows applications.
+This module focuses on the Web API. For more information on the organization service, see Use the Dataverse Organization service in the Dataverse Developer Guide.
+## OData (Open Data Protocol) 4.0
+Dataverse Web API is implemented as an OData (OASIS Open Data Protocol) service. Using an industry-standard such as this provides all the benefits of open standard development, such as cross-platform compatibility and simple implementation against a common, predefined protocol.
+Dataverse doesn't provide specific .NET tooling for the Web API. Instead, we recommend that you use community libraries that conform to the OData protocol. If you want more information about which libraries exist, see https://www.odata.org/libraries/.
+OData lets you interact with Dataverse data with CRUD (Create, Read, Update, Delete) operations that are available through standard GET, POST, PATCH, and DELETE HTTP methods. (You can find more information about these methods later in this module.) You can also perform almost any other operation exposed through the Dataverse Event Framework by invoking an OData function or action with the same name as its corresponding organization service message. CRUD-related messages are the only ones that aren't available because those messages use the previously described standard HTTP methods.
+## REST
+Fundamentally, OData protocol is a set of RESTful (REpresentational State Transfer) APIs, an industry standard for providing interoperability between systems. REST consists of six guiding principles that restrict how a service can process and respond to requests to ensure that non-functional properties of that service are met (such as performance, scalability, simplicity, reliability, and so on).
+For this lesson, you should keep in mind that OData conforms to these constraints and that the Dataverse Web API that implements the OData protocol also conforms to the constraints.
+## FetchXML
+FetchXML is a robust query language that allows for complex querying of Dataverse data. You can use FetchXML to compose your query criteria when you run queries with the Dataverse Web API. This approach can be valuable if you encounter a scenario where FetchXML better fits your particular query than OData query syntax. You can find more information about FetchXML later unit in this module.
+# Insomnia
+Completed100 XP
+15 minutes
+Insomnia is a valuable tool for composing unplanned Web API queries and verifying the behavior of Web API Operations without having to write a program to do so. If you're new to Insomnia, see the Introduction to Insomnia for an introduction to Insomnia.
+## Register an app in Microsoft Entra ID
+To connect Insomnia to Microsoft Dataverse, you must first ensure that you have an application registered in your Microsoft Entra ID environment.
+## Get the current version of your Web API endpoint
+You can find the version number of your Web API endpoint by going to your environment's Developer resources in the maker portal.
+From the Developer Resources page. Your version number is indicated under the Web API endpoint, as shown in the following image. Make note of the endpoint and the version.
+## Set up Insomnia
+To start the setup process, install Insomnia.
+After Insomnia has been installed, you use a feature that Insomnia has to manage environment variables so that you can cleanly manage entities such as your endpoint URLs and client IDs.
+To create an Insomnia environment that you can use to connect with your Dataverse instance, follow these steps:
+Launch the Insomnia desktop application.
+Select New Collection.
+Enter Dataverse Collection for name and then select Create.
+Select the Environment settings button.
+Rename the environment Dataverse Environment and replace {} with the JSON text below.
+JSON
+{
+ 	"url": "https://[ORG NAME].api.crm.dynamics.com",
+ 	"clientid": "51f81489-12ee-4a9e-aaae-a2591f45987d",
+ 	"version": "9.2",
+ 	"webapiurl": "{{url}}/api/data/v{{version}}/",
+ 	"callback": "https://callbackurl",
+ 	"authurl": "https://login.microsoftonline.com/common/oauth2/authorize?resource={{url}}"
+ }
+Replace the URL placeholder [ORG NAME] with of your Dataverse environment org name.
+If the variables show errors, select the url.
+Select Done on the edit variable popup.
+Do the same for the Version and the second url variables.
+The variable should now look like the image below. Select Close.
+## Generate an access token to use with your environment
+To connect by using OAuth 2.0, you must have an access token. To get a new access token, follow these steps:
+Select New HTTP Request.
+Select the Auth tab.
+Select the chevron icon next to the Auth tab name and then select OAuth 2.0.
+Verify that you've selected the environment you created.
+Select Implicit from the Grant Type drop-down menu, set AUTHORIZATION URL to {{authurl}}, CLIENT ID to {{clientid}}, and REDIRECT URL to {{callback}}.
+Select Fetch Token. When you make this selection, a Microsoft Entra ID sign-in page appears. Enter your username and password.
+You should see the created Token.
+## Test your connection
+Create a new Web API request to test the connection with your Dataverse instance. Use the WhoAmI function by following these steps:
+Select GET as the HTTP method and add {{webapiurl}}WhoAmI in the editing space.
+Select Send to send this request.
+If your request is successful, you see the data from the WhoAmIResponse ComplexType that is returned by the WhoAmI Function.
+# Authenticate against Microsoft Dataverse using OAuth
+Completed100 XP
+15 minutes
+Microsoft Dataverse uses OAuth 2.0 as its authentication standard. OAuth 2.0 provides an industry standard for authenticating client applications and granting them access to a resource.
+## Authentication vs. authorization
+Authentication is the process or action of verifying the identity of a user or process. Microsoft's solution to this verification process is Microsoft Entra ID. Entra ID supports many options to verify the identity of a user or process. Abstracting your identity provider allows for a good separation of concerns because managing usernames and passwords can be a difficult (and risky) process.
+Note
+Microsoft Entra ID is the new name for Azure Active Directory. All licensing and functionality remain the same.
+Authorization is the process or action of verifying whether an authenticated user is authorized to access the resource. Presently, Dataverse authorization is at the Entra ID tenant level, while management of the detailed permissions is delegated to the application based on the current signed-in user. Therefore, you don't use OAuth 2.0 to govern app-level security, which you would handle with Dataverse security roles and assignment to users with the Power Apps Admin Center.
+If you want to learn more about the concepts of authentication and authorization, see Authentication basics.
+## Register Dataverse apps with Entra ID
+To successfully connect to your Dataverse, you must first register an app with Entra ID, which you can complete in the Azure portal. Depending on the type of app that you want to make, a few different settings are available for you to configure (web apps versus native apps that are installed natively on a device). For more information on settings required for each type, see Types of app registration.
+To register an app with Entra ID, go to the App Registrations section of the Entra ID (Azure Active Directory) menu and then select New Registration.
+Specify the name of your app and what type of account access you need. If you're registering a web app, specify a Redirect URI by going to the Authentication section, setting the type to Web, and then entering a redirect URI.
+The following list summarizes when to use the different account types:
+Accounts in this organizational directory only (Single tenant)
+All user and guest accounts in your directory can use your application or API.
+Use this option if your target audience is internal to your organization.
+Accounts in any organizational directory (Any Entra ID directory - Multitenant)
+All users with a work or school account from Microsoft can use your application or API, including schools and businesses that use Microsoft 365.
+Use this option if your target audience is business or educational customers and to enable multitenancy.
+Accounts in any organizational directory (Any Entra ID directory - Multitenant) and personal Microsoft accounts (for example, Skype and Xbox)
+All users with a work, school, or personal Microsoft account can use your application or API. It includes schools and businesses that use Microsoft 365 and personal accounts that are used to sign in to services like Xbox and Skype.
+Depending on the complexity of your application setup, you might want to configure other authentication settings. Refer to the Entra ID documentation for steps on how to complete this task.
+## Access Dataverse using the Web API
+All access to Dataverse is done in the context of a signed-in user. This can be a normal interactive user or a non-interactive user using Server-to-Server (S2S) authentication.
+When an application accesses Dataverse on behalf of an interactive user, the registered application must be configured with API permissions to access Dataverse with delegated permission. When an application directly accesses Dataverse, an Application User associated with the Entra ID application registration must be created in Dataverse. When you use S2S authentication, Dataverse API delegated permissions aren't required.
+In all cases, the authenticated users must have Dataverse security roles associated with the user, permitting the operations you perform using the Web API.
+### Configure API permissions
+If your application accesses Dataverse on behalf of a signed-in user, go to the API permissions tab on the application registered and ensure that you grant your application user impersonation access to your Dataverse environment.
+The label says Dynamics CRM, which is a historical name of the precursor product to Dataverse.
+### Configure a Dataverse application user
+When you use S2S authentication, a Dataverse Application User must be configured in each Dataverse environment you access with the Web API.
+Configuration of Dataverse Application Users is done from the Power Platform admin center as a System Administrator.
+From the admin center, you can perform the following steps:
+Create a new application user
+Associate the application user with the Entra ID app or managed identity
+Configure which Dataverse security roles apply
+For more detailed step-by-step review Manage application users in the Power Platform admin center.
+## Use authentication libraries to connect
+Once your application is registered, use one of the Microsoft identity platform authentication libraries to perform authentication and acquire an access token for use with the Web API.
+The following code is an excerpt from the Enhanced QuickStart sample that uses the Microsoft Authentication Library (MSAL). The following OAuthMessageHandler class implements a class derived from DelegatingHandler, which you pass to the constructor of the HttpClient. This handler allows you to override the HttpClient.SendAsync method so that the access token is refreshed by the AcquireToken* method calls with each request sent by the Http client.
+C#
+class OAuthMessageHandler : DelegatingHandler
+{
+  private AuthenticationHeaderValue authHeader;
+  public OAuthMessageHandler(string serviceUrl, string clientId, string redirectUrl, string username, string password, HttpMessageHandler innerHandler)
+  : base(innerHandler)
+  {
+    //Build Microsoft.Identity.Client (MSAL) OAuth Token Request
+    var clientApplication = PublicClientApplicationBuilder.Create(clientId)
+    .WithAuthority(AadAuthorityAudience.AzureAdMultipleOrgs)
+    .WithRedirectUri(redirectUrl)
+    .Build();
+    var scope = serviceUrl + "//.default";
+    string[] scopes = { scope };
+    AuthenticationResult authBuilderResult;
+    if (username != string.Empty && password != string.Empty)
+    {
+      //Make silent Microsoft.Identity.Client (MSAL) OAuth Token Request
+      var securePassword = new SecureString();
+      foreach (char ch in password) securePassword.AppendChar(ch);
+      authBuilderResult = clientApplication.AcquireTokenByUsernamePassword(scopes, username, securePassword).ExecuteAsync().Result;
+    }
+    else
+    {
+      //Popup authentication dialog box to get token
+      authBuilderResult = clientApplication.AcquireTokenInteractive(scopes).ExecuteAsync().Result;
+    }
+      //Note that an Entra ID access token has a finite lifetime, default expiration is 60 minutes.
+      authHeader = new AuthenticationHeaderValue("Bearer", authBuilderResult.AccessToken);
+    }
+  protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, System.Threading.CancellationToken cancellationToken)
+  {
+    request.Headers.Authorization = authHeader;
+    return base.SendAsync(request, cancellationToken);
+  }
+}
+You could then have a helper method to get the HttpClient instance using the handler:
+C#
+static HttpClient GetHttpClient(string url, string clientId, string redirectUrl, string version = "v9.2")
+{
+  try
+  {
+    HttpMessageHandler messageHandler = new OAuthMessageHandler(url, clientId, redirectUrl, "", "",
+    new HttpClientHandler());
+    HttpClient httpClient = new HttpClient(messageHandler)
+    {
+      BaseAddress = new Uri(string.Format("{0}/api/data/{1}/", url, version)),
+      Timeout = new TimeSpan(0, 2, 0) //2 minutes
+    };
+  return httpClient;
+  }
+  catch (Exception)
+  {
+    throw;
+  }
+}
+And finally, use the client instance to make a Web API call:
+C#
+using (HttpClient client = GetHttpClient("https://yourenvname.api.crm.dynamics.com", "51f81489-12ee-4a9e-aaae-a2591f45987d", "http://localhost:8080"))
+{
+  // Use the WhoAmI function
+  var response = client.GetAsync("WhoAmI").Result;
+  if (response.IsSuccessStatusCode)
+  {
+    //Get the response content and parse it.
+    JObject body = JObject.Parse(response.Content.ReadAsStringAsync().Result);
+    Guid userId = (Guid)body["UserId"];
+    Console.WriteLine("Your UserId is {0}", userId);
+  }
+  else
+  {
+    Console.WriteLine("The request failed with a status of '{0}'", response.ReasonPhrase);
+  }
+  Console.WriteLine("Press any key to exit.");
+  Console.ReadLine();
+}
+You should now have an app registered that can successfully connect to your Dataverse environment. You also have a simple example of connecting and using the registered app to access a Web API operation.
+# Use OData to query data
+Completed100 XP
+15 minutes
+OData is a protocol for querying RESTful APIs. This lesson explores a few ways of performing CRUD operations against Microsoft Dataverse data.
+## Create a row
+To create rows, use the HTTP POST method.
+OData
+POST [Organization URI]/api/data/v9.2/accounts HTTP/1.1
+Content-Type: application/json; charset=utf-8
+OData-MaxVersion: 4.0
+OData-Version: 4.0
+Accept: application/json
+
+{
+    "name": "Sample Account",
+    "creditonhold": false,
+    "address1_latitude": 47.639583,
+    "description": "This is the description of the sample account",
+    "revenue": 5000000,
+    "accountcategorycode": 1
+}
+## Retrieve rows
+To retrieve rows, use the HTTP GET method.
+The following sample retrieves an account with the ID 00000000-0000-0000-0000-000000000001:
+OData
+GET [Organization URI]/api/data/v9.2/accounts(00000000-0000-0000-0000-000000000001)
+Other methods are available for querying data by using standard OData query syntax. For more information on this process, see Retrieve a table row using the Web API.
+## Update rows
+Depending on what you are trying to accomplish, you can choose between one of two methods for updating rows:
+If you're performing an update of multiple attribute values, use the HTTP PATCH method. PATCH methods provide upsert capability if you provide an ID value as part of your request, a beneficial feature when you're synchronizing data between systems.
+If you're updating a single attribute value, use the HTTP PUT method. You can't use this method with navigation properties like lookups because that requires a reference to be removed as well.
+The following example updates an account table row:
+OData
+PATCH [Organization URI]/api/data/v9.2/accounts(00000000-0000-0000-0000-000000000001) HTTP/1.1
+Content-Type: application/json
+OData-MaxVersion: 4.0
+OData-Version: 4.0
+
+{
+    "name": "Updated Sample Account ",
+    "creditonhold": true,
+    "address1_latitude": 47.639583,
+    "description": "This is the updated description of the sample account",
+    "revenue": 6000000,
+    "accountcategorycode": 2
+}
+If you want to retrieve data from the table that you're updating, you can use the return=representation request header. If you want to control which properties are returned, you can add a $select query to your PATCH URL. In the following example, the header has been added and the $select has been amended to only include the name, creditonhold, and address1 attributes.
+### Request
+OData
+PATCH [Organization URI]/api/data/v9.2/accounts(00000000-0000-0000-0000-000000000001)?$select=name,creditonhold,address1_latitude,description,revenue,accountcategorycode,createdon HTTP/1.1
+OData-MaxVersion: 4.0
+OData-Version: 4.0
+Accept: application/json
+Content-Type: application/json; charset=utf-8
+Prefer: return=representation
+
+{"name":"Updated Sample Account"}
+### Response
+OData
+HTTP/1.1 200 OK
+Content-Type: application/json; odata.metadata=minimal
+Preference-Applied: return=representation
+OData-Version: 4.0
+
+{
+    "@odata.context": "[Organization URI]/api/data/v9.2/$metadata#accounts/$entity",
+    "@odata.etag": "W/"536537"",
+    "accountid": "00000000-0000-0000-0000-000000000001",
+    "accountcategorycode": 1,
+    "description": "This is the description of the sample account",
+    "address1_latitude": 47.63958,
+    "creditonhold": false,
+    "name": "Updated Sample Account",
+    "createdon": "2023-09-28T23:14:00Z",
+    "revenue": 5000000.0000,
+    "_transactioncurrencyid_value": "048dddaa-6f7f-e611-80d3-00155db5e0b6"
+}
+The following code is a sample PUT request where an account's name for a given row is updated:
+OData
+PUT [Organization URI]/api/data/v9.2/accounts(00000000-0000-0000-0000-000000000001)/name HTTP/1.1
+Content-Type: application/json
+OData-MaxVersion: 4.0
+OData-Version: 4.0
+
+{"value": "Updated Sample Account Name"}
+## Delete rows
+To delete rows, use the HTTP DELETE method. The operation is straightforward, where you provide the URI of the table row that you want to delete, as shown in the following request:
+OData
+DELETE [Organization URI]/api/data/v9.2/accounts(00000000-0000-0000-0000-000000000001) HTTP/1.1
+Content-Type: application/json
+OData-MaxVersion: 4.0
+OData-Version: 4.0
+## More operations
+Dataverse provides many other predefined operations that you can trigger through Web API requests. For a full inventory of the available capabilities, see Perform operations using the Web API.
+# Use FetchXML to query data
+Completed100 XP
+10 minutes
+FetchXML is a query language that Microsoft developed to enable you to perform complex query operations against Microsoft Dataverse data. It provides considerably more filtering options than the OData connectors and allows you to see the labels for reference data, such as option set labels or lookup fields.
+You can run FetchXML queries by using the following methods:
+Dataverse Web API
+Organization service
+You can also apply a custom FetchXML filter to a lookup field within a model-driven app. This approach allows for more complex lookup scenarios that you can't easily accomplish out of the box. For more information on how to complete this process, see the addCustomFilter Client API Reference.
+### Example FetchXML query
+The following sample query retrieves the accountid and name fields from the account table:
+XML
+<fetch mapping='logical'>
+   <entity name='account'>
+      <attribute name='accountid'/>
+      <attribute name='name'/>
+   </entity>
+</fetch>
+If you need to filter this data, for example by state, you could do something like the following sample query:
+XML
+<fetch mapping='logical'>
+   <entity name='account'>
+      <attribute name='accountid'/>
+      <attribute name='name'/>
+      <filter type='and'>
+        <condition attribute='address1_stateorprovince' operator='eq' value='WA' />
+      </filter>
+   </entity>
+</fetch>
+### Tools to help build your queries
+If you're querying data and have a model-driven app that includes the tables you wish to query, the simplest method for composing FetchXML queries is to use Advanced Find, which contains a Download FetchXML function. You're limited to the UI on what filters and related data you can pull, but it's frequently an excellent first start, so you don't have to compose the XML yourself.
+Another notable tool created by the community is called FetchXML Builder. With this tool, you can construct FetchXML in ways that Advanced Find can't (aggregates, outer joins, "has no" queries, and attributes from multi-level linked entities). It also provides a wealth of other features, which you can find on their website: FetchXML Builder.
+### More resources
+For more in-depth details on the FetchXML Query Language, review the Use FetchXML to query data section, which covers several advanced topics such as handling paging, querying hierarchical data, and much more.
+# Call Power Automate actions from the Web API
+Completed100 XP
+10 minutes
+Dataverse contains a feature that allows power users to create their own custom sets of business logic called actions. From a developer perspective, consider an action a "reusable operation, which may have observable side effects." These side effects include creating or updating rows.
+Dataverse has several pre-built actions, and developers can create custom actions using the Custom API feature of Dataverse.
+A feature of actions is your ability to invoke them through the Dataverse Web API. As a result, you can encapsulate your low-code automations so that you can use them in nearly any scenario by interacting with them through their associated Web API request and response.
+While this lesson doesn't cover how to create actions in detail, we assume you already have a basic understanding of building them. You can review their documentation if you need more information on creating an action. See the Create Custom APIs section for detailed information on how to build Dataverse actions.
+## Run actions with the Web API
+When a new action is created in your Dataverse environment, the framework also creates a corresponding Web API request message. You can run these requests by using a POST operation similar to the following example:
+OData
+POST [Organization URI]/api/data/v9.2/WinOpportunity HTTP/1.1
+Accept: application/json
+Content-Type: application/json; charset=utf-8
+OData-MaxVersion: 4.0
+OData-Version: 4.0
+
+{
+ "Status": 3,
+ "OpportunityClose": {
+  "subject": "Won Opportunity",
+  "opportunityid@odata.bind": "[Organization URI]/api/data/v9.2/opportunities(b3828ac8-917a-e511-80d2-00155d2a68d2)"
+ }
+}
+The above example is an HTTP request call to the WinOpportunity action for an opportunity with an opportunityid value of b3828ac8-917a-e511-80d2-00155d2a68d2.
+## Call pre-built Dataverse actions
+Dataverse comes with a set of existing actions that you can use to perform common operations. Some of these actions might only apply to model-driven or Dynamics 365 apps. For example, the CalculatePrice action calculates the price in an opportunity/quote/order/invoice, so it would only apply to a Dynamics 365 Sales app where that functionality exists.
+For more information about which pre-built actions are available for use through the Web API, see the Web API Action Reference.
+## Unbound vs. bound actions
+An action can be built as unbound, meaning it doesn't have a Dataverse table correlated to it. Or it can be built as bound, meaning the logic is tied to a specific table row. SQL developers could consider these actions as similar to stored procedures (unbound actions) versus triggers (bound actions). However, unlike SQL triggers, you can also run bound actions on demand by providing a corresponding table row ID as its parameter.
+Unbound actions are beneficial for generic logic that runs outside the context of a specific table row, such as the WinOpportunity action that was referenced earlier. To run a bound action against a specific row, you must provide the ID of that row in the URI of your request:
+OData
+POST [Organization URI]/api/data/v9.2/contacts(94d8c461-a27a-e511-80d2-00155d2a68d2)/Microsoft.Dynamics.CRM.contoso_AddNoteToContact HTTP/1.1
+Accept: application/json
+Content-Type: application/json; charset=utf-8
+OData-MaxVersion: 4.0
+OData-Version: 4.0
+
+{
+ "NoteTitle": "New Note Title",
+ "NoteText": "This is the text of the note"
+}
+The preceding example calls a custom action that was previously built in the solution called contoso_AddNoteToContact for a contact with the ID of 94d8c461-a27a-e511-80d2-00155d2a68d2 and then passes the parameters NoteTitle and NoteText to the action. The expected behavior for this procedure would be that a new note would be added to the corresponding contact with the title and text provided.
+## More details
+For more information on how to call actions in code, see Use Web API actions.
+# Use the Web API to impersonate another user
+Completed100 XP
+10 minutes
+Occasionally, you might need to run logic for another user. Within the context of Microsoft Dataverse, your logic applies all appropriate roles and object-based security based on the user you're impersonating. This method can be especially effective when you're integrating external systems with a Dataverse solution where the integration account is a system account versus the user who actually invoked the request.
+## Implement a Web API request with user impersonation
+When calling any Web API method, you can provide a CallerObjectId in your message header to indicate that you want the message to run as that particular user. The value of this parameter is their Microsoft Entra ID object ID. The Microsoft Entra Graph API provides a method to query Microsoft Entra user data. For more information, see the Microsoft Entra ID Graph API Reference.
+## Determine the user who performed an operation
+If you need to see the ID of the user who actually performed an operation for another user, you can query the record's createdonbehalfby value, which contains this detail. For example, if you want to see if an account row was created through user impersonation rather than by the actual user, you could query that account record to compare their createdby and createdonbehalfby values by using the following query:
+OData
+GET [Organization URI]/api/data/v9.2/accounts(00000000-0000-0000-000000000003)?$select=name&$expand=createdby($select=fullname),createdonbehalfby($select=fullname),owninguser($select=fullname) HTTP/1.1
+Accept: application/json
+OData-MaxVersion: 4.0
+OData-Version: 4.0
+If an impersonating account created the record, you can expect a response similar to the following example:
+OData
+HTTP/1.1 200 OK
+Content-Type: application/json; odata.metadata=minimal
+ETag: W/"506868"
+
+{
+  "@odata.context": "[Organization URI]/api/data/v9.2/$metadata#accounts(name,createdby(fullname,azureactivedirectoryobjectid),createdonbehalfby(fullname,azureactivedirectoryobjectid),owninguser(fullname,azureactivedirectoryobjectid))/$entity",
+  "@odata.etag": "W/"2751197"",
+  "name": "Sample Account created using impersonation",
+  "accountid": "00000000-0000-0000-000000000003",
+  "createdby": {
+    "@odata.etag": "W/"2632435"",
+    "fullname": "Impersonated User",
+    "azureactivedirectoryobjectid": "",
+    "systemuserid": "75df116d-d9da-e711-a94b-000d3a34ed47",
+    "ownerid": "75df116d-d9da-e711-a94b-000d3a34ed47"
+  },
+  "createdonbehalfby": {
+    "@odata.etag": "W/"2632445"",
+    "fullname": "Actual User",
+    "azureactivedirectoryobjectid": "",
+    "systemuserid": "278742b0-1e61-4fb5-84ef-c7de308c19e2",
+    "ownerid": "278742b0-1e61-4fb5-84ef-c7de308c19e2"
+  },
+  "owninguser": {
+    "@odata.etag": "W/"2632435"",
+    "fullname": "Impersonated User",
+    "azureactivedirectoryobjectid": ",
+    "systemuserid": "75df116d-d9da-e711-a94b-000d3a34ed47",
+    "ownerid": "75df116d-d9da-e711-a94b-000d3a34ed47"
+  }
+}
+# Track entity data changes with change tracking and the Web API
+Completed100 XP
+15 minutes
+Commonly, organizations need to synchronize data across multiple systems. Microsoft Dataverse provides a feature to efficiently manage this scenario, called change tracking. With change tracking enabled, you can build applications to query for these changes.
+## Enable change tracking for a table
+You can enable change tracking on a table by setting the Track changes flag on the table settings in the Power Apps maker portal, found under the Advanced options > For this table section.
+## Delta links
+According to the OData 4.0 documentation, delta links are "opaque, service-generated links that the client uses to retrieve subsequent changes to a result." Microsoft has built this standard into change tracking in Dataverse to provide a common, standard method for interfacing with change data as it occurs over time. For more information on delta links, see OData Version 4.0 - Delta Links.
+After you issue a change tracking request, your response contains a delta link, which you then pass to your next request to get changes that have occurred since the initial request. It's up to your app to maintain the delta link, similarly to how you might have done tracking with date/time stamps in the past.
+## Retrieve changes in tables by using the Web API
+After you've enabled change tracking on a table, you can retrieve its changes through the Web API by adding odata.track-changes as a preference header in your web request. The following example requests changes from the account table for a specific set of fields (name, account number, telephone1, and fax).
+OData
+GET [Organization URI]/org1/api/data/v9.2/accounts?$select=name,accountnumber,telephone1,fax HTTP/1.1
+Prefer: odata.track-changes
+Cache-Control: no-cache
+OData-Version: 4.0
+Content-Type: application/json
+On the initial request, you receive the entire set of data that applies to the query because a delta hasn't been applied. However, the response shows an @odata.deltaLink value. This link contains a deltatoken parameter, which is intended to be passed into your subsequent request when you want to see what changes have been applied since this query was run. Think of this process as similar to how you would handle paging in OData.
+The following example is a response to the preceding account request:
+OData
+{
+          "@odata.context":"[Organization URI]/data/v9.2/$metadata#accounts(name,telephone1,fax)/$delta",
+          "@odata.deltaLink":"[Organization URI]/api/data/v9.2/accounts?$select=name,telephone1,fax&$deltatoken=919042%2108%2f22%2f2017%2008%3a10%3a44",
+"value":
+    [
+        {
+            "@odata.etag":"W/\"915244\"",
+            "name":"Monte Orton",
+            "telephone1":"555000",
+            "fax":"10101",
+            "accountid":"60c4e274-0d87-e711-80e5-00155db19e6d"
+        },
+        {
+            "@odata.context":"[Organization URI]/api/data/v9.2/$metadata#accounts/$deletedEntity",
+            "id":"2e451703-c686-e711-80e5-00155db19e6d",
+            "reason":"deleted"
+        }
+    ]
+}
+In this scenario, consider that some time has passed, and you now want to see if any other changes have been applied. You can use the @odata.deltaLink parameter to run your query (or extract its deltatoken if you're managing connection strings differently), and see what changes have happened since your last request.
+The following example shows how you would retrieve changes since that last request by running the returned @odata.deltaLink:
+OData
+GET [Organization URI]/api/data/v9.2/accounts?$select=name,accountnumber,telephone1,fax&$deltatoken=919042%2108%2f22%2f2017%2008%3a10%3a44
+In this scenario, imagine that a new account was created and another one was deleted. Your response would then look similar to the following example:
+OData
+{
+          "@odata.context":"[Organization URI]/data/v9.2/$metadata#accounts(name,telephone1,fax)/$delta",
+          "@odata.deltaLink":"[Organization URI]/api/data/v9.2/accounts?$select=name,telephone1,fax&$deltatoken=919058%2108%2f22%2f2017%2008%3a21%3a20",
+"value":
+    [
+        {
+            "@odata.etag":"W/\"915244\"",
+            "name":"Monte Orton",
+            "telephone1":"555000",
+            "fax":"10101",
+            "accountid":"60c4e274-0d87-e711-80e5-00155db19e6d"
+        },
+        {
+            "@odata.context":"[Organization URI]/api/data/v9.1/$metadata#accounts/$deletedEntity",
+            "id":"2e451703-c686-e711-80e5-00155db19e6d",
+            "reason":"deleted"
+        }
+    ]
+}
+As shown in the example, another delta link was provided, which you can then use the next time you need to see what changes have occurred.
+## Retrieve the number of changes in a delta
+You can also retrieve the number of changes made in a given delta by adding the $count parameter to your request.
+OData
+GET [Organization URI]/api/data/v9.2/accounts/$count?$deltatoken=919042%2108%2f22%2f2017%2008%3a10%3a44

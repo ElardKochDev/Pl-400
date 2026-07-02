@@ -1,0 +1,239 @@
+# Microsoft Dataverse Azure Solutions overview
+Completed100 XP
+10 minutes
+Because Microsoft Dataverse is part of the robust Microsoft Power Platform, it provides numerous capabilities to facilitate integration with Microsoft Azure solutions. This lesson covers some of the standard integration practices regarding Azure solutions and how they pertain to Dataverse.
+## Comparing Azure's integration solutions
+Azure has various other solutions that you can integrate with Dataverse. The following sections provide a summary of each solution. However, this module limits further education in future lessons to the solutions with pre-configured utilities within Dataverse that help streamline your integrations, such as:
+Microsoft Azure Service Bus
+Microsoft Azure Event Hubs
+Microsoft Azure Logic Apps
+### Logic Apps
+Azure Logic Apps provides a robust visual interface in which you can orchestrate complex integrations across your various environments. It has many of the same capabilities as Microsoft Power Automate workflows, so if you're familiar with preparing workflows in that context, you should be able to recognize their similarities. Both let you use pre-built and custom-built connectors, which you can use to connect to whichever system is needed. Most importantly, Logic Apps comes with a Microsoft Dataverse connector that allows you to trigger actions based on various Dataverse events (such as a row being created or updated).
+### Azure Service Bus
+Azure Service Bus is Microsoft's cloud messaging as a service (MaaS) platform. Messages are sent to and received from queues for point-to-point communications. Service Bus also provides a publish-subscribe mechanism that uses its Topics feature, which isn't covered in this module.
+### Azure API Management
+You can use Azure API Management to manage custom APIs you build for use with the Power Platform. The logic in your APIs can work with your own internal data, external services, or the Dataverse API. You can export your API definition from the Azure API Management portal to create a Power Platform custom connector.
+### Event Grid
+Microsoft Azure Event Grid is an event-driven, publish-subscribe framework that allows you to handle various events. While Dataverse doesn't provide out-of-the-box capabilities to integrate with an Event Grid instance as it does with Service Bus or Event Hubs, it's a viable item to consider when you need event-driven integrations.
+### Event Hubs
+Azure Event Hubs is Microsoft's version of Apache Kafka and provides a real-time data ingestion service that supports millions of events per second. This service is good for large data streams that need to be ingested in real-time (which might occur when trying to capture items like application telemetry within a business application) but aren't as common in most business application integration scenarios. Technically, Event Hubs isn't as much of an integration solution as an analytics solution, given that their predominant applications are with "big data." Dataverse lets you publish events to an event hub.
+## Choose the right Azure integration solution
+If you're struggling to figure out which Azure integration solution best suits your needs, consider the information in the following table.
+For in-depth guidance on Azure's broader Integration Services framework, refer to the Azure Integration Services whitepaper, which is found here.
+Another article to reference is one found on the Azure website: Choose between Azure messaging services - Event Grid, Event Hubs, and Service Bus.
+# Expose Microsoft Dataverse data to Azure Service Bus
+Completed100 XP
+30 minutes
+Microsoft Dataverse provides various pre-built mechanisms for externalizing its data for integration purposes. This lesson covers publishing Dataverse data to Azure Service Bus using Dataverse's Service Endpoint Registration feature, which you can configure in the Plug-in Registration tool.
+## Set up your Azure Service Bus environment
+Create your Azure Service Bus namespace and message queue with the following steps.
+Sign in to the Azure portal.
+Select + Create a resource.
+Search for service bus and select Service Bus.
+Select Create.
+Enter the appropriate details for your namespace and then select Next.
+Select Review + create again.
+Select Create.
+It might take a few minutes for your resource to provision. When it's finished, you should see something similar to the following image in the Notifications area of your Azure portal:
+After your resource has been created, go to your newly created namespace to create a new queue.
+Note a few items that are found in your namespace so that Dataverse has the correct credentials to connect to your new queue. For this procedure, use the existing Shared access policy that was auto created as part of your namespace. If you want further access limitations, you can create a Shared access policy for your individual queue as well.
+From within your Shared access policy, copy your Primary Connection String and store it for future use because you need this string as part of your Service Bus Endpoint configuration in Dataverse:
+## Register Service Bus endpoint in Dataverse
+Now that you have set up a message queue in Azure, you can provide Dataverse with the required configuration information to access it.
+Note
+You use Dataverse's Plug-in Registration Tool to configure the publishing of your Dataverse data to your Service Bus. This tool is provided as part of Microsoft's Dataverse developer tooling, which is found at NuGet. For more information on how to install the Plug-in Registration Tool through NuGet, see Download tools from NuGet. You can also install and launch the plug-in registration tool using the Power Platform CLI tool command (pac tool prt).
+Open the Plug-in Registration Tool and connect to your Dataverse environment.
+When connected to the environment, register your Service Bus Endpoint by selecting Register and then selecting Register New Service Endpoint.
+Copy and paste the Primary Connection String value that you referenced earlier when setting up your Service Bus instance, and then select Next.
+All the fields from your connection string should prepopulate on the form. For this example, you write a one-way queue publisher, so you can leave the Designation Type as Queue. Dataverse supports many other designation types to support various messaging protocols.
+Enter your queue name into the Queue Name field and specify Message Format as JSON. Dataverse supports the .NETBinary, JSON, and XML message formats. You're using JSON for this message because it's become an industry standard messaging format because of its portability and lightweight nature. Lastly, to have your user information sent to your queue, you can select UserId in the User Information Sent drop-down list.
+## Register a Service Bus integration step
+In this scenario, you register an integration step that publishes a message to a Service Bus queue every time an account row is created. By registering a step, you can define the table and message combination. You can also define what conditions cause the message that is being processed by Dataverse to be sent on the Service Bus to the Azure queue.
+Register a new step for your Service Endpoint by right-clicking and selecting Register New Step.
+Enter the following details to register a new integration step that is started on creation of an account row. Make sure that you clear the Delete AsyncOperation if StatusCode = Successful flag. Clearing this flag is only for testing purposes so you can verify that the created System Job rows show that the Service Bus integration step has successfully started on creation of an account row. In a real-world production scenario, we recommend that you leave this value selected.
+## Test your Service Bus integration
+Test your Service Bus integration with the following steps:
+To test your Service Bus integration, go to your Dataverse environment and create an account.
+To see if the integration ran, go to Admin center.
+Expand the Audit and logs section and System jobs.
+Verify that your integration step ran successfully by viewing it in the System Jobs view. If it ran successfully, the Status Reason should be Succeeded. You also use this view to troubleshoot integration runs if an error occurs. If there's a failure, open the System Job record to view the error information.
+Because the integration step ran successfully, you can now verify that the account creation message has arrived in your Service Bus queue by going to the queue in the Azure portal.
+# Write a Service Bus Event Listener that consumes Microsoft Dataverse messages
+Completed100 XP
+10 minutes
+## Types of supported Service Bus contracts
+Microsoft Dataverse supports various methods to consume Azure Messaging Service Bus queue messages: queue, one-way, two-way, or REST. If using two-way and REST, you're able to return a string of information back to Dataverse.
+### Queue
+An active queue listener isn't required to send an event to a queue. You can consume queued messages on your own timeline using a "destructive" or "non-destructive" read. A destructive read reads the message from the queue and removes it, whereas a non-destructive read doesn't remove the message from the queue. This method is useful for "send-and-forget" scenarios where it isn't critical that the message is received at a given point in time.
+### Topic
+Topic listeners are similar to queue listeners, except that one or more listeners can subscribe to receive messages for a given topic. This type is useful if you require multiple consumers for a given message.
+### One-way
+One-way contracts require an active event listener to consume a message you post to the Service Bus queue. If no active listener is available, the post fails. If the post fails, Dataverse retries posting the message in exponentially larger and larger time spans until the asynchronous system job is eventually canceled. In this case, the System Job status of this event is set to Failed.
+### Two-way
+Two-way contracts are similar to one-way contracts, except they also let you return a string value from the listener. If you've registered a custom Azure-aware plug-in to post your message, you can then consume this returned data within your plug-in. A common application of this scenario might be if you want to retrieve the ID of a row created in an external system as part of your listener's process to maintain it in your Dataverse environment.
+### REST
+REST contracts are similar to two-way contracts except that you publish it to a REST endpoint.
+## Write a queue listener
+In the previous exercise, you registered a Service Endpoint that publishes messages to a Service Bus Endpoint whenever account data is updated in your Dataverse environment. This exercise now describes how to consume those messages.
+Create a C# Console Application in Visual Studio that targets .NET 4.6.2 or higher.
+Add the following NuGet packages:
+WindowsAzure.ServiceBus
+Microsoft.CrmSdk.CoreAssemblies
+In the application's Main method, paste the following code. Replace the Endpoint URL with your Azure Service Bus Namespace's Endpoint URL and the queue name if it differs:
+C#
+string connectionString =@"[ENDPOINT URL]";
+string queueName = "mslearnsamplequeue";
+QueueClient queueClient = QueueClient.CreateFromConnectionString(connectionString, queueName, ReceiveMode.PeekLock);
+To consume your message, use the OnMessage method, which lets you process a Service Bus queue message in an event-driven message pump.
+C#
+queueClient.OnMessage(message =>
+{
+  //get RemoteExecutionContext based on Message Format
+  RemoteExecutionContext context = null;
+
+  if (message.ContentType == "application/msbin1") //.NETBinary Message Format
+  {
+    context = message.GetBody<RemoteExecutionContext>();
+  }
+  else if (message.ContentType == "application/json") //JSON Message Format
+  {
+    context = message.GetBody<RemoteExecutionContext>(new DataContractJsonSerializer(typeof(RemoteExecutionContext)));
+  }
+  else if (message.ContentType == "application/xml") //XML Message Format
+  {
+    context = message.GetBody<RemoteExecutionContext>(new DataContractSerializer(typeof(RemoteExecutionContext)));
+  }
+  try
+  {
+    var target = context.InputParameters["Target"] as Entity;
+
+    foreach (var field in target.Attributes)
+    {
+      Console.WriteLine($"Name: {field.Key} Value: { field.Value}");
+    }
+  }
+  catch (Exception ex)
+  {
+    Console.WriteLine(ex.ToString());
+  }
+});
+Lastly we're going to add a Console.ReadLine() to our main method to allow for multiple messages to be processed. Note this isn't a scalable method for handling event-processing. However is sufficient enough for our exercise’s purposes. You’d want to have a more scalable solution that you host in an Azure Durable function or other service of your preference.
+C#
+Console.ReadLine();
+Hit F5 to run your application. If there are already messages in your queue from your previous exercise, they should get processed and their message contents should be displayed on the console screen. If not, you can invoke an update by making an update to an Account in your Dataverse environment.
+# Write an Azure Function that processes Microsoft Dataverse events
+Completed100 XP
+40 minutes
+In the previous exercise, you registered webhooks to publish Microsoft Dataverse data to an external Web API. In this exercise, you'll build an example Web API using Azure Functions to illustrate how to consume a published webhook event.
+## Azure Functions vs. plug-ins
+Microsoft Azure Functions provides a great mechanism for doing small units of work, similar to what you would use plug-ins for in Dataverse. In many scenarios, it might make sense to offload this logic into a separate component, such as an Azure Function, to reduce load on the Dataverse's application host. You have the availability to run functions in a synchronous capacity because Dataverse webhooks provide the Remote Execution Context of the given request.
+However, Azure Functions doesn't explicitly run within the Dataverse's event pipeline. So if you need to update data in the most high-performing manner, such as autoformatting a string value before it posts to Dataverse, we still recommend that you use a plug-in to perform this type of operation. Any data operations you perform from the Azure Function will also not roll back if, after it completes, the plug-in has an exception and rolls back.
+## Write an Azure Function that processes Dataverse events
+To start writing an Azure Function that processes Dataverse events, you use Visual Studio 2022's Azure development template to create and publish your Function. Visual Studio provides several tools to help make Azure development simple. Therefore, you're required to have Azure Development Tools installed in your Visual Studio 2022 instance. If you don't have the feature installed, add it through the Visual Studio Installer.
+### Create your Azure Function project
+Create a new Azure Function project by using the Azure Functions template. You can find this template by creating a new project and then entering "function" in the search bar.
+Give your Function project a descriptive name and then select Create.
+Select the latest .NET Core LTS, select Http trigger, uncheck the Use Azurite checkbox, select Function for Authorization level, and select Create.
+Your sample project should be created now, with the following template code found in the Function's .cs file:
+C#
+public static class Function1
+ {
+     [FunctionName("Function1")]
+     public static async Task<IActionResult> Run(
+         [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
+         ILogger log)
+     {
+         log.LogInformation("C# HTTP trigger function processed a request.");
+
+         string name = req.Query["name"];
+
+         string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
+         dynamic data = JsonConvert.DeserializeObject(requestBody);
+         name = name ?? data?.name;
+
+         string responseMessage = string.IsNullOrEmpty(name)
+             ? "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response."
+             : $"Hello, {name}. This HTTP triggered function executed successfully.";
+
+         return new OkObjectResult(responseMessage);
+     }
+ }
+You replace this code later, but first, publish your Function to ensure that everything works correctly.
+### Publish your Azure Function to Azure
+Right-click your project and select Publish... from the context menu to test the publishing of your Function to Azure App Service.
+Select Azure and select Next.
+Select Azure Function App (Windows) and select Next.
+Select your subscription and then select Create new.
+Name your new App Service, select your resource group or create a new one, provide the rest of the required information and then select Create.
+After your Publish profile is created, select Finish.
+Select Publish to deploy your Function to Azure. The Function is published by default in release mode. If you'd like to debug this function (more on this later), you want to publish the Function in Debug mode.
+### Another method to create Azure Functions
+If you want to manually create your Azure Function without the help of Visual Studio 2019, you can do so from the Azure portal:
+Sign in to your Azure environment and select + Create a new resource
+Search for function app and select Function app.
+Select Create.
+Choose the hosting plan you want the app to run under. Then select Select.
+To create an Azure Function App, specify its name and runtime stack, and then verify that the Subscription, Resource group, Region fields are correct, and then select Review + create.
+Select Create.
+Note
+This lesson doesn't cover the details of building a new Azure Function assembly.
+## Update your function's logic to interact with Dataverse data
+If needed, change your Function's FunctionName and corresponding class name to something more meaningful (that is, MSLearnFunction).
+Add the following using statements to your function:
+C#
+using Newtonsoft.Json.Linq;
+Replace the code inside the Run function with this code:
+C#
+log.LogInformation("C# HTTP trigger function processed a request.");
+
+ string queryParams = "";
+ foreach (var q in req.Query)
+ {
+     queryParams += $"Key: {q.Key} Value: {q.Value}\n";
+ }
+
+ string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
+ dynamic data = JsonConvert.DeserializeObject(requestBody);
+ string requestHeader = "";
+ foreach (var h in req.Headers)
+ {
+   requestHeader += $"Key: {h.Key} Value: {h.Value}\n";
+ }
+ log.LogInformation("Query Parameters:\n" + queryParams);
+ log.LogInformation("Request Header: \n" + requestHeader);
+ log.LogInformation("Request Body:\n" + requestBody);
+ string requestBodyFormatted = JValue.Parse(requestBody).ToString(Formatting.Indented);
+ log.LogInformation("Request Body Formatted:\n" + requestBodyFormatted);
+
+ try
+ {
+   dynamic target = data.InputParameters["Target"];
+
+   foreach (dynamic field in target.Attributes)
+   {
+     log.LogInformation($"Name: {field.Key} Value: { field.Value}");
+   }
+ }
+ catch (Exception ex)
+ {
+   log.LogInformation(ex.ToString());
+ }
+
+ return (ActionResult)new OkObjectResult(data.InitiatingUserId);
+Build your function and publish it to Azure by right-clicking the project and then selecting Publish...
+Verify that your function has been published by going to the Azure portal. You can manually select it from within the resource group that you specified when you created the function. Or you can search for it by name in the Azure portal, as shown in the following image.
+## Register a Dataverse webhook that calls your Azure Function
+In this exercise, you use the Plug-in Registration Tool to register a webhook that calls your new Azure Function.
+Open the Plug-in Registration Tool and sign in to your Dataverse environment.
+Register a new webhook by selecting Register New Web Hook under the Register menu option.
+Get your Function's URL from the Azure portal by selecting Get function URL.
+Copy the URL.
+Paste the copied value into a text editor, which should look like the following string.
+HTTP
+https://[AppServiceUrl].azurewebsites.net/api/MsLearnFunction?code=[WebhookKey]
+Cut and paste the code query string value from the copied URL and place into the Value section of the WebHook Registration string (make sure to remove the code= portion). Select Save.
+Register a new step that posts a message on creation of a new account. Register a new step by right-clicking your new webhook assembly and then selecting Register New Step.
+Select Create for Message, select account for Primary Entity, select Synchronous for Execution Mode, and then select the Register New Step button. Because you're building this webhook to run synchronously, ensure that the flag is set when you're registering the new step.
+## Test your webhook integration
+To test your webhook integration, go to your Dataverse environment and create an account row.
+Go to your Function in the Azure portal and view the logs.

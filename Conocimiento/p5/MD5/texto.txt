@@ -1,0 +1,194 @@
+# Introduction
+Completed100 XP
+3 minutes
+While developing a Power Apps app, you might find out you need to call a web API created by a high-code, or traditional, development team in your organization. The Power Apps ecosystem already has over a thousand connectors to access resources inside and outside your organization. However, there isn't a built-in connector for you to call web APIs that your organization developed. You have to create a custom connector to fill the gap between Power Apps and web APIs.
+In a previous module on how Fusion Development practices help businesses create better applications faster, you met the team at VanArsdel, Ltd. You learned how they plan to use fusion development to fix issues they're experiencing with their Field Inventory Management System.
+There are two members on VanArsdel's fusion development team so far, Kiana and Maria. Kiana is a professional developer who creates ASP.NET Core web APIs to use internally and externally. Maria is an inventory management specialist who creates applications with Power Apps to help her with her job responsibilities.
+They're working together to create a new Power Apps app that helps manage inventory. Their first task is to display a list of VanArsdel's warehouse locations. The warehouse locations are fetched from a web API and displayed in the Power Apps app.
+## Learning objectives
+In this module, you:
+Learn what a custom connector is, and its use cases
+Build a custom connector from a web API deployed in Visual Studio
+Build a custom connector from a web API deployed in Azure API Management
+Build a custom connector from an OpenAPI document
+Test and use a custom connector to call a web API from a Power Apps app
+## Prerequisites
+Familiarity with the concept of web (HTTP) APIs.
+# What are custom connectors
+Completed100 XP
+5 minutes
+There are hundreds of prebuilt connectors available to connect Power Apps to Microsoft and non-Microsoft services. However, you might want to communicate with a service that isn't available as a prebuilt connector, for example the VanArsdel inventory management web API. Custom connectors bridge this gap by allowing you to create a connector with its own actions, including invoking a web API hosted in Azure API Management from a Power Apps application.
+## Connected Services in Visual Studio
+Developers can also use connected services within Visual Studio to create custom connectors. This is a collection of tools that help you connect to services like Microsoft Power Platform. The integration allows you to:
+Connect to a Power Platform environment
+Automatically generate a custom connector for your Power Platform environment
+Configure a dev tunnel to locally connect to your custom connector
+Dev tunnels create an ad-hoc connection between your web API running locally and your Power Apps. You can use them to locally test and debug your web API in the context of the Power Platform in real-time.
+## Web APIs behind Azure API Management
+Kiana and their team built the web APIs for the inventory management system and iterated on them over time. The system is complex and consists of many different APIs. Kiana's team could use Azure API Management to control and administer the web APIs from a central place.
+Kiana's team often uses Azure API Management's ability to expose specific web APIs publicly, but not others, by setting various policies. To learn more about Azure API Management, see Integrate Open API-enabled Web API with Azure API Management through Visual Studio.
+## Creating a custom connector
+You can create a custom connector by either adding Power Platform as a connected service in Visual Studio or by exporting it from Azure API Management. Both options allow the Power Apps app developer to use the custom connector, and thus the web API, without having to know the web API's address or how it works.
+Once the custom connector is generated, you can see it on the Power Apps page. You learn how to export an API like shown below, in the following unit.
+## Connector vs. connection
+A custom connector is a wrapper around a web API. It allows Power Apps to communicate with the web API. However, the custom connector itself does nothing unless you create a connection for it.
+The connector knows the web API's host and operation details.
+The connection knows the credentials and has a reference to the connector facilitate to communication with the web API.
+# Exercise - Create a custom connector from Visual Studio
+Completed100 XP
+5 minutes
+In this exercise, you'll create a custom connector in your Power Platform environment from your web API in Visual Studio.
+Power Platform enables web API developers to quickly build mobile or web applications using a Power Apps canvas app as a front end. With the Power Platform Connected Service in Visual Studio 2022, ASP.NET web API developers can easily create a custom connector for use with Power Apps.
+Note
+If you want to use Visual Studio and Power Apps in this exercise, you will need to:
+Install Visual Studio 2022 with the ASP.NET and web development workload installed. You need to be signed in to Visual Studio to create and use dev tunnels. The feature is not available in Visual Studio for Mac.
+Create a free Power Platform developer environment.
+Download the samples.
+## Add Power Platform as a connected service
+Open this sample API from GitHub with Visual Studio. This is an ASP.NET Core Web API project.
+In your project, from Solution Explorer, right-click the Connected Services node and select Add > Microsoft Power Platform
+Select or input the following values:
+Power Platform environments: select your developer environment
+Power Platform Solutions: Common Data Service Default Solution
+Custom Connector: select the + icon and enter InventoryLocations_Connector
+For the field Select a public dev tunnel, select the + icon and the following values:
+Name: devtunnel
+Tunnel Type: Persistent
+Access: Public
+Select OK and Finish. Once the connected service is configured, you may select Close.
+You have now created a custom connector for inventory locations, which leverages dev tunnels to connect your API to Power Platform. Here in the inner loop you're running your API in your local environment.
+## Run your API
+When Visual Studio runs a web app and a tunnel is active, the web browser opens to a tunnel URL instead of a localhost URL.
+Run your Visual Studio solution and start debugging.
+When the browser opens, a warning page opens with the first request sent to the tunnel URL. Select Continue.
+Important
+Remember to keep the API running (in a browser tab) while building your Power App.
+## Create an app from the API
+Note
+To use the sample app provided in this step, you will need to install Power Platform tools for Visual Studio Code.
+Open Visual Studio Code and create a new authentication for your user using the Power Platform CLI command. Change the url to your developer environment URL found in the admin center.
+PowerShell
+pac auth create --url https://yourenvironment.crm.dynamics.com
+Get the custom connector you created. Copy the connector ID.
+PowerShell
+pac connector list
+Generate a canvas app (*.msapp file), based on the operations of your API.
+PowerShell
+pac canvas create --connector-id your connector id --msapp your file name.msapp
+## Preview the app
+Open Power Apps.
+Select Blank app. From Canvas app from blank select Create.
+Enter the app name Inventory app and select Tablet format. Select Create.
+From the command bar, select ... and Open.
+Browse to open the *.msapp file you created in Step 3. This will load your sample app in the studio.
+From the left bar, select the data icon and Add data. Search for InventoryLocations_Connector to select Connect. This is the custom connector that was created from the web API.
+To preview this app, select the play icon.
+Select the GET app button to view a list of inventory locations.
+Select the close icon on the top-right of the app to return to the Studio. Select the publish icon to save your work.
+Tip
+Not returning any countries/regions from the sample API? Make sure the API is running as you build your app.
+Since you are using dev tunnels here, you can iterate on your API in real-time, including debugging and hot reload.
+You have completed creating an app and custom connector from a web API.
+# Exercise - Create a custom connector from Azure API Management
+Completed100 XP
+8 minutes
+In this exercise, you're going to create a custom connector by exporting an API from Azure API Management.
+In the VanArsdel fusion development scenario, Maria needs to display warehouse locations in her Power Apps application. Kiana and her development team have built several web APIs one of which returns the warehouse locations.
+The web APIs are served through Azure API Management, which has the ability to create custom connectors for any web APIs it hosts. With the custom connector, Maria's Power Apps app will be able to call the warehouse location API in Azure API Management.
+Note
+If you want to use Azure API Management and Power Apps throughout the exercises in this module you will need to follow a couple of steps.
+The first is to download the , unzip the archive, and provision and deploy them to API Management using the instructions included in the README file.
+The second is to ensure that you have the right Power Apps licensing. You can sign up for a free Power Platform developer environment, or use an existing Microsoft 365 license (or a free trial).
+## Export a web API from API Management to a custom connector
+You need a subscription key in order for Power Apps to access any web API hosted in API Management. Go to the Subscriptions blade, select the three dots (...) and select the Show/hide keys menu.
+Then, copy the subscription key from either Primary key or Secondary key.
+To generate a custom connector from Azure API Management, go to the APIs blade and select an appropriate API under the All APIs section. In the screenshot, it's Inventory Management. Then, you'll be able to see the API for the warehouse locations.
+Select the three dots (...), and you'll see the context menu. Select the Export ⬇️ menu.
+Select the Power Apps and Power Automate panel at the right bottom corner.
+Choose your Power Apps environment for the custom connector to publish and give the display name, InventoryManager. Then select the Export button at the bottom.
+The inventory management APIs have been exported to Power Apps.
+## Create a connection to the custom connector
+You need to create a connection to the custom connector in order to use it. Generally speaking, creating the connection requires authentication to the web APIs.
+After logging into Power Apps dashboard, open the Data blade and select the Custom Connectors menu on the left-hand side. Then, select the ➕ button on the right-hand side.
+When a pop-up modal shows up, you'll see the API Key field enabled. Enter the API key copied at the beginning of this unit. Then select the Create button.
+Go to the Connections menu, and you'll see the new connection has been created.
+You have completed creating a custom connector for inventory management.
+# What is OpenAPI and why you should use it
+Completed100 XP
+5 minutes
+OpenAPI defines a standard and programming language-agnostic interface description for web APIs. It allows both humans and computers to discover and understand the capabilities of a service without having to access source code or other documentation, or inspect network traffic.
+Using an OpenAPI document describing a web API, the consumer can understand and communicate with the web API with minimal effort.
+A custom connector can be created for any web API as long as it's properly described by an OpenAPI document. That means the VanArsdel fusion development team isn't limited to creating custom connectors for their Power Apps applications from web APIs hosted in Azure API Management.
+## What does OpenAPI document do?
+The OpenAPI document specifies a contract of the surface area of the web API. It abstracts the actual implementation specifics away from the consumer of the API. That means you can quickly build your application by knowing what methods to call and what they return without having to worry about how those methods are invoked.
+In the previous unit, you used Azure API Management to create a custom connector. By doing so, you also created a dependency on Azure API Management. In other words, if any change occurs on Azure API Management, your custom connector must be updated to reflect the change.
+With the OpenAPI document, you don't have to know where the API is located or whether it's running, because the document contains all the information you need.
+Power Apps lets you instantly create a custom connector with this OpenAPI document.
+Once you create the custom connector from the OpenAPI document, you can see it on your Power Apps page.
+## Why use an OpenAPI document for custom connectors?
+There are many advantages of using the OpenAPI document for your custom connector creation. But the following two benefits are the most crucial for citizen developers.
+Remove dependencies: With an OpenAPI document you can create a custom connector by yourself, without having to wait for somebody to create one for you from API Management. Plus, it's becoming more common for professional development teams to include OpenAPI document generation capabilities within the web API itself. This means you can download the OpenAPI document by visiting a URL and then create the custom connector with it.
+Increase agility: The cadence of your Power App development increases when your web API development team can hand you an OpenAPI document. You don't need to rely on them for anything further to create and use a custom connector.
+As you can see the following diagram, the OpenAPI document doesn't have to know the actual implementation of the web API, as long as the contract remains the same.
+## A custom connector from an OpenAPI document or Azure API Management
+To create a custom connector, you can use either Azure API Management or an OpenAPI document. Which one should you choose?
+This table lists some comparisons between Azure API Management and OpenAPI for custom connectors.
+# Exercise - Create a custom connector from an OpenAPI document
+Completed100 XP
+5 minutes
+In this exercise you'll learn how to create a custom connector from an OpenAPI document.
+Note
+To complete this exercise you will need a Power Apps license, an openapi.json file and an API access key.
+Power Apps requires either a Microsoft 365 license or a free trial. Learn more about your licensing options. Microsoft products include Microsoft Power Apps and Power Automate.
+The openapi.json file can be found on GitHub here. Unzip the archive, and the openapi.json will be included.
+The API access key has already been obtained from the previous exercise unit.
+## Create a custom connector from an OpenAPI document
+There are several ways of creating a custom connector for Power Apps. In this exercise, you will create one using an OpenAPI document. Suppose you have an OpenAPI document named openapi.json and an API access key provided by the professional development team.
+After logging into Power Apps dashboard, open the Data blade and click the Custom Connectors menu on the left-hand side. Then, click the ➕ New custom connector button at the right-top corner and select the Import an OpenAPI file menu.
+When a pop-up modal appears, give the name, InventoryManager, to the Connector name field and click the Import button to import the OpenAPI document, openapi.json. Then, click the Continue button.
+As the OpenAPI document has everything you need to create the custom connector, click the ✅ Create connector button at the right-top corner.
+Once the custom connector is created, you will see the message, ✅ Custom connector has been successfully created at the top of the screen.
+Click the Custom Connectors menu on the left-hand side of the page, and you will see the custom connector created. The ➕ button at the right-hand side.
+When a pop-up modal shows up, you will see the API Key field. Enter the API key for the web API, which is usually obtained from the web API's developers. Then click the Create button.
+Go to the Connections menu, and you will see the new connection has been created.
+A new custom connector from the OpenAPI document is now created and ready to be used within a Power Apps application.
+# Test the custom connector
+Completed100 XP
+5 minutes
+Maria now has a custom connector for a web API to use in her Power App application. But before she can use it, she needs to test it to make sure it runs as expected.
+## Testing the custom connector
+The last step of creating a custom connector is to check whether it works as expected. Power Apps Studio gives you the ability to test your connector. You can see the functionality in the screenshot below.
+During this testing stage, you can test the connection and the API operations. Here are example test results, both passing and failing, of the custom connector.
+Once you complete the test, you are now good to go build a Power Apps app with the custom connector.
+# Exercise - Test the custom connector
+Completed100 XP
+5 minutes
+In the last exercise you created a custom connector for your Power Apps app. Now, you will test the connector through this exercise.
+Note
+Power Apps requires either an Microsoft 365 license or a free trial. Learn more about your licensing options. Microsoft products include Microsoft Power Apps and Power Automate.
+## Test the custom connector
+To test whether your custom connector works as expected or not, go to the Custom Connectors menu on the left-hand side and click the 🖋 button on the right-hand side.
+Click the 4. Test tab, and you will see the connector has an active connection.
+Choose the first operation on the left-hand side and click the Test operation button, and you will see the result that the connector works as expected.
+If for whatever reason the web API stops working you will see an error screen similar to the one below. If you see this kind of error screen, get your pro-dev team to help fix the error.
+# Exercise - Use the custom connector in Power Apps canvas app
+Completed100 XP
+8 minutes
+You've created the connector, tested it, and now you'll learn how to use it in a canvas app.
+Note
+Power Apps requires either an Microsoft 365 license or a free trial. Learn more about your licensing options. Microsoft products include Microsoft Power Apps and Power Automate.
+## Create a canvas app
+First of all, create a blank canvas app. In Power Apps studio go to the Create menu at the left-hand side and click the Canvas app from blank panel.
+When a modal pops up, give the name, Inventory, to the App name field and leave the format as default. Then click the Create button.
+Navigate the Data menu to add the custom connector. You will see nothing in the Data pane.
+Click the Add data button and enter inventory in the search box, and you will see the InventoryManager custom connector. (Assuming you named your custom connector InventoryManager.)
+Click the InventoryManager connector, and you will see the InventoryManagement connection.
+Your custom connector is successfully added to your Power Apps. Navigate to the Insert menu at the top and click Button to add a button control onto the canvas.
+While Button1 is selected, choose the property value to OnSelect and enter the function formula below. InventoryManagement represents the custom connector and getapiwarehouselocations() represents an API endpoint. The warehouses collection stores the result that the getapiwarehouselocations() function returns.
+PowerApps Formula
+ClearCollect(warehouses, InventoryManagement.getapiwarehouselocations())
+Click Gallery and select the Vertical control.
+Once the Vertical control is added, it asks the data source.
+Select the warehouses collection declared above. Then the Vertical control changes below because the warehouses collection currently contains nothing.
+While holding your Alt key on Windows (or Option key on Mac), click the Button button, and you will see the list of warehouse locations showing up in the Vertical control.
+You have successfully included the custom connector into your Power Apps app.

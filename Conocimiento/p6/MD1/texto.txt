@@ -1,0 +1,198 @@
+# Introduction
+Completed100 XP
+3 minutes
+Custom connectors can provide access to custom or partner APIs that are accessible through public endpoints. Many of the APIs that are accessible in this manner are secured and require authentication. Custom connector infrastructure provides several methods to help you make the underlying API more secure. The following table shows the authentication schemes that are supported.
+## Azure API Management gateway
+Custom connectors are supported by Microsoft Azure API Management infrastructure, so it's beneficial to understand how this infrastructure helps facilitate secure API access.
+When the target API is on-premises, the use of the connection is the same, but as the following image shows, the API is accessed through the on-premises gateway.
+When a connection to the underlying API is created, the API Management gateway stores the API credentials or tokens, depending on the type of authentication used, on a per-connection basis in a token store. Because only an authenticated user can create a connection, the connections are always authenticated. Anonymous access isn't provided to the instance of a custom connector in the API Management gateway, which allows the gateway to more securely store API credentials on a per-connection basis and then use them as required.
+This solution enables authentication at the connection level. After a connection has been created, you don't need to authenticate API again when a custom connector is used interactively in an app in Microsoft Power Apps, in an automated Microsoft Power Automate flow, or in a Microsoft Azure Logic Apps workflow. Depending on how connectors and connections are shared, credentials are collected at the different stages of a custom connector life cycle.
+## Connector and connections sharing
+After a maker configures a custom connector and then provides a more secure API, they have a choice of how to share the connector and connections. The manner that the connector and the connections are managed and shared have implications on the connector's security.
+The rest of this module explores how to configure custom connectors for the different types of authentication.
+# Authentication options
+Completed100 XP
+8 minutes
+Before using any connector in Azure Logic Apps, Power Automate, or Power Apps, the user needs to create a connection by authenticating to the network service. When creating a custom connector, you can define how the person who will be using the connector will authenticate. You can select the type of authentication on the Security tab in the online connector wizard. Additional information that you need to provide will depend on the selected authentication scheme.
+## No authentication
+When the No authentication option is selected, no further information is required. The user won't need authentication to create a connection to the custom connector, and any anonymous user can use the connector. This option would be used only when the API allows anonymous use.
+## Basic authentication
+The simplest type of authentication is Basic authentication, where the user will provide the user name and password to create the connection.
+The values that you enter under the Parameter label column aren't the actual user name or password; they're labels for these fields that the user will see while creating the connection.
+In the preceding example, the user will be prompted to enter User and Password to create a connection. You should match the labels to the names that are used by the API to clarify to someone who is creating a connection what values to use with that connection.
+Any service connection that uses Basic authentication must use secure HTTPS protocol to avoid sending unencrypted credentials over the wire.
+## API Key authentication
+API Key is a popular authentication scheme that is used by web services. For example, Microsoft Azure Functions includes code parameters as part of the default template.
+Make sure that you define the following values:
+Parameter label - The label for the user prompt when a new connection is created.
+Parameter name - The name of the parameter that will contain the key value during each service request.
+Parameter location - Gives makers an option to send the API key in the request header or the query string when they're calling the underlying service.
+In the previous example, the user who is creating a new connection will see the following prompt.
+The supplied value will be sent to the underlying service as a custom X-API-Key request header.
+The default Azure Functions template can use code as the parameter name and then send it as part of the query by setting the parameter location to Query so that the service URL will be similar to:
+HTTP
+https://functionurl.azurewebsites.net?code=user-supplied-code/
+Similar to Basic authentication, we recommended that you use the API Key authentication scheme only with HTTPS protocol to avoid sending the keys unencrypted.
+## OAuth 2.0 authentication
+The OAuth 2.0 authentication scheme is only available for online connectors. Other than providing support for Generic OAuth 2.0, the platform provides implementations for specific services, including Microsoft Entra ID, GitHub, Microsoft account, and more. Prebuilt identity provider templates, when selected, fill in many of the fields that are required by OAuth 2.0, with provider-specific values reducing what you need to provide.
+Additional information that will be collected depends on the identity provider. The Generic OAuth 2.0 provider requires the following parameters.
+Make sure that you register the connector with the identity provider as a client application; specific registration details are provider-dependent and documented by the identity provider. For example, to authenticate by using Facebook, a maker would create a Facebook app by using their development tools. Because the Client ID and Client secret parameters are part of OAuth 2.0 specifications, they're provided by all OAuth 2.0 identity providers as part of the app registration. One value that needs to be included with the app registration is Redirect URL. This value in the connector configuration is initially empty but becomes available when the configuration is saved. It can then be copied and saved with the connector registration with the identity provider.
+Most of the specific providers only require client ID, client secret, and optional scope because all URLs are predefined for a specific service.
+After the connector has been published and made available for users, they'll be asked to enter their credentials for signing in to the service during the connection creation process. These credentials will be used by the application to get an authorization token. For every request, this authorization token will be sent to your service through the standard authorization header.
+The authorization token is short-lived, and the connector runtime will use the refresh process to renew so that users of the connector aren't involved in the refresh process.
+## Windows authentication
+The Windows authentication option is available only for connections that use on-premises data gateway, when the Connect via on-premises data gateway check box is set on the General tab. No additional information is required for the Windows authentication scheme.
+When a new connection is created, the user will need to provide Windows credentials for the service, and then select one of the installed on-premises gateways.
+OpenAPI specification that is used by the platform includes both API Key and Basic authentication definitions. You can also modify them directly online by using the Swagger editor. Other authentication schemes store authentication information separately as the extended properties of the connector. While this information isn't available for direct source editing online, you can modify it by using the paconn tool. The Command-Line Interface (CLI) allows scripting of the connector deployment process where automated deployment is required.
+Custom connectors support several authentication schemes to accommodate requirements for allowing access to secure REST API services. When API services are deployed and secured within an Azure AD environment, the connector's infrastructure delivers other benefits. You'll learn more about Azure AD specifics in the next unit.
+# Use APIs with Azure AD
+Completed100 XP
+5 minutes
+Microsoft Entra ID authentication is a recommended authentication scheme. Unlike other approaches, it has the following unique attributes:
+It allows authentication on behalf of the user who is consuming the connection, meaning that users can't get access to the resources that they don't already have access to. The target service maintains responsibility for enforcing what is permitted for the authenticated user.
+The target service knows the identity of the user who is performing the connection, thus allowing more checks by using Azure AD information without explicitly asking a user for further details.
+It supports managed identities where controlled access to the underlying resource eliminates the need for developers and users having to manage credentials.
+The internals of the Azure AD secured custom connector are similar to a generic secured connector.
+The main difference is that the custom connector and the target app service are registered as the apps within Azure AD. That factor allows makers to apply appropriate permissions and then pass the calling user's identity from an app in Power Apps, Power Automate flow, or Logic Apps workflow through to the underlying service.
+The service can be an existing service that is registered in Azure AD, like Microsoft Graph API, or it can be a custom service that is implemented by using Azure Functions or Microsoft Azure App Service, for example. The important characteristic of the service is that it helps protect and authorize access to the secured resources by using the caller's Azure AD identity.
+## Enable Azure AD authentication
+If an organization already has a service implementation by using either Azure Functions or Azure App Service, adding Azure AD authentication is a simple configuration exercise.
+Select the Authentication/Authorization blade.
+Enable the App Service Authentication.
+Set the default action on unauthorized access.
+Configure and register the app in Microsoft Entra ID.
+Enabling the Azure AD authentication makes the caller identity information available to the underlying service that can now use this information.
+## Configure the connector
+Callers can access the underlying service only through a custom connector. To allow the connector to pass through the caller identity, it needs to be registered as a separate app in Azure AD. In addition, it needs to be granted delegated permissions to the API service so that it can perform actions on behalf of the caller.
+Because the custom connector will be accessing the API on behalf of the user, consent is required. Typically, users are prompted for consent when a connection is created by the custom connector. Some permissions might require administrative consent, which can be granted by an administrator for all users in the organization.
+After the custom connector has been registered in Azure AD, you can configure it by using the custom connector wizard.
+Select OAuth 2.0 as the authentication type and then set the identity provider to Microsoft Entra ID. The following parameters are required:
+Client id - ID of the Azure AD app that will identify the connector.
+Secret - Secret that is created during the Azure AD app registration.
+Resource URL - Resource identifier for your service.
+After you've saved the configuration, the Redirect URL will become available to add as a valid callback to the app registration.
+The configuration is stored in the apiProperties.json file, and developers can also use paconn command line tooling to update the configuration as required. For example, the secret key, instead of being defined by the maker, can be managed and rotated automatically as part of the enterprise deployment.
+## Steps to configure connectors with Microsoft Entra ID
+Follow these steps to set up and configure connectors with Azure AD:
+Register two Azure AD apps:
+One to identify and protect API service
+One to identify and protect your connector
+Delegate permissions. Allow your connector's registered app to make "on-behalf" calls to your service's identity.
+Define your connector by providing the client ID, secret, and resource URL information.
+Add redirect URLs to the connector app registration.
+If your service is set up with the Cross-Origin Resource Sharing (CORS) scheme, allow list Azure API Management domains (usually azure-apim.net) for CORS on your service.
+Setting up Azure AD authentication involves more steps to register apps and identities in Azure AD, but it has more benefits that make it a preferred scheme for securing custom connectors.
+# Configure Microsoft Entra ID authentication
+Completed100 XP
+5 minutes
+The following video demonstrates how to enable Azure AD authentication for a custom connector. You'll learn how to take an API that's implemented with API Key authentication and convert it to Azure AD authentication. Additionally, you'll learn how to configure the custom connector from API key to use the Azure AD protected API.
+# Exercise - Use graph API from a custom connector
+Completed100 XP
+15 minutes
+In this exercise, you'll create a custom connector and learn how to configure it to access the Microsoft Graph API by using Microsoft Entra ID authentication. Because the focus is on authentication, this exercise only configures a single action called Last Used.
+Important
+Use a test environment with Microsoft Dataverse provisioned. If you don't have one, you can sign up for the community plan.
+## Task 1: Create a new solution
+To create a new solution, follow these steps:
+Go to Power Apps maker portal and make sure that you are in the correct environment.
+Select Solutions > + New solution.
+Enter Contoso graph for Display name, select CDS Default Publisher for Publisher, and then select Create. Note: When working with a real project, it's best to create your own custom publisher.
+Don't navigate away from this page after selecting Create.
+## Task 2: Use Graph Explorer to test the API
+In this task, you'll use Graph Explorer to perform an API action that you'll configure in the custom connector.
+In another new browser tab, go to Graph Explorer.
+Select Sign in.
+Sign in with your user information.
+Read the requested permissions and then continue if you agree.
+Make sure that GET is selected for the verb, add /insights/used to the URL, and then select Run query.
+You should get a 403 error indicating that Graph Explorer lacks your permission to perform this action.
+Select the Modify permissions tab to grant Graph Explorer permission.
+Select Consent for Sites.Read.All.
+Read the requested permissions and then continue if you agree.
+Select Run query again.
+You should now get the OK - 200 status.
+Start a new browser session tab.
+Go to OneDrive Personal Cloud Storage and sign in.
+Select + New and select Word document. You're creating this document so that you have some content in your Last Used list.
+Enter some test text in the Word file. The document will be saved automatically for you.
+Go back to the Graph Explorer.
+Run the same query again.
+You should now get a response with values. If you don't see a response, go back to the document you created in OneDrive and make changes, then come back and run the query again.
+Select the response JSON, right-click, select Copy, and then save it.
+You'll need this response later in this exercise because you'll use it when you configure the response in the custom connector.
+## Task 3: Register a new application and add permissions
+In this task, you'll configure a new application that will be used to access the Graph API from the custom connector. You'll also configure permissions for the specific graph API actions, similar to when you modified permissions in Graph Explorer.
+Go to Microsoft Azure and sign in with your admin user credentials.
+Select Show portal menu and then select Microsoft Entra ID.
+Select App registration > + New registration.
+Enter Learn last used connector for Name, select Web enter https://global.consent.azure-apim.net/redirect for Redirect URI, and then select Register.
+Select API permissions and then select + Add a permission.
+Select Microsoft Graph.
+Select Delegated permissions.
+Search for sites and then expand Sites.
+Select Sites.Read.All, Sites.ReadWrite.All, and then select Add permissions.
+You should now have three API permissions. Select Certificates & secrets.
+Select + New client secret.
+Enter Last used connector action for Description, select 90 days for Expires, and then select Add.
+Copy the Value and save it for later because it won't be shown again. You'll use this user secret when creating the connector.
+Select Overview.
+Copy the Application (Client) ID and save it on a notepad. You'll use this client ID when creating the connector.
+## Task 4: Create a custom connector
+Follow these steps to create a custom connector:
+Go to Power Apps admin portal and make sure that you are in the correct environment.
+Select Solutions and then select to open the Contoso graph solution that you created in Task 1: Create a new solution.
+Select + New > Automation > Custom connector.
+Enter Contoso graph for Connector name.
+Scroll down, enter graph.microsoft.com for Host and /v1.0 for Base URL.
+Select Security.
+Select OAuth 2.0 for Authentication.
+Select Microsoft Entra ID for Identity Provider.
+Paste the ID that you copied from Azure in the Client id field and then paste the Value that you copied from Azure in the Client secret field.
+Enter https://graph.microsoft.com for Resource URL and then select Create connector.
+Don't navigate away from this page.
+## Task 5: Add the action
+In this task, you'll configure the last used action tip called Graph API.
+Select Definition > + New action.
+Enter Last used for Summary and LastUsed for Operation ID.
+Go to the Request section and select + Import from sample.
+Select Get for the verb, enter /me/insights/used for URL, and then select Import.
+Scroll down and select the default response.
+Select + Import from sample.
+Paste the response that you copied from Graph Explorer in the Body field and then select Import.
+Select Update connector.
+Don't navigate away from this page.
+## Task 6: Test the connector
+Follow these steps to test the connector:
+Select the Test tab and then select + New connection.
+Provide your credentials.
+Read the requested permissions and continue.
+Select Refresh connections.
+Select Test operation.
+You should see a 200 status, and the response should look like the following image.
+# Share and move between environments
+Completed100 XP
+5 minutes
+Public connectors are automatically available to all users. Custom connectors need to be shared with others in your organization before they can be used. After a maker configures a custom connector and has provided a more secure API, they have a choice of how to share the connector and connections to make them available to other users.
+## Logic apps
+Custom connectors in Logic Apps are visible and available to the connector's author and to users who have the same Microsoft Entra ID tenant and Azure subscription for Logic Apps in the region where those apps are deployed. No other steps are required for sharing.
+## Standalone connectors
+Custom connectors that are created outside of a solution can be shared explicitly within the same environment. To share the connector or to view the sharing status, open the connector from the list of custom connectors and then switch to the Share tab.
+Custom connectors can be shared with individual users, user groups, or the entire organization. Organization sharing only allows use of the connector (Can view option). User and group sharing adds the ability to share the connector with others (Can view + share option) and to change the connector (Can edit option).
+After a custom connector has become available, makers can start building assets like canvas apps or cloud flows that use the connector. When a maker creates a new connection, they'll need to provide their own set of credentials to be used. When the app or cloud flow that uses the connection is shared with other users, the maker has a choice of either sharing the existing connection or asking the users to provide their own set of credentials.
+Individual connections can also be shared explicitly, which adds flexibility for the maker to select between securing the connection or delegating the permission management to the connector.
+The other option to make a custom connector available to other users is to share an app or share a cloud flow that uses the connector. Connectors that are shared through an app or a cloud flow can only be used within that app or flow.
+Important
+As a maker, you should be aware of the dependencies that are taken on your custom connector by other users. When a connector is shared, deleting the connector will delete all associated connections.
+## Connectors in solutions
+Custom connectors that are created as a solution asset can be moved between environments. This approach allows custom connectors to be included in the application life cycle like any other component.
+Connections can't be within the solution. Instead, a connection reference can be created and included in the solution. A connection reference can also be created and included implicitly when an app or flow that uses the custom connector is added to the solution.
+An included connection reference simply "points" to the connection outside the solution. When a solution that contains the connector reference is imported in the target environment, the user is prompted to provide a connection that will be used in that reference (and create a new one if necessary). Apps and flows that are included in the solution will now use that connection.
+User access to the connectors and connection references that are included in solutions is no longer controlled by sharing. Standard Dataverse role-based security is used instead, and access is controlled by the Connector and Connection Reference tables.
+This approach provides greater flexibility, compared to simple sharing, and supports other scenarios. For example, by selecting appropriate scope for the privileges, you can restrict connectors to a specific business unit.
+## Sharing outside the organization
+A few options are available for sharing a custom connector outside of the organization where the connector was created:
+Certify the custom connector to make it publicly available.
+Make the custom connector configuration files open source.
+Use a solution to transport the connector across.
+Create a complete copy of the connector by downloading and sharing the configuration files.
+Makers can distribute custom connectors and connections within the organization with simple sharing. However, for more flexibility and control, we recommend that you use solutions to share connectors between the environments or organizations.

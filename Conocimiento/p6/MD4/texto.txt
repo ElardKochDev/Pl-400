@@ -1,0 +1,111 @@
+# Introduction
+Completed100 XP
+8 minutes
+Solutions allow you to package features, such as apps in Microsoft Power Apps (canvas and model-driven), site maps, flows, entities, forms, custom connectors, web resources, choices, charts, and fields, to transport from one environment to another. Only the metadata, such as entities and their columns and configuration data, are transported. No business data is transported.
+Solutions are part of the overall application lifecycle management (ALM) practice of Microsoft Power Platform. Solutions are important mechanisms for implementing ALM. For more information, see Solutions for implementing ALM.
+## Learn the basics
+### Power Apps
+Power Apps is a user-friendly platform that lets you create apps without needing to be a coding expert. It's a bit like working with Excel formulas, such as SUM and TEXT, which many people are familiar with. With Power Apps, you can make simple tools like vehicle inspection forms and status reports, or more complex solutions for tasks like managing purchases and inventory. If you have an idea for an app that could solve a business problem, you can bring it to life using your existing skills. While Power Apps is designed for business users who aren't tech experts, it also offers advanced features for experienced developers to build intricate applications effortlessly.
+Power Apps gives you three types of apps to choose from: canvas, model-driven, and portals, depending on your needs.
+Canvas apps are perfect when you want to start from scratch and create an app on a blank canvas. You pick the screen size (tablet or mobile), and you get a clean slate to work with. You can connect your app to data sources, drag and drop various elements, and make it work the way you want using Excel-like formulas. Canvas apps provide the ultimate flexibility for app building.
+Model-driven apps are built around data stored in Microsoft Dataverse. Power Apps automatically generates a fully functional app for tasks like adding, editing, and viewing data. These apps are responsive, meaning they adapt to work on both mobile and tablet devices without extra effort on your part. You can define relationships, forms, views, business rules, and more at the data level in Dataverse, giving you control without needing to write all the formulas yourself.
+Portals let you create websites for external users without any coding skills. Using the Power Apps interface, you can build anonymous or authenticated websites that allow people to interact with data stored in Dataverse. It's as simple as dragging and dropping elements, just like when you're building apps.
+### Power Automate flows
+Microsoft Power Automate, also known as Flow, is a handy tool that lets you create workflows. These workflows can be set up to run automatically or started by a user when needed. You have various options to get started, like using ready-made templates that might fit your needs perfectly or require just a few modifications. You can also create workflows using a Microsoft Visio template, a user-friendly interface (UI), or business process flows.
+The design feature in Power Automate is easy to use. Sometimes, sketching out your workflow on a Visio diagram can help you plan a more efficient workflow. That's why Power Automate can be integrated with Visio. In Visio, you can use BPMN Basic Shapes to map out your flow, export it, and then import it into Power Automate. This gives you the flexibility to fine-tune your workflow further.
+UI flows are a cool feature that brings robotic process automation (RPA) right into Power Automate. It lets you record actions like mouse clicks and keyboard inputs in desktop or web apps. This is useful for dealing with older applications that don't have APIs.
+Business process flows are created using Microsoft Power Platform and Dataverse. These flows guide users through a series of steps in a specific order. It's like a visual map that helps users move through different stages. You can easily make these flows using Power Automate, and there are plenty of templates available to get you started. You can use existing entities or create custom ones to suit your needs.
+Flows that you create within a solution in Power Automate are called 'solution-aware flows.' You can create a new flow right within a solution, and you can also edit or delete it from there.
+### Connection references
+A connector is a user-friendly way to allow a service to connect with Power Automate. Each connector comes with a set of operations that are classified as actions and triggers. After you have connected to the service, these operations can be used within your Power Automate workflow.
+Three separate categories of connectors are: Standard, Premium, and Preview. Custom connectors and connectors for Microsoft Azure Logic Apps fall under the Premium category.
+You can add connectors in a solution, and you can add existing connectors to a solution or create new ones that automatically become part of that solution.
+### Environment variables
+Previously, it was a common practice for all stored data to be available in a single environment only. Now, thanks to environment variables, you have the flexibility to transport your configuration data from one environment to another within the same tenant. After creating environment variables in Dataverse for apps, you can consume them by retrieving data from the Environment Variable Definition and Environment Variable Value entities.
+You can add environment variables in a solution, and you can add an existing environment variable in a solution or create a new one that automatically becomes part of that solution.
+## Managed and unmanaged solutions
+Solutions are like organizing tools in Power Apps and Power Automate, helping you manage your work. There are two types: managed and unmanaged.
+Unmanaged solutions are like your workbench when you're designing, building, and testing in your development environment. Think of them as your source for all things Microsoft Power Platform. When you delete an unmanaged solution, it only removes the solution container but keeps all your customizations intact, safely stored in the default solution.
+Managed solutions come into play when you're ready to take your work out of the development environment and into other places like testing or production. You can create managed solutions independently for different environments to simplify and speed up deployment. A best practice in Application Lifecycle Management (ALM) is to generate managed solutions by exporting an unmanaged solution and treating it like a building block.
+However, you can only make changes to unmanaged solutions. If you ever need to customize a managed solution, you'll have to include it in an unmanaged solution. This creates a connection between your unmanaged customizations and the managed solution. When there's a connection, you can't uninstall the managed solution until you remove the link.
+Keep in mind, some parts of managed solutions can't be edited. To see if you can make changes, just check the 'Managed' properties.
+One more thing - you can't export a managed solution, and when you uninstall a managed solution, it takes all the customizations and extras with it.
+# Add and remove apps, flows, and entities in a solution
+Completed100 XP
+10 minutes
+To use solutions within Microsoft Power Platform, you'll first need to create a solution, and then add apps, flows and tables to it. Or create new apps, flows, and tables and assign them to the solution:
+To create a solution, sign in to Power Apps and then select Solutions, which is available in the left vertical navigation.
+Add the Display name, select CDS Default Publisher, and then enter a Description. Select Create.
+Congratulations, you have created your new solution.
+You can now create new apps, flows, and tables in this solution or add existing ones.
+To add new apps, flows, and tables, select the Volunteer Request solution, select + New in the upper-left corner of the screen, and then select your option.
+To add existing apps, flows, and tables, select + Add existing. Select App to add existing apps, Table to add existing tables (previously known as entities), and Flow to add existing flows.
+# Edit a solution-aware app, flow, and table
+Completed100 XP
+5 minutes
+Editing a solution-aware app, flow, and table requires you to first select the items from your solution.
+Sign in to Power Apps, select Solutions, and then select Volunteer Request.
+You should see all your apps, flows, and tables.
+To edit the canvas app, select the app and then select Edit, which is available in the upper portion of the screen, or you can select the ellipsis. This action will take you directly into Power Apps studio.
+Select the flow and then select Edit, which directs you to the edit mode for the flow.
+Select the table and then select Edit, which takes you to the section where you can view the columns, relationships, business rules, and so on.
+# Exercise - Import and export solutions
+Completed100 XP
+10 minutes
+Consider a scenario where you have a solution that includes an app, table, and a flow. You now want to export this solution from one tenant, which is the source, and then import it to another tenant, which is the destination.
+In the source tenant, sign in to Power Apps and then select Solutions, which is available in the left vertical navigation. Select Export solution.
+Select Publish. This selection will make sure that all changes that are made to this solution are part of this published solution.
+Select Next once the customizations are finished publishing.
+You then need to decide which environment this solution will be exported to. If it's a test or a production environment, then select Managed (recommended). If you're moving it to another development environment, select Unmanaged and then select Export.
+Note
+Solution Version numbers are used to keep track of the functionality contained in a particular solution release. Versioning is used in Microsoft Power Platform to determine if code being imported is a solution or a patch. Power Platform solution versions are in the format <major>.<minor>.<build>.<revision>. When you create a new version, you will be asked to enter the version number. This defaults to 1.0.0.0 and auto increments based on the Solution update. An update must have a higher major, minor, build or revision number than the parent solution. For example, for a base solution version 1.0.0.0, a small update could be version 1.0.0.1, or a slightly more significant update could have version 1.0.1.0. A substantially more significant update could be version 2.2.0.0.
+In the upper left of the screen, you should see a message stating that the solution was exported, and a download button will appear on the right side. Select the download button to get a zip file of your solution.
+The zipped file name contains the solution name, if it's managed or unmanaged, and the version number.
+Go to your destination tenant, sign in to Power Apps, and then select Solutions, which is available in the left vertical navigation. Select Import.
+If you receive an authentication window, enter your credentials to continue.
+Select the zipped file that was exported.
+Select Next.
+Select Import.
+If you receive warnings, then you can select the warning or download the log file.
+You'll now see your solution imported successfully in the new tenant.
+# Build and deploy a complex solution with flows, apps, and entities
+Completed100 XP
+5 minutes
+Watch the following video for a demonstration of these processes:
+Packaging a Power Apps canvas app, Power Automate flow, and a Dataverse entity with a Choices field into a solution
+Exporting the solution from one environment and importing it into another
+# Automate solution management
+Completed100 XP
+8 minutes
+In this module, you've already learned how solutions can be super handy for keeping track of your app pieces and moving them between different places manually. Now, let's explore how automation can make your app management even stronger through something called Application Lifecycle Management (ALM). ALM isn't just about creating the app, it covers everything from setting rules (like requirements) and developing, to keeping things running smoothly. Solutions are key players in your ALM strategy, along with other helpful tools like Azure DevOps or GitHub.
+Usually, a solution architect on your project will map out the ALM plan, and someone skilled in DevOps will set up the automation. As a team member, your job is to stay involved in the process by using the chosen tool to manage your tasks and keeping an eye on your app and flow changes using solutions. Once your part is done, the ALM automation takes over. It kicks off a series of actions that automatically move your changes from development to testing, and then to production. Each step might need some approvals to make sure everything's on track. Imagine the application lifecycle as a never-ending cycle of app development that includes planning, creating, testing, deploying, running, monitoring, and learning from what you discover along the way.
+While all the actions can be done manually, automation ensures they're done consistently each time they're performed. They also can still happen if, for example, the person who performs the manual actions is out sick. DevOps focused tools like Azure DevOps or GitHub provide the automation, but also provide work item tracking and source control.
+## Source control and solutions
+Source control, which you can find in tools like Azure DevOps and GitHub, is like a super version tracker for all the parts of your project. Imagine you're working on a Power App, and you make changes. Each time you do that, it's like creating a new version of your project. You can also use 'work items' to note down what changes you made, and these notes can be linked to the version. This helps your team keep a record of when things were changed and lets you undo any changes that caused problems. So, while your team is busy making a newer version of something, the current version can still be used.
+Source control is super important in Application Lifecycle Management (ALM) because it's the ultimate source of truth for your project. Even if your development environment crashes, no worries. You can rebuild it using the information stored in source control. In a way, source control makes development environments replaceable. When you send stuff to testing or production, you're actually sending what's in source control, not just something random from your development space.
+Now, here's the catch: when you export a solution from your environment, it's like packing everything into one large file. If you just put that file into source control, it can only tell you that something changed, but it won't say exactly what changed within each part. So, to make it more useful, we add a step to the automation process. This step takes the solution from your development space, unpacks it (like opening a packed suitcase), and creates separate files for each part. These separate files are then put into source control. This way, you can keep a detailed log of all the changes. Plus, it opens up the possibility of having multiple development environments that all follow the changes in source control, reducing the chance of one change messing up another.
+## Automating with DevOps tools
+Automation is important because it brings consistency to what would otherwise be a manual process. Once built, automations can run on demand, on a schedule, or based on a check-in event. While there are many tools you could use to implement the automation, Azure Pipelines and GitHub Actions both have pre-built Power Platform task and action support from Microsoft.
+### What can you automate?
+There's a wide range of what can be automated since the automation just runs tasks or actions. Think of it as being similar to Power Automate flows but more specific to working with app management and deployments. The following are some of the common automations that might be found on Power Platform projects:
+Creating a new development environment and installing solutions from source control
+Taking changes from development environment and updating source control
+Running solution checker to identify quality problems
+Provisioning and de-provisioning environments
+Running automated tests including Power Apps Test Studio tests
+Building managed solutions from source control for deployment to downstream environments
+Deploying to downstream environments like test and production
+Automation is tailored to each project's requirements, but commonly has initiated, build, and release automations.
+When working on a project that uses automation, be aware of the overall processes that are in place. However, building the automation is typically done by a DevOps focused resource.
+## Power Platform build tools
+Microsoft Power Platform Build Tools are like a toolbox designed for managing apps on the Microsoft Power Platform. These tools are a bunch of helpful actions that save you from hunting down special tools and writing complicated scripts to handle different tasks in your app's lifecycle. You can use them one-by-one to do specific things, like bringing an app into a new environment, or you can use them together in a sequence to make things happen automatically.
+Now, depending on whether you're using Azure DevOps or GitHub Actions to automate your work, the fancy words might change a bit. In Azure DevOps, we call these actions 'tasks,' while in GitHub Actions, we call them 'actions.'
+The following are some of the common operations:
+Power Platform Checker - Runs static analysis on your solution and allows you to catch problems early by adding it to your automation.
+Export Solution - Exports a solution as unmanaged, managed, or both from an environment.
+Import Solution - Imports a solution into an environment.
+Unpack Solution - Breaks a compressed solution file into individual files for each component to allow checking them into source control.
+Pack Solution - Packs a solution represented in source control into a solution.zip file that can be imported into another environment.
+Set Solution Version - Allows you to update the version number in your automation and to implement a consistent versioning strategy.
+Create, Delete, and Copy Environments - Allows automation of environment management as part of automations.
+Automation is a smart way to make sure your app-building process is consistent and reliable. If your team is still doing everything manually, it's a good idea to explore some automations. Not only does this make your work more consistent, but it also helps you make better apps and deploy them with higher quality.

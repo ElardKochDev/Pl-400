@@ -1,0 +1,385 @@
+# Introduction
+Completed100 XP
+9 minutes
+First impressions are important. The first impression that app users get is the length of time that it takes for the app to display the first screen or to provide other visual feedback, such as progress indicators. During startup, your app performs several steps to prepare for the presentation of the first screen: Authenticate, get metadata, OnStart processing, and render screens.
+Authenticate - Handles all authentication prompts for connections that are configured for the app. Removing connectors that aren't in use can reduce the number of prompts and accelerate the process.
+Get metadata - Retrieves metadata, such as the version of the Microsoft Power Apps platform on which the app runs and the sources from which it must retrieve data.
+OnStart processing - Evaluates the formulas that you have set up in the OnStart property. Streamlining the performance of this processing has a direct impact on improving the load time of the app.
+Render screens - The first screen is prepared and presented to the user. Specified OnVisible formulas are implemented first. Optimizing formulas and minimizing the number of controls on the screen can improve load time.
+This module explains how you can evaluate your app load time and identify strategies for improvement.
+## Evaluate your app load time
+When you're evaluating app load time, a good place to start is establishing a baseline for how long it takes for your app to load. You can accomplish this task by measuring the startup time from launching the application to the time when you believe that you have a usable app. Use a stopwatch to measure the time from launching the app to when you believe a person can start using it. Tools that you can use to measure and drill into the performance details during the load time are discussed later in this module. We recommend that you conduct a new evaluation with each app update so that you can compare the new version with your prior baseline and then identify significant increases in load time.
+Measuring startup time helps you get actual timings; however, you should consider observing and asking users about their perception of the app's performance. Occasionally, you can have an app that loads in a few seconds, but users might perceive it to be much longer because they don't regard the app as usable yet. For example, that situation could happen because the app, after displaying the first screen, continues to load data and update the information even though users are already interacting with it. Approaches to solving these two problems differ. If you're trying to improve load time, then you can usually get imperative data that points you to where your app is spending time. If you're trying to improve user perception, then you need to observe the person using the app to understand how they use it and what changes might improve their perception. Small changes can help improve perception, such as adding text prompts to start the interaction or changing the start screen to persist and reload most recent records.
+Commonly, you will discover components that slow down an app by viewing the app's OnStart property or the OnVisible property of the first screen. By optimizing or deferring work that is performed in these properties, you can accelerate load time. Some of these techniques will be explained later in this module.
+If you view analytics for your app from the maker portal, it will include the Time to first screen and Time to first screen without connection setup analytics.
+The data is provided for the last 30 days and can be helpful in providing a summary of your app's performance.
+The Power Apps Review Tool is another option for evaluating apps. This open-source tool is packaged as a solution that you can import into your Microsoft Dataverse environment. After you have imported the tool, you can use it to evaluate apps in your environment. You can upload .msapp files for evaluation as well. The automated review can check your app against a customizable checklist of best practices, and it can identify many common issues that can impact the app startup time and general performance of your apps. After the automated review is complete, you can view a list that shows where your app is doing well and actionable items where it could improve.
+In addition to viewing the results in the app, you can email the results, which can be helpful if you are not the app maker.
+Common rules that the tool can check that can impact startup time include:
+Use of Concurrent function - Consider using the Concurrent function for parallel independent data requests.
+App Settings flags - Review app settings. Ensure Delayed Load and Explicit Column Selection is On.
+Delegation - Ensure ClearCollect and Filter operations are delegable.
+Asset Optimization - Review embedded asset compression/size optimization.
+Data loading strategy - Review OnStart and OnVisible data loading strategy. Avoid data calls in OnStart. Move to OnVisible when possible. Ensure that only important data calls block user interaction with UI during initial load of the home screen.
+Cross-screen dependencies - Ensure that repeating UI elements are encapsulated in components (for example, menus, header, footer).
+## Review your app settings
+App settings can have a significant impact on the performance of your app; therefore, make sure that you review the app settings and their enabled status with each app update. Older apps might not have the latest app setting options enabled automatically to ensure that the new option doesn't break existing apps. You might have also enabled a setting to try resolving a problem but then forgot to turn off the setting when you were done. A good example of that scenario is the Debug published app option. Enabling this option allows more debug information to be displayed when you use the app monitor to troubleshoot the published app. When this option is enabled, it can be detrimental to the performance and should not be left on for production use.
+Another setting to consider is Data row limit. This setting determines the most rows that will be retrieved from a server-based connection when delegation is not supported. By default, this value is 500 and can be any value between 1 and 2,000. To work around delegation issues in apps, it's common for people to increase this value. This increase might cause unexpected problems when a development environment holds much smaller sets of data than production. For example, with the Data row limit set to 2,000, the following expression in Data row limit might only preload a few rows in a development environment.
+ClearCollect(colDesks,Desks)
+The same app in a production environment with a fully populated dataset could retrieve the full 2,000 rows. As a result, the app will load much slower in production than in development. Frequently, working to eliminate delegation warnings is a better approach than increasing this value.
+In older apps, the Enable Navigate function in App.OnStart setting might be enabled. This setting allows you to use the Navigate() function in the App.OnStart property, but results in the first screen will not render until all your expressions in App.OnStart are evaluated. In more recent apps, this approach is not allowed, and you will need to use the App.StartScreen property instead. The OnStart and StartScreen properties will be discussed in depth later in this module. If your app has this setting enabled, consider updating to the new approach and disabling the setting, which can improve load times.
+In addition to the previously mentioned settings, the Upcoming features category has more settings that you should review. Three sections are in this category: Preview, Experimental, and Retired.
+New settings start as Experimental and graduate to Preview as they mature. Experimental features let you try a new feature but are not intended for production apps. These features are turned off by default, and you must enable them. Considerable investment has gone into improving app performance, so continue watching this area for upcoming features.
+Typically, settings in the Preview section are turned on by default for new apps. These features are in their final stages of testing before becoming standard settings that are enabled for all apps. For the existing apps, you need to opt in to enable these settings if you want to use them. In some cases, opting in might require minor formula usage changes.
+If you are working on a performance issue, testing some of the upcoming features might provide insight into whether they would help address your challenges. If so, waiting for the features to mature might be an alternative to refactoring without their benefit.
+## Limits and throttling
+Each connector can have its own limit of retrieved data and throttling. Additionally, service protection limits are in place at the platform level. Make sure that you are aware of these limits for the connectors that you use in your app. Apps that encounter these limits during startup might exhibit a slowdown in loading the app.
+## Use a loading image
+Using a loading image or a progress indicator during long operations in your app can improve user perception.
+The simplest way to use a loading image during the loading of your app is to use a component that has a spinning image. You can find a prebuilt image in the Power Apps tools GitHub repository. You can import this component and place it on your initial screen on top of your other controls. Then, you can use a variable to control the visibility of the component. The following image shows an example of setting the visible property to the value of a variable showLoader.
+Then, in App.OnStart, you can turn on the loading image before loading the data, and then you can turn off the image after the data is loaded.
+Set(showLoader, true);
+
+ClearCollect(colDesks, Desks);
+
+ClearCollect(colDeskFeatures, 'Desk Features');
+
+Set(showLoader, false);
+While using a loading image doesn't speed up your application, it provides visual feedback and can help the user understand that the app is doing work in the background.
+The rest of this module explores other techniques to identify and improve app load performance.
+# Use Monitor to troubleshoot app start performance issues
+Completed100 XP
+3 minutes
+Microsoft Azure Monitor is a tool that you can launch from Microsoft Power Apps Studio to help you troubleshoot problems and improve the quality of your apps. Key elements that you can identify by using Monitor include:
+Errors in using connectors
+Extensive data being sent/received
+Slow response from connectors
+Duplicated data actions
+When Monitor is activated, it captures and allows you to view a stream of events from your running app. These events include user interaction with controls and the use of data sources. Generating this log as the app starts and then analyzing it can help you understand how your app is spending its load time.
+The captured data includes all necessary context information so that you can identify problems. Similar information is also available from your browser's developer tools. However, those tools lack app context information like the control name and formula.
+By using the event details, you can make changes in the app to correct identified problems and then retest without leaving Power Apps Studio or Monitor.
+In addition to the events being automatically captured, you can also log custom messages by using the Trace() function. The custom messages can be helpful in marking the start or end of OnStart or OnVisible logic. The following example shows the process of adding a Trace() function before and after data is preloaded from Microsoft Dataverse.
+Trace("Start of OnStart");
+
+ClearCollect(colDesks,Desks);
+
+Trace("End of OnStart");
+When Monitor is run for the app, you can now view the beginning and end of the OnStart processing by looking for the trace messages in the event log.
+When using Monitor to evaluate the startup time of your app, make sure that you run your app from a cold start and that you don't manually rerun OnStart or OnVisible from within Power Apps Studio. The cold start ensures that the events that you capture are not influenced by data caching that can occur when you rerun the OnStart or OnVisible method logic. The cold start can be ensured by following these steps:
+Enable the Debug published app setting.
+Save the app.
+Publish the app.
+Launch Monitor from make.powerapps.com.
+The following video demonstrates how to activate Monitor and review the data that is captured during the startup of your app.
+# Optimize App.OnStart
+Completed100 XP
+5 minutes
+The OnStart property on the app object runs when a user starts your app. The property is commonly used to evaluate formulas for retrieving and caching data that you want to preload and for setting global variables. The App.OnStart property can become too busy with this work, which can cause performance problems. To help reduce these types of problems, alternative approaches are available, or are being invested in, for upcoming Microsoft Power Platform releases. Use available alternatives when they fit your app needs. This topic explores some of the available alternatives.
+## Navigate on app startup
+A common need during app startup is to select the first screen that the user views. For example, the app could open a welcome screen on first run or implement deep linking into a specific detail page. Previously, adding conditional logic and using the Navigate() function in the App.OnStart property was common practice. Using Navigate() in OnStart has been retired, and all new apps are prohibited from using the Navigate() function from App.OnStart.
+The new approach is to use the App.StartScreen property. By default, this property will be empty, and the first screen in the screen tree view is shown. If you're evaluating the formula that was provided for by the StartScreen property and it results in an error, the first screen will return as if the property is empty. You can use the IfError() function to catch errors and redirect to an appropriate error screen.
+You can set the StartScreen property to a specific screen to ensure that, if it's moved in the tree, it's still the start screen. You can also have conditional logic, similar to the following image, that looks up the user. If the user doesn't have an address, they're sent to the ChooseLocation screen instead of the HomeScreen.
+StartScreen is a data flow property that can't contain behavior functions. All data flow functions are available, and the following examples are common:
+Param() function to read parameters that are used to start the app
+User() function to read information about the current user
+LookUp(), Filter(), CountRows(), Max(), and other functions that read from a data source
+Any call through a connector, but it should implement quickly
+Signals such as Connection, Compass, and App
+Global variables and collections, including those that are created in OnStart, aren't available in the StartScreen property.
+The StartScreen property is evaluated once at startup. If you need to test afterward, you can change the property. Alternatively, you can manually force it to be reevaluated by using the Navigate to StartScreen context menu command for the app object.
+If you have an older app, you should update your app to use the new StartScreen property. Until your app is updated, you can go to Settings > Updates > Retired tab and turn off the Enable Navigate function in App.OnStart toggle switch. By turning off this toggle switch, you can (for a limited time) continue to use the Navigate() function in OnStart.
+## Use OnVisible instead of OnStart
+Review the formulas that you have in App.OnStart, and if they only preload information for a single screen, then move the logic from App.OnStart to that screen's OnVisible property.
+## Review app settings
+New app settings regularly become available with Power Apps updates. It's a good practice to review them to determine if they could be helpful. Consider the following app settings when you're optimizing app load functionality:
+Enable App.OnStart property - This setting is turned on by default. Consider turning off the setting if you don't need OnStart and want to discourage its use.
+Use non-blocking OnStart rule - In published apps, this setting allows App.OnStart formulas to run concurrently with other app rules. When the setting is turned off, your other rules wait for App.OnStart to finish. This setting is turned on by default for new apps, but you must enable it for older apps.
+# Data load strategies
+Completed100 XP
+5 minutes
+Power Apps provides users with an efficient way to work with their business data and processes. Apps can access data by using connectors. Commonly, when an app starts or a new screen is displayed, some information is retrieved for initial display. Controls on the screens are often bound directly to connectors, and data is retrieved when the screen is rendered for the user. Navigating from screen to screen can also cause the data to be retrieved again. In some cases, if not optimized, this process can result in a substandard user experience or additional processing. By evaluating your users' needs and how data is loaded, you can develop a strategy to improve performance.
+As you evaluate your app, consider the following key questions:
+Is the initial data that is being shown to the user useful? Often, app makers want to show data when users arrive at a screen. This behavior can make the app look appealing and it demos well; however, it's inefficient when the initial list isn't used regularly. This situation can result in unintentional slowness of the app when users are preloading a large quantity of unfiltered records.
+Does the app offer the correct data filters? Adding controls so that users can enter criteria to reduce the number of rows that are displayed can be helpful for user productivity and performance.
+Are you incurring overhead from showing related data? If you're using a data source that provides access to relational data, and you use related values in a gallery, the app might perform lookup queries for each row that is shown. You can identify this issue by running the app with Monitor and then reviewing the results. Preloading the related data into a collection and then looking up from the collection instead can be more efficient.
+Do you know what data is static and what data is updated frequently? Before you consider preloading data, make sure that you know if it's frequently updated. Caching of infrequently changing or static data can help improve the performance of the application by having the data ready when the screen is displayed. Caching data that frequently changes can have a detrimental impact on the application performance or it can present stale data to the user.
+Do you want to show a loading indicator to the user? If you're binding data from the connector directly to the control, you don't have the option of showing and hiding a loading indicator as you would if you cached the data in a collection.
+How much data will be loaded from the data source? If you're considering caching, make sure that the data source that you're going to cache doesn't have more rows than configured for the data row limit in the app settings.
+Do you need to calculate columns or manipulate the data that you loaded? If the data source supports required calculations, and the column is useful across multiple apps, try to implement these columns in the data source. For example, Microsoft Dataverse has calculated and rollup column capabilities.
+How frequently do you need to see data added/modified by another app or automation? If you're preloading data into a collection, the updated information will only display if you reload the collection.
+## Direct data source binding
+When you set the Items property of a gallery to the table of a tabular connector, or if you use an expression like a Filter() function that is based on the table, you're doing direct data source binding. The following expression binds directly to the Desks table.
+SortByColumns(Filter([@Desks], StartsWith(Title, TextSearchBox1.Text)), "Title", If(SortDescending1, Descending, Ascending))
+This approach is most basic to data loading. Data is retrieved directly from the connector as the criteria on the filter changes. This approach is a declarative way of loading data where the Power Apps runtime can decide to load and refresh the data. As a result, you don't have the option of a loading indicator being shown to the user.
+After data has loaded, it can be used by controls without retrieving from the data source each time. You can manually refresh the data from the data source by using Refresh(tableName). The data that is displayed in controls is automatically refreshed when data is modified elsewhere in the app.
+Another significant advantage of direct binding is that you aren't limited by the Data row limit app setting if your connector supports delegation. For example, if you had 100,000 contact rows in Microsoft Dataverse and you bound a gallery directly to the table, the gallery would load an initial set of items and then get more as the user scrolled. The following screenshot shows Monitor events that include a getRows call to load the initial data, followed by several getMoreRows calls as the user scrolls the gallery. These calls are done automatically by Power Apps, and the app doesn't need to handle paging of the data.
+As previously mentioned, you don't want to present the user with 100,000 rows. Instead, with data sources that support delegation, you can add a filter and then let the connector process the filter criteria and only return rows that match.
+## Preload data into a collection
+Preloading data into a collection allows you to control the load of the data in either the App.OnStart or OnVisible properties. Preloading data in App.OnStart is a good choice if you need the same data on multiple screens. Alternatively, preloading data from OnVisible allows you to defer the load until that screen is used. Either option allows you to show a loading indicator while the data is loaded.
+The following expression clears the colDesks collection and loads all Desks table rows up to the Data row limit app setting.
+ClearCollect(colDesks,Desks)
+To use the preloaded data, change your relevant formulas to use the collection.
+When you use data that is preloaded into a collection, the data isn't refreshed unless you use the ClearCollect() function again to bring in the latest data. This scenario is different from the direct data source binding, where refresh is automatically managed by Power Apps.
+Another advantage of this approach is that you can allow your user to modify and review multiple rows as they go, without having to save each one by using the data source. After changes are completed, you can commit them back to the data source by using a single Patch() function call. If you want to undo all changes before the commit, you can refresh the collection. The following example shows the process of using the Patch() function to commit changes in the colDesks collection back to the Desks table in Dataverse.
+Patch(Desks,colDesks)
+## Load from persisted storage
+A variation of the simple preload approach is to load data from your device's local storage first and then continue to load directly from the data source. This strategy is helpful when the data source is slow or available intermittently. To implement this pattern, follow these steps:
+Load the data, if it exists, from the device's local storage by using the LoadData() function. At this point, any control that is bound to the collection would show the data.
+Load data directly from the data source connector into the same collection. At this point, any control that is bound to the collection would show the updated data that is loaded from the connector.
+Use the SaveData() function to persist the most recent data to the device's local storage.
+Your formulas would look similar to the following formulas:
+LoadData(colDesks,"LocalDesks",true);
+
+ClearCollect(colDesks,Desks);
+
+SaveData(colDesks,"LocalDesks");
+If your users are occasionally not connected, you can add a conditional check if they're connected prior to attempting to load new data. The revised formula would look similar to the following formula:
+LoadData(colDesks,"LocalDesks", true);
+
+If (Connection.Connected,
+
+ClearCollect(colDesks,Desks);
+
+SaveData(colDesks,"LocalDesks")
+
+)
+## Preload into a variable
+When working with non-tabular connectors, such as Office 365 Users, you can improve performance by saving the results from a function call into a variable. In the following example, the formula is calling the function three times to get information from the profile:
+Set(profileDisplayName,Office365Users.MyProfileV2().displayName);
+
+Set(profileHireDate,Office365Users.MyProfileV2().hireDate);
+
+Set(profileCity,Office365Users.MyProfileV2().city);
+The following expression is more efficient because it only calls the connector once but still populates the three variables:
+Set(profile,Office365Users.MyProfileV2());
+
+Set(profileDisplayName,profile.displayName);
+
+Set(profileHireDate,profile.hireDate);
+
+Set(profileCity,profile.city);
+You could also simplify it further to one variable named Profile and then use the dot notation to access the properties whenever required For example, you can use the profile.hireDate property instead of the profileHireDate variable. To do so, you would only use the following expression in App.OnStart:
+Set(profile,Office365Users.MyProfileV2());
+Then, instead of using the If(IsBlank(profileHireDate),Red,Green) expression, which uses individual variables to set a controls color, you would use the If(IsBlank(profile.hireDate),Red,Green) expression, which uses the dot notation profile.hireDate instead.
+## Load data concurrently
+If you're preloading data from connectors and have multiple items that you're caching, by default, they'll run one at a time sequentially. The following example shows the process of loading two tables and the user profile into collections and a global variable.
+ClearCollect(colDesks,Desks);
+
+ClearCollect(colDeskFeatures,'Desk Features');
+
+Set(userProfile, Office365Users.MyProfileV2())
+If each table is independently preloading data, then you can run them in parallel by using the Concurrent() function.
+Concurrent(
+
+ClearCollect( colDesks,Desks ),
+
+ClearCollect( colDeskFeatures, 'Desk Features' ),
+
+Set( userProfile, Office365Users.MyProfileV2() )
+
+)
+## Load data once
+If you preload data in App.OnStart, it will only run once when your app starts. If you use the OnVisible property instead to defer, then preload to the first time when the screen is used, and OnVisible will run each time that the screen is navigated to. This approach will potentially refresh your collection too frequently. To avoid this situation, instead of doing a ClearCollect() function, you would need to check first if you have already loaded the data.
+Replace the ClearCollect(colDesks,Desks) function call with the If(IsEmpty(colDesks),ClearCollect(colDesks,Desks)) expression, which includes the check if the collection is empty.
+## App settings and data loading
+As previously mentioned, app settings can affect your app's performance and behaviors. If you're using collections to preload data, the Data row limit applies and can make larger datasets unsuitable for preloading.
+Another setting to be aware of is Delay load. This setting delays running screen expression calls until they're needed and then runs them on demand. This setting is turned on by default for all new apps and can be turned on manually for older apps.
+Optimizing your app's data loading is unique to each app. This topic explained how to evaluate the needs of your users and the app to tailor your data-loading strategy for best performance and user experience. Optimizing isn't a one-time exercise but something that you'll do over the lifetime of the app. Additionally, you'll want to take advantage of any new platform capabilities that optimize data loading as they become available.
+# Introduction
+Completed100 XP
+3 minutes
+Monitor is a tool that you can launch from Microsoft Power Apps Studio to help you troubleshoot problems and improve the quality of your apps.
+The key issues that you can identify by using Monitor include:
+Errors when using connectors
+Large volumes of data being sent or received
+Slow connector response times
+Unexpected interactions with controls
+Duplicate data actions
+When Monitor is activated, it captures a stream of events from your running app and displays them in real time. These events include user interactions with controls and the use of data sources.
+The captured data includes essential context information that helps you analyze issues. While some of this information is also available through your browser’s developer tools, Monitor adds app-specific context such as control names and formulas.
+You can use these details to address identified problems and retest directly within Power Apps Studio or Monitor.
+Video: Use Monitor to capture and analyze app behavior
+In addition to using Monitor interactively, you can enable it in published apps to collaborate with remote users during troubleshooting.
+This module provides a detailed explanation of how to use Monitor as part of your regular app development process.
+# Identify and resolve common problems
+Completed100 XP
+9 minutes
+There are two common ways to use Monitor during the app development process:
+Reactive: Use Monitor when you're aware of a problem and need to identify the root cause. For example, if a user reports an error, you can use Monitor to observe events related to the reported issue.
+Proactive: Use Monitor before releasing your app to identify potential issues. Run the app while capturing events in Monitor and review the event log for long response times, anomalies, or errors. Identifying issues early helps reduce problems in production and supports higher app quality.
+### Start with a clean event log
+Before testing your app, start with an empty event log. In Monitor, select Clear data to remove previous events. This ensures that the captured data reflects only the new actions you perform during testing.
+## Use meaningful control names
+Control names in the event log correspond to the names in your app. Descriptive control names make it easier to analyze event data. The following image compares default names with more descriptive alternatives, highlighting the benefits of meaningful naming.
+## Filter event data to find related events
+When troubleshooting, it's common to identify patterns across related events. Monitor provides two filtering options:
+### Global filter
+The global filter searches all columns in the event log. It's useful for broad searches, such as control names or connector actions. You can find this filter in the upper-right corner of the Monitor dashboard.
+### Column filters
+Use column filters to target specific columns. Select the dropdown next to the column name and choose Filter by. You can apply filters to multiple columns simultaneously. When multiple filters are used, all conditions must be met for an event to display.
+Filters are useful when working with large sets of captured events to isolate specific issues.
+## Identify and resolve errors
+Errors often present as messages to the user or trigger error-handling logic in the app. Monitor provides detailed information for errors involving connectors.
+To identify errors:
+Look for entries in the Result column labeled Error.
+Watch for a red circle at the start of error rows.
+Check the Status column for HTTP status codes. For more information, see HttpStatusCode Enum.
+Double-click a row to open a pane with tabs for Formula, Request, and Response. These tabs provide insights into the error source.
+Formula shows the formula that caused the error.
+Request includes details like the URL and body sent to the connector.
+Response includes returned data, including error messages.
+Common issues include missing or incorrect data in requests. Compare request details to connector documentation to identify discrepancies.
+Reviewing the Response tab can help you identify business rule violations or other errors returned by the connector.
+If the response is unclear, provide these details to the connector developer or support.
+## Identify and resolve slow actions
+Use the Duration column to find slow actions. Filter the column to display entries that exceed a set threshold, such as one second. Duration values are in milliseconds (ms).
+To capture startup logic performance, ensure Monitor is running and that Run OnStart logic is selected.
+To improve performance:
+Reduce the volume of data returned.
+Optimize query criteria.
+Ensure only necessary data is requested.
+Some connectors support options to limit returned data. Adjust requests accordingly.
+## Identify and resolve delegation problems
+Delegation issues occur when a data source can't process a query remotely. Instead, the app retrieves a limited data set (default 500 records) and filters locally. This can result in incomplete or inaccurate data.
+Use App checker in Power Apps Studio to identify delegation issues. Monitor can provide additional context when needed.
+To troubleshoot delegation problems:
+Review the request in Monitor.
+Examine query criteria for unsupported functions.
+Modify formulas to use delegable functions.
+Monitor helps confirm whether formula changes result in correct data retrieval.
+## Summary
+Monitor is a critical tool for identifying errors, performance issues, and delegation problems in canvas apps. Use it proactively during development and reactively when addressing user-reported issues. With regular use, Monitor can help ensure app quality and performance.
+# Collaborate by using Monitor
+Completed100 XP
+6 minutes
+Monitor offers three collaboration options:
+Download/Upload – These options help make it easier to collaborate by saving a Monitor session to a local file that you can reload later or share with someone else. For example, you can save the session locally, then upload and attach it to a work item, and assign it to another developer. The assigned developer can reload the session into Monitor to view the events that occurred on their own schedule.
+Invite – With this option, you can collaborate in real time with another person, watching the Monitor event log as you run the app from Power Apps Studio. Because the app runs from Power Apps Studio, this option is intended for development, not for deployed apps. For example, this option might be helpful if a colleague on your team created a custom connector and you're having trouble using it. You could invite that colleague to view your app's use of the connector and monitor it using the Invite feature.
+Connect user – This option allows you to use Monitor to connect to a remote user who is running a published canvas app from Power Apps. For example, a user might experience a problem that you're unable to reproduce in your development environment. By using the Connect user feature, you can invite the user to run the app while you review the event log in Monitor.
+Regardless of which option you choose, collaboration can accelerate the resolution of app issues. In these scenarios, users you collaborate with have access to the events and data used in the app. The rest of this module describes additional considerations for collaborative problem solving in your app.
+## Use Download/Upload
+Monitor includes a built-in feature that allows you to download the current session's events to a local file. You can reload the downloaded file into any Monitor session using Upload. This process doesn't affect the contents of the current session; it only enables reloading the events later. You can start these actions from any Monitor session using the command bar buttons.
+The simplest use of the downloaded file is to reload it later into your own Monitor session. For collaboration, you can share the file (for example, via email, OneDrive, GitHub Issues, or Microsoft Azure DevOps work items) with anyone who has Monitor access. They can reload the file even if they don't have edit access to the monitored app. This feature allows you to consult with a colleague who might be more familiar with how specific connectors work.
+Additionally, you can use this option to save a baseline of an app for future comparison. For example, if your queries were slow, it would help to identify those queries from a previous test session.
+Download and upload work best when real-time collaboration isn't needed. This option is effective when collaborators are in different time zones.
+## Use the Invite feature
+By selecting Invite, you can invite another user in your organization to access Monitor and view the events generated as you preview the app in Power Apps Studio. Initiate the invite by selecting Invite from the command bar. Monitor generates the invite link.
+Copy the link and send it to the user so they can open Monitor and join your session. The link is valid for 60 minutes. If more time is needed, remove and reinvite the user. If you invite the wrong person, you can remove the invite; they won't be notified.
+The following diagram shows the Invite process, where you're User A and the invited user is User B.
+Each user receives their own copy of the events, meaning you can independently browse, view, and inspect app events without affecting each other’s session or needing to transfer control. For example, if you select Clear data, it only clears your event log.
+While the invited user can view Monitor events, they can't see your activity in the app. It can be helpful to also share your screen so they can observe your actions alongside the event log.
+Because the invited user doesn't run the app, you don't need to share the app or assign app permissions to them.
+## Use the Connect user feature
+Connect user allows you to select a published app enabled for debug and invite a user to run the app while you use Monitor to view the events it generates.
+To enable the app, turn on the Debug published app setting. After enabling, save and republish the app.
+Enable this option only when needed, as it adds debug information that may impact performance.
+To use Connect user, launch Monitor from the app list instead of Power Apps Studio.
+When Monitor launches, the Connect user button is available in the command bar.
+Similar to Invite, you'll provide the user information, and Monitor generates a link to share with the user who will run the app.
+However, unlike Invite, the user must run the app, so you must share the app and assign the necessary permissions.
+When the user selects the link to run the app, your Monitor session displays the events they generate. In many cases, screen sharing is useful so you can observe their actions while reviewing the event log.
+The collaboration features in Monitor help you work with others to troubleshoot app issues, even when you're not in the same location.
+# Introduction
+Completed100 XP
+3 minutes
+You have built an app, and you have published and shared it with people in your organization. Now, you need to know how people are using it and if it's performing well. If you configured your app to send telemetry to Application Insights, you could check how it's doing in the Microsoft Azure portal. For example, you could answer the following questions:
+How many people are using the app?
+What screens do people use most often?
+How long are users on a screen?
+Which screens are slow?
+Application Insights is a feature of Microsoft Azure Monitor that you can use to monitor application performance. You can configure custom apps, including canvas apps from Microsoft Power Apps, to send telemetry to Application Insights. After the telemetry is in Application Insights, you can view or access the data by using multiple options.
+From the Azure portal, you can access prebuilt visualizations of the telemetry that was captured from users who were running your app.
+For more custom analysis of the data, you can compose custom queries of the data or use Microsoft Power BI to create custom visualizations of your data.
+Canvas apps from Power Apps will automatically send basic screen telemetry to Application Insights if you set up the Instrumentation Key on the app object. The telemetry is only captured when your published app is run; therefore, usage from within Microsoft Power Apps Studio when you build the app won't impact your usage telemetry.
+In addition to the basic telemetry that the Power Apps runtime sends, you can also log custom events by using the Trace() function from Microsoft Power Fx. By strategically instrumenting your app with Trace() function calls, you can include app context information that you can use to analyze app-specific challenges. The following example shows the use of Trace() to record the user and active screen information when the OnStart property runs.
+Setting up your canvas app to send telemetry to send data is a simple process that the next topic will cover. Sending of telemetry adds minimal overhead to an app and should be considered for any app with multiple users. Without actual telemetry, you are left with user perception of how your app is doing. While user perception is an important part of how you should improve your application, actual telemetry removes user emotion and focuses on empirical data. The rest of this module will explain how to set up and use the telemetry that you capture in Application Insights to improve your application.
+# Set up an app for Application Insights
+Completed100 XP
+4 minutes
+Sending telemetry from a canvas app requires the follow steps:
+Provision an Application Insights resource at the Azure portal.
+Edit your canvas app to set up the Instrumentation Key and then publish the app.
+Now, when users run your published app outside of Power Apps Studio, it will send telemetry to Application Insights.
+The following video demonstrates how to set up a canvas app from Power Apps for Application Insights.
+The rest of this topic explores some options that you should consider when setting up Application Insights for your app.
+## Manage usage and costs for Application Insights
+The pricing for Application Insights is a pay-as-you-go model based on data volume that is ingested and, optionally, for longer data retention. Each billing account includes 5 GB of log data ingestion, so you might find that low usage apps that log sporadic data have no extra ingestion cost. For more information, see log data ingestion costs.
+When setting up your Application Insights resource, you can choose the default Log Analytics workspace or you can create a custom workspace. For more information, see designing your Log Analytics workspaces and the trade-offs of multiple workspaces.
+## Multiple apps in one Application Insights resource
+You can set up multiple apps to log data to the same Application Insights resource by setting up each to use the same Instrumentation key. Contained in the details of the logged events is an ms-appId property that will be tracked to keep each app data identifiable. The default visualizations will mix the data from all apps, which makes analyzing a single app difficult. However, you can view the combined usage of all apps in one place.
+When you set up multiple apps so that each has its own Application Insights resource and Instrumentation key, the event data is separated. This approach will help make it easier to visualize single app usage patterns but not usage across a set of apps.
+If you plan to use Application Insights for multiple apps, make sure that you consider how you will consume the data.
+## Move from development to production
+After you have set up an Instrumentation key on your app and have saved and published the app, whenever the published app is run, it will send telemetry to Application Insights. By default, if you transport the app to test and production environments, the app will use the same Instrumentation key and will log to the same Application Insights resource. The only time that the app will not send data is if it's run from Power Apps Studio while you are building the app.
+Environment variables are not currently supported for configuring the Instrumentation key.
+If you are using Microsoft Power Platform CLI to unpack and pack an application that has the Instrumentation key set up, the key is unpacked into a file named AppInsightsKey.json. You could use the CLI along with a source control strategy to allow the app to have different keys.
+## No access to your company Azure subscription
+You can still use Application Insights capability, even if you don't have permissions to set up the required Azure resources. Ask your Microsoft Entra ID administrator to create the Application Insights resource in the company Azure subscription. The administrator would then share the Instrumentation key with you to use in the application. The administrator can also grant you access to the Application Insights resource so that you can view and analyze the data that has been collected.
+# View Application Insights data
+Completed100 XP
+4 minutes
+After you have set up your application to send telemetry to Application Insights, you can view collected data from the Azure portal. From your Application Insights resource in the portal, you have the following ways to access the data:
+Individual visualizations - For example, the users report allows you to visualize summary data for a time period and allows you to drill down into more detail.
+Workbooks - Provide insights into the availability, performance, usage, and overall health of the underlying components. Several prebuilt workbooks are available, and you can build your own to include data from multiple Azure data sources.
+Logs - Allow you to query the raw event data and look for patterns. Also, you can answer questions directly in Application Insights on the Azure portal or in an external app like Power BI.
+You can use Application Insights to collect application performance data for many different types of applications, including Power Apps. For this reason, the portal offers many different visualizations and workbook templates for the different types of applications. Not all visualizations and workbook templates are applicable for Power Apps, and as you explore the different assets, you might find that many of them don't contain data or provide a limited experience.
+Visualizations and workbook templates that you will find useful for Power Apps include:
+Investigate > Transaction Search
+Monitoring > Metrics
+Monitoring > Logs
+Monitoring > Workbooks > App Performance Index
+Monitoring > Workbooks > Active Users
+Monitoring > Workbooks > Analysis of page views
+Monitoring > Workbooks > Engaged Users
+Monitoring > Workbooks > New, returning, and churn
+Monitoring > Workbooks > Usage calendar
+Monitoring > Workbooks > Usage through the day
+Monitoring > Workbooks > User Timeliness
+Monitoring > Workbooks > User Retention
+Usage > Users
+Usage > Sessions
+Usage > Events
+Usage > User Flows
+A good place to start is Usage > Users and then determine who/how many people are using your app. To find your Application Insights resource in the Azure portal, select All Resources and then search for the name that you provided.
+## Cohorts
+Using cohorts will allow you to define sets of users, events, or operations that have something in common. For example, you could define a cohort for all users of a specific screen in your app. Another example would be all users from a country/region. Then, you could use the cohort to filter your Application Insights visualizations.
+## Custom visualizations
+From most of the built-in visualizations, such as Users and Metrics, you can add or modify the filters and other criteria and then save your custom visualization. This approach can be useful if you frequently filter on the same information whenever you visit the data. For example, you can create a new chart on metrics and then customize the time range and granularity.
+## Alerts
+You can use the Alerts feature to help you stay aware of the metrics and send notifications when your apps don't behave as planned. For example, you could set up an alert if average page load time was high.
+## Power BI
+If you want to use Power BI to create custom visualizations, you can import the log data into a Power BI dataset.
+## Automate reporting by using Power Automate
+By using the Azure Monitor connector, you can build automated workflows that use data from your Application Insights workspace. For example, you could have a daily email that includes a list of errors that are logged by users of your app.
+# Custom logging with trace
+Completed100 XP
+5 minutes
+In addition to the telemetry that is sent automatically by Power Apps runtime to Application Insights, you can use the Power Fx Trace() function to send custom events. By instrumenting your app with trace calls, you can capture important events and associated data.
+Examples of when you might add Trace() function calls include:
+Using OnStart to log the parameters that are passed to your app when it was started
+When users enable or disable options in your application
+When a button is selected to perform an action
+When the user cancels an action
+When an error occurs, such as someone submitting a form or data source errors
+Logging validation errors
+Logging search criteria so that you can determine the popular searches
+Logging feedback based on a user's likes or dislikes in an app
+Anything that you want to query later
+In addition to logging the data for Application Insights, trace data is also visible in the Monitor tool and Power Apps Test Studio results.
+The syntax for the function is as follows:
+Trace(message, trace_severity, custom_record )
+The message parameter is required, and you should use it to identify why you called trace, such as entering Trace("Timesheet Validation Failed").
+Optionally, you can pass a severity level of information, warning, error, or critical. When used to consistently categorize your traces, severity can be helpful in querying the data. For example, you could get a daily email with a list of all errors that were captured.
+The Trace() function also allows you to pass a data record with context information. This record can have one or more data fields that would be helpful in analyzing the trace event data later. Additionally, you can use this data in the log queries to reduce the set of trace records that you review. You can compose the inline record by using braces ({}) that contain named field values. For example, you could enhance your previous validation by passing more context information:
+Trace(“Timesheet Validation Failed”,Warning, { hoursWorked:ThisItem.HoursWorked”)
+When composing Trace() function calls, make sure that you keep the following parameters in mind:
+Avoid sensitive data being recorded in Application Insights that might cause compliance problems, such as a customer's name and email address.
+Be alert for bad data or a formula that might cause unexpected results.
+Avoid sending too much data; send only what you need to analyze or query the data.
+Use consistent field names to help make querying easier across related trace calls.
+## Query the traces
+You can query and view the data that is captured by each Trace() function call by querying the log and using traces as the table name.
+In the results, each line will have an itemType of trace. In each row, the message and severityLevel will display. If you expand the row, a customDimensions property will display that you can further expand to show the fields that you logged as context data when you invoked the Trace() function.
+In the preceding image, JobId and JobName were context data. All ms- fields are automatically added to every trace. You can use this data to build a query similar to the following example that queries for all trace records from a specific JobId.
+You can use ms-appId to find all traces for a specific app and ms-appSessionId to find all traces for a user for that session of running the app. Each app that logs data will have a unique ms-appId.
+Adding traces to your app can provide you with a valuable resource to track problems. Traces are especially valuable because you can use them to capture data for an app that is running in production and doesn't require you to run the app in Power Apps Studio. By proactively adding Trace() function calls to your application, you will be ready when users report a challenging problem in production.
