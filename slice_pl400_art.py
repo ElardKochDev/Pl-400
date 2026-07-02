@@ -255,7 +255,8 @@ def do_portals():
 
 def do_backdrops():
     print("Fondos:")
-    for name in ["TitleVista", "TownPlaza", "BattleBastion", "BattleCrypt", "BattleFactory", "BattleThrone"]:
+    for name in ["TitleVista", "TownPlaza", "BattleBastion", "BattleCrypt", "BattleFactory",
+                 "BattleThrone", "BattleServerCrypt", "BattleAzure", "BattleCitadel"]:
         p = os.path.join(SRC, name + ".png")
         if not os.path.exists(p):
             print("  (falta %s.png)" % name); continue

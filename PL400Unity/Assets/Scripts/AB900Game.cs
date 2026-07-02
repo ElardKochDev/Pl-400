@@ -6021,7 +6021,8 @@ public sealed partial class AB900Game : MonoBehaviour
         return PartBackdrop(IsDungeon(area) || IsHub(area) ? PartOf(area) : 1);
     }
 
-    // Fondo por parte (1..4). Reutiliza los 4 fondos heredados hasta tener arte propio.
+    // Fondo por MUNDO (parte 1..6). Cada mundo tiene su escenario propio; los mundos 4-6 caen al
+    // trono del examen SOLO si su arte aún no está presente (fallback seguro).
     string PartBackdrop(int part)
     {
         switch (part)
@@ -6029,9 +6030,16 @@ public sealed partial class AB900Game : MonoBehaviour
             case 1: return "Art/External/BattleBastion";
             case 2: return "Art/External/BattleCrypt";
             case 3: return "Art/External/BattleFactory";
+            case 4: return BackdropOr("Art/External/BattleServerCrypt", "Art/External/BattleThrone");
+            case 5: return BackdropOr("Art/External/BattleAzure", "Art/External/BattleThrone");
+            case 6: return BackdropOr("Art/External/BattleCitadel", "Art/External/BattleThrone");
             default: return "Art/External/BattleThrone";
         }
     }
+
+    // Devuelve `primary` si su textura existe en Resources; si no, `fallback`.
+    string BackdropOr(string primary, string fallback)
+        => Resources.Load<Texture2D>(primary) != null ? primary : fallback;
 
     string BattleBackdrop()
     {
