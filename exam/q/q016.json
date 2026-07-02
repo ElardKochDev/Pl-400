@@ -1,0 +1,18 @@
+{
+  "n": 16,
+  "area": "integrations-alm",
+  "type": "multi",
+  "scenario": "A company uses a Power Platform custom connector for an API. The parameters for one of the API operations vary based on the category value selected. You need to configure the custom connector to present different parameters when makers use the action for this operation in their flows.",
+  "q": "Which two extensions could you configure? Each correct answer presents a complete solution.",
+  "options": [
+    "x-ms-visibility",
+    "x-ms-dynamic-schema",
+    "x-ms-operation-context",
+    "x-ms-capabilities",
+    "x-ms-dynamic-properties"
+  ],
+  "answer": ["x-ms-dynamic-schema", "x-ms-dynamic-properties"],
+  "why": "To show different parameters depending on a selected value you need DYNAMIC schema in the custom connector's OpenAPI definition. x-ms-dynamic-schema resolves the schema (the set of parameters/properties) at runtime by calling an operation that returns the schema for the chosen category, so makers see different parameters. x-ms-dynamic-properties works the same way for resolving properties dynamically at runtime from another operation - it is the newer/extended form and also presents different parameters based on input. x-ms-visibility only controls whether a parameter is shown as important/advanced/internal, it does not change which parameters exist. x-ms-capabilities declares connector capabilities (e.g. file picker/chunking), and x-ms-operation-context is not the mechanism for dynamic parameters.",
+  "cs": null,
+  "src": ["Screenshot 2026-07-02 102418.png", "Screenshot 2026-07-02 102424.png"]
+}

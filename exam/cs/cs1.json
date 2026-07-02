@@ -1,0 +1,17 @@
+{
+  "cs": "cs1",
+  "n": 17,
+  "area": "casefiles",
+  "title": "CompanyA - Retail (Dynamics 365 Sales + Power Platform)",
+  "status": "IN_PROGRESS",
+  "sections": [
+    {"title": "Background", "text": "CompanyA is a retail organization that sells home decor products online. It also has stores at various locations throughout the world, where many employees help customers resolve their queries, return defective products, and initiate refunds. Currently, most of the processes and activities that are performed by employees are performed manually. Employees also struggle to get a unified view of a customer's information, as they have to open multiple applications and systems in order to complete an order placement.\n\nCompanyA is planning to upgrade its outdated applications by adopting the Microsoft Dynamics 365 Sales app. It also wants to leverage the Power Platform low code capabilities. Its focus is to automate most of the sales process and reduce the effort required to handle customer queries and requests so that its employees can focus more on productive activities."},
+    {"title": "Current Environment", "text": "(pending transcription)"},
+    {"title": "Requirements", "text": "(pending transcription)"}
+  ],
+  "questions": [
+    {"q": "You need to ensure that employees can access the Customer self-service portal to raise requests on behalf of customers. What authentication type should you use?", "type": "single", "options": [], "answer": "", "why": "(pending)"}
+  ],
+  "src": ["Screenshot 2026-07-02 102440.png"],
+  "note": "Caso de estudio: 3 secciones (Background/Current Environment/Requirements) + 5 sub-preguntas (Question 1..5). Pendiente transcribir secciones restantes y Q1-Q5 con respuestas/explicaciones. Va al area 'casefiles' con lector."
+}

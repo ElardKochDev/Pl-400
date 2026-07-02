@@ -36,3 +36,12 @@ el header "Question X of 103". Cada pregunta ocupa 2-3 capturas consecutivas.
 - [x] Q13 hotspot extend-platform    (Custom API: Is Function false / Entity binding / None processing step)  src 102241/102248
 - [x] Q14 order   design-dataverse   (dar acceso a tabla via security role, 5 pasos PPAC)  src 102308/102314
 - [x] Q15 order   integrations-alm   (S2S auth app user + MSAL para Web API, 5 pasos)  src 102339/102347
+- [x] Q16 multi   integrations-alm   (custom connector dynamic params: x-ms-dynamic-schema + x-ms-dynamic-properties)  src 102418/102424
+- [~] Q17 CASE STUDY cs1 casefiles   (CompanyA retail D365 Sales; secciones Background/Current Env/Requirements + 5 sub-preguntas) -> exam/cs/cs1.json (IN_PROGRESS; empieza en 102440)
+
+## OJO casos de estudio
+Q17 es el primer CASO DE ESTUDIO: cabecera "Case Study", panel de Secciones (Background/Current
+Environment/Requirements) + lista Questions 1..5. En el contador avanza como "Question 17 of 103".
+Se guardan en exam/cs/csN.json (no en q/). El contador global salta segun cuantas sub-preguntas
+consuma; hay que ir viendo el header. Diseno de UI: LECTOR con pestanas de seccion + navegacion de
+sub-preguntas (area 'casefiles').
