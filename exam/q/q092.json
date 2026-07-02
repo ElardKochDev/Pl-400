@@ -1,0 +1,12 @@
+{
+  "n": 92,
+  "area": "extend-platform",
+  "type": "order",
+  "scenario": "You write a plug-in on the account entity that runs a create and update operation. Some of the users report that they experience business process errors while updating the account record. You need to debug the plug-in.",
+  "q": "Which six actions should you perform in sequence? Move the appropriate actions from the list of possible actions to the answer area and arrange them in the correct order.",
+  "options": ["Browse the assembly location, select the plugin Dynamic-link library (DLL), and click on Start Execution.", "Select the plug-in step and click on Start Profiling.", "Install the plug-in profiler.", "Select the plug-in and click on Start Profiling.", "Select the plug-in and click on Debug.", "Trigger the plug-in and download the error log file.", "Attach the Pluginregistration.exe process with the plug-in code in Visual Studio.", "Select the plug-in step and click on Debug and select the profile."],
+  "answer": ["Install the plug-in profiler.", "Select the plug-in step and click on Start Profiling.", "Trigger the plug-in and download the error log file.", "Select the plug-in step and click on Debug and select the profile.", "Attach the Pluginregistration.exe process with the plug-in code in Visual Studio.", "Browse the assembly location, select the plugin Dynamic-link library (DLL), and click on Start Execution."],
+  "why": "Debug a plug-in with the Plug-in Profiler in the Plug-in Registration Tool: Install the plug-in profiler; select the plug-in STEP and click Start Profiling; trigger the plug-in (reproduce the error) and download the error log/profile file; then select the plug-in step, click Debug and select the downloaded profile; attach the PluginRegistration.exe process to your plug-in code in Visual Studio (set breakpoints); and finally browse to the assembly location, select the plug-in DLL and click Start Execution to replay the profiled event and hit your breakpoints.",
+  "cs": null,
+  "src": ["Screenshot 2026-07-02 114113.png", "Screenshot 2026-07-02 114119.png"]
+}

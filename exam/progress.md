@@ -118,3 +118,7 @@ sub-preguntas (area 'casefiles').
 - [x] Q88 single  extend-platform    (retrieve record en plugin -> IOrganizationService)  src 113935
 - [x] Q89 multi   automation         (owner de flow se va: crear service principal Entra + application user + compartir connections del flow)  src 114030
 - [x] Q90 match   automation         (env variable cache: open canvas=DEV / new canvas=UAT / flow off&on=UAT / flow post save=UAT)  src 114045/114050
+- [x] Q91 single  extend-platform    (gov website lento, fetch+enviar a todos -> Azure Functions)  src 114101
+- [x] Q92 order   extend-platform    (debug plugin profiler 6 pasos: install profiler -> start profiling -> trigger+download log -> Debug select profile -> attach PluginRegistration.exe VS -> browse DLL Start Execution)  src 114113/114119
+- [x] Q93 multi   design-dataverse   (elastic table: alto volumen read/write + datos semi-structured)  src 114132
+- [x] Q94 single  design-dataverse   (nuevos users ven asteriscos en col segura -> Add to second security profile)  src 114144

@@ -1,0 +1,12 @@
+{
+  "n": 91,
+  "area": "extend-platform",
+  "type": "single",
+  "scenario": "You are using a model-driven app for a healthcare organization to maintain the information of doctors and patients. The organization is planning to set up multiple vaccination centers across the world and has the following requirements: Each doctor should be able to fetch information about the relevant health records of a particular patient from the government's official website; The organization should be able to send an update related to vaccination to all patients (e.g. dates of first and second dose and vaccination availability). The organization reports that the government's website has a long response time due to using outdated applications and heavy traffic load. You need to fulfill the requirements and optimize the process.",
+  "q": "Which component should you use to fulfill the requirements and optimize the process?",
+  "options": ["Custom workflow", "Azure Functions", "Plug-in", "Custom action"],
+  "answer": "Azure Functions",
+  "why": "Use Azure Functions. The government's website is slow (long response times), so the call must run OUTSIDE the Dataverse transaction to avoid plug-in/workflow timeouts (plug-ins are limited to ~2 minutes and would block/roll back). An Azure Function can call the external website asynchronously, scale under heavy load, and handle the long-running/batch update to all patients efficiently. Custom workflows, plug-ins and custom actions run within Dataverse and are subject to execution-time limits, so they are not suitable for a slow external service.",
+  "cs": null,
+  "src": ["Screenshot 2026-07-02 114101.png"]
+}

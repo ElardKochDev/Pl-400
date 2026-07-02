@@ -1,0 +1,12 @@
+{
+  "n": 93,
+  "area": "design-dataverse",
+  "type": "multi",
+  "scenario": "A company uses Microsoft Dataverse to store data for a Power Platform application. You need to choose the type of table to store data for a new requirement.",
+  "q": "In which two scenarios should you choose the elastic table type? Each correct answer presents a complete solution.",
+  "options": ["The application must handle a high volume of read and write requests.", "The application requires complex joins between table rows.", "The data is semi-structured.", "The data is customer interactions with time dimensions.", "The data is structured."],
+  "answer": ["The application must handle a high volume of read and write requests.", "The data is semi-structured."],
+  "why": "Elastic tables (built on Azure Cosmos DB) are designed for very high-volume, high-throughput read/write workloads that need to scale automatically, and for semi-structured/schema-flexible data where rows can have varying columns (JSON-like). Choose elastic tables for those two scenarios. They are NOT suited for complex relational joins or well-structured relational data - use standard Dataverse tables for that; time-dimension/customer-interaction analytics is not by itself a reason to choose elastic tables.",
+  "cs": null,
+  "src": ["Screenshot 2026-07-02 114132.png"]
+}

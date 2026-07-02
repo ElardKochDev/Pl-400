@@ -1,0 +1,12 @@
+{
+  "n": 94,
+  "area": "design-dataverse",
+  "type": "single",
+  "scenario": "You are a developer in a company. You create an activity table for the accounting department in Microsoft Dataverse. This table contains data related to commercial transaction records such as consumer orders that are managed by the department coordinator. The department coordinator needs to read and update the values of these sensitive columns. Other users in the accounting department need to be able to view but not update the sensitive columns. Column-level security is enabled on these columns and two column security profiles are created. The first profile is for the department coordinator and the second profile is for all other users in the accounting department. New employees in the accounting department report that they are unable to view the contents of these columns and see asterisks instead of the values. You need to solve this issue.",
+  "q": "What should you do?",
+  "options": ["Create a column security profile.", "Modify the permissions of the sensitive columns.", "Add the new users to the Basic user security role.", "Add the new users to the second security profile."],
+  "answer": "Add the new users to the second security profile.",
+  "why": "Field/column security is granted through field security PROFILES. The new employees see asterisks because they have not been added to any profile that grants Read on the secured columns. Adding them to the SECOND security profile (the read-only profile for other accounting users) gives them Read access so they can view the values. Creating another profile is unnecessary, modifying the column permissions would change the security design, and a Basic user security role does not override field-level security.",
+  "cs": null,
+  "src": ["Screenshot 2026-07-02 114144.png"]
+}
