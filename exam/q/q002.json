@@ -1,0 +1,26 @@
+{
+  "n": 2,
+  "area": "extend-ux",
+  "type": "order",
+  "scenario": "You are designing a Power Apps portal for a retail organization. The organization wants its users to have an enhanced user experience working with data on forms, views, and dashboards. You need to use custom code components (PCF controls) to achieve this.",
+  "q": "Which four steps should you perform in sequence?",
+  "options": [
+    "Configure the table permissions on the web resource table.",
+    "Create site settings.",
+    "Create a basic form.",
+    "Add your code component to a model-driven app column.",
+    "Restart the portal.",
+    "Build and package your code component.",
+    "Create basic form metadata for the code component column.",
+    "Create a web role for portal users."
+  ],
+  "answer": [
+    "Build and package your code component.",
+    "Add your code component to a model-driven app column.",
+    "Create a basic form.",
+    "Create basic form metadata for the code component column."
+  ],
+  "why": "First build and package the code component (designed with TypeScript) and import it to the environment. Next add the code component to a model-driven app column to change the data visualization. Then create a basic form. Finally create basic form metadata for the code component column so the portal renders the component. The other actions (table permissions, site settings, restart, web role) are not required to display the PCF component.",
+  "cs": null,
+  "src": ["Screenshot 2026-07-02 101659.png", "Screenshot 2026-07-02 101712.png", "Screenshot 2026-07-02 101722.png"]
+}

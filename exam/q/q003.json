@@ -1,0 +1,21 @@
+{
+  "n": 3,
+  "area": "design-dataverse",
+  "type": "match",
+  "scenario": "CompanyA is using Microsoft Dataverse and Power Apps. Transaction records are created in different currencies for different regions in Microsoft Dataverse. CompanyA plans to add daily exchange rates for each currency in Microsoft Dataverse. You must allow the company to retrieve exchange rates and use those exchange rates when transaction records are created in Microsoft Dataverse.",
+  "q": "What data source should you use for each requirement? A data source may be used once, more than once, or not at all.",
+  "options": ["Virtual Table", "Custom Connector"],
+  "rows": [
+    "Exchange rate records can be viewed in Microsoft Dataverse.",
+    "Exchange rate records have a numeric primary key.",
+    "Exchange rate records can be accessed in all Microsoft Dataverse clients."
+  ],
+  "answer": {
+    "Exchange rate records can be viewed in Microsoft Dataverse.": "Virtual Table",
+    "Exchange rate records have a numeric primary key.": "Custom Connector",
+    "Exchange rate records can be accessed in all Microsoft Dataverse clients.": "Virtual Table"
+  },
+  "why": "Use a virtual table to view/create/update/delete data in external systems: virtual tables display data from external systems as tables/columns in Dataverse while the data stays external. Use a custom connector for a numeric primary key: virtual tables only support external sources that use GUIDs as primary key, whereas a custom connector can access tables that use an integer primary key. Use a virtual table so data is available to all Dataverse clients (it appears like any other Dataverse table); model-driven and portal apps do not use connectors.",
+  "cs": null,
+  "src": ["Screenshot 2026-07-02 101742.png", "Screenshot 2026-07-02 101754.png"]
+}

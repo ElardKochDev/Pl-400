@@ -1,0 +1,26 @@
+{
+  "n": 1,
+  "area": "integrations-alm",
+  "type": "order",
+  "scenario": "CompanyA is using a canvas application to manage timesheets and allowance approvals of their employees. The master data for timesheets and employee allowances is stored on a website database hosted in Azure. You need to use an Azure function that retrieves the master data from the website database and shows it in your canvas app.",
+  "q": "Which five actions should you perform in sequence?",
+  "options": [
+    "Use the custom connector in Power Apps.",
+    "Create a Postman collection.",
+    "Import the Postman Collection to create the custom connector.",
+    "Add a custom API.",
+    "Create a folder structure.",
+    "Add an API key.",
+    "Create an Azure function with an HTTP trigger."
+  ],
+  "answer": [
+    "Create an Azure function with an HTTP trigger.",
+    "Add an API key.",
+    "Create a Postman collection.",
+    "Import the Postman Collection to create the custom connector.",
+    "Use the custom connector in Power Apps."
+  ],
+  "why": "First, create an Azure function with an HTTP trigger. Azure functions are used for event-driven serverless computing and can be created from Visual Studio using .NET, Node JS, Java, Python and TypeScript. An Azure function with an HTTP trigger is an API you can call via HTTP. Then secure the Azure function with an API key. Next, create a Postman collection to describe the API; this creates a Swagger file that defines the REST API signature. Then import the Postman Collection to create the custom connector. Finally, use the custom connector in a canvas app via Data sources. You should NOT create a folder structure (it is created automatically when you create/publish an Azure function). You should NOT add a custom API (that is a Dataverse feature for external systems to perform operations in Dataverse).",
+  "cs": null,
+  "src": ["Screenshot 2026-07-02 101615.png", "Screenshot 2026-07-02 101629.png", "Screenshot 2026-07-02 101635.png"]
+}
