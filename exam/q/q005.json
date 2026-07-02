@@ -1,0 +1,19 @@
+{
+  "n": 5,
+  "area": "extend-platform",
+  "type": "yesno",
+  "scenario": "You are integrating a model-driven app with an external system. You need to push the data to the external system each time a new contact is created or updated in the model-driven app. You need to ensure that only the necessary columns are used in the plug-in code to improve the plug-in performance. You write the code snippet in the plug-in execute method shown in the exhibit.",
+  "code": "// Plug-in execute method (exhibit)\nvar contactQuery = new QueryExpression(\"contact\")\n{\n    ColumnSet = new ColumnSet(\"emailaddress\"),\n    Criteria = new FilterExpression\n    {\n        Conditions =\n        {\n            new ConditionExpression(\"emailaddress\", ConditionOperator.Equal, contact.EMailAddress1)\n        }\n    }\n};\nEntityCollection contactColl = service.RetrieveMultiple(contactQuery);",
+  "q": "For each of the following statements about the plug-in code, select Yes if the statement is true. Otherwise, select No.",
+  "rows": [
+    {"s": "The contactColl object returns the contacts with the same email address.", "v": true},
+    {"s": "The contactColl.Count object returns the count of duplicate contacts.", "v": false},
+    {"s": "You should use service.Retrieve(contactQuery) instead of service.RetrieveMultiple(contactQuery) to execute the query.", "v": false},
+    {"s": "You should use ColumnSet('emailaddress') instead of ColumnSet(true).", "v": true},
+    {"s": "You must register the plug-in in the pre-operation stage.", "v": false},
+    {"s": "The user must have the System Administrator role to register the plug-in.", "v": false}
+  ],
+  "why": "contactColl returns the contacts matching the query: RetrieveMultiple always returns the record collection based on the query passed to it. contactColl.Count does NOT return the count of duplicates; to get the count use contactColl.Entities.Count, e.g. if(contactColl.Entities.Count > 0) { throw new InvalidPluginExecutionException(\"Duplicate contact found.\"); }. You should NOT use service.Retrieve(...) instead of RetrieveMultiple(...): Retrieve returns a single record by its GUID, while RetrieveMultiple returns the collection for a query. You SHOULD use ColumnSet(\"emailaddress\") instead of ColumnSet(true): requesting only the needed column (rather than all columns) improves performance. You do NOT have to register the plug-in in the pre-operation stage (validation/duplicate checks are commonly done in pre-validation/pre-operation, but it is not mandatory for this logic). The user does NOT need the System Administrator role to register a plug-in; the System Customizer role (with the necessary privileges) is sufficient.",
+  "cs": null,
+  "src": ["Screenshot 2026-07-02 101834.png", "Screenshot 2026-07-02 101846.png"]
+}

@@ -10,7 +10,9 @@ el header "Question X of 103". Cada pregunta ocupa 2-3 capturas consecutivas.
 - [x] Q3  match   design-dataverse   (exchange rates: Virtual Table / Custom Connector)          src 101742/101754
 
 ## Siguientes (pendientes)
-- [ ] Q4 ...  (empieza en la captura posterior a 101754)
+- [x] Q4  multi   design-dataverse   (restrict duplicates: Alternate key + Plug-in + Real-time workflow)  src 101811
+- [x] Q5  yesno   extend-platform    (plug-in code contactColl RetrieveMultiple/ColumnSet)  src 101834/101846
+- [x] Q6  match   extend-platform    (pipeline stages: Pre-validation/Pre-operation/Post-operation)  src 101903/101918
 - [ ] ... hasta Q103
 
 ## Pistas ya vistas (para cuando lleguemos)

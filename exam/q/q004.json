@@ -1,0 +1,19 @@
+{
+  "n": 4,
+  "area": "design-dataverse",
+  "type": "multi",
+  "scenario": "You are integrating a Power App with an external system in order to sync data in Microsoft Dataverse. You need to implement logic in Microsoft Dataverse to restrict users from creating duplicate records.",
+  "q": "Which three Microsoft Dataverse components should you use to implement the logic? Each correct answer presents a complete solution.",
+  "options": [
+    "Alternate key",
+    "JavaScript",
+    "Azure Logic Apps",
+    "Plug-in",
+    "Real-time workflow",
+    "Power Automate cloud flow"
+  ],
+  "answer": ["Alternate key", "Plug-in", "Real-time workflow"],
+  "why": "Each of these enforces uniqueness server-side, so it works no matter how the record is created (UI, API or the external sync). An ALTERNATE KEY defines one or more columns that must be unique; Dataverse rejects a create/update that would duplicate the key. A synchronous (real-time) PLUG-IN registered on the Create/Update message can query for an existing record and throw an InvalidPluginExecutionException to block the duplicate. A REAL-TIME (synchronous) WORKFLOW can likewise check for duplicates and stop the operation before it is committed. JavaScript is client-side only (form scripting) and is bypassed by API/integration writes, so it cannot guarantee uniqueness. Azure Logic Apps and Power Automate cloud flows run asynchronously after the record is created, so the duplicate already exists by the time they run - they cannot prevent it.",
+  "cs": null,
+  "src": ["Screenshot 2026-07-02 101811.png"]
+}

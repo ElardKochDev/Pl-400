@@ -1,0 +1,21 @@
+{
+  "n": 6,
+  "area": "extend-platform",
+  "type": "match",
+  "scenario": "You are working as a developer for a company that wants you to perform validation and integrate its Microsoft Dataverse data to an external database. You need to identify the pipeline stages in which to register the plug-in.",
+  "q": "Which stages should you use to meet the requirements? To answer, drag the appropriate stages to the correct descriptions. Each stage may be used once, more than once, or not at all.",
+  "options": ["Pre-validation", "Pre-operation", "Post-operation"],
+  "rows": [
+    "Check for duplicate data.",
+    "Update the case resolution time on case closure.",
+    "Send Dataverse table data to an external API."
+  ],
+  "answer": {
+    "Check for duplicate data.": "Pre-validation",
+    "Update the case resolution time on case closure.": "Pre-operation",
+    "Send Dataverse table data to an external API.": "Post-operation"
+  },
+  "why": "Use PRE-VALIDATION to check for duplicate data: it runs before the main system operation and outside the database transaction, so it is the right place to validate/cancel an operation early (e.g. throw if a duplicate exists) before any work is done. Use PRE-OPERATION to update the case resolution time on case closure: it runs inside the transaction, before the record is written, so you can modify column values on the record being saved (setting them here avoids an extra update call). Use POST-OPERATION to send Dataverse table data to an external API: it runs after the record has been committed, so the data is final and you can safely push it to the external system (ideally asynchronously).",
+  "cs": null,
+  "src": ["Screenshot 2026-07-02 101903.png", "Screenshot 2026-07-02 101918.png"]
+}
