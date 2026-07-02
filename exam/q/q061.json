@@ -1,0 +1,12 @@
+{
+  "n": 61,
+  "area": "extend-ux",
+  "type": "single",
+  "scenario": "A company is using a model-driven app to manage its employee data. The Employee table stores employee profile data and the Background Check table stores background verification details. The Employee table has a 1:N relation with the Background Check table. A custom button on an employee form calls a JavaScript function that validates whether all background verification records associated with that employee are completed. If not, the JavaScript function displays a message to the user. Users in Spain are complaining that the message is not being displayed in their local language. You need to modify the RibbonDiffXml file to ensure that messages appear in the user's local language as configured in the model-driven apps' personal settings.",
+  "q": "Which of the following parameters and values should you use?",
+  "options": ["CrmParameter = 1033", "CrmParameter = UserLcid", "CrmParameter = OrgLcid", "CrmParameter = 1034"],
+  "answer": "CrmParameter = UserLcid",
+  "why": "Pass CrmParameter = UserLcid. UserLcid resolves to the CURRENT user's language (LCID) as configured in their personal settings, so each user - including those in Spain - sees the message in their own language. Hard-coding 1033 (English-US) or 1034 (Spanish) forces one fixed language for everyone, and OrgLcid uses the organization's base language, not the individual user's language.",
+  "cs": null,
+  "src": ["Screenshot 2026-07-02 112926.png"]
+}

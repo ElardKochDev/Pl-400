@@ -1,0 +1,12 @@
+{
+  "n": 62,
+  "area": "extend-platform",
+  "type": "order",
+  "scenario": "You are writing a C# console application to retrieve the contact records from Microsoft Dataverse where: Contacts are in an inactive state; Contacts do not have an email address.",
+  "q": "Which of the following five Microsoft Dataverse Organization Service classes should you use in sequence to retrieve the data? Move the appropriate classes from the list to the answer area and arrange them in the correct order.",
+  "options": ["Tracing Service", "Condition Expression", "Entity Collection", "Filter Expression", "IOrganizationService", "Query Expression", "Input Parameter", "Service Provider"],
+  "answer": ["IOrganizationService", "Query Expression", "Condition Expression", "Filter Expression", "Entity Collection"],
+  "why": "First get the IOrganizationService (the connection used to call Dataverse). Create a QueryExpression for the contact table. Define the ConditionExpression(s) - one for statecode = Inactive and one for emailaddress1 is null. Add those conditions to a FilterExpression on the query's Criteria. Finally call RetrieveMultiple, which returns an EntityCollection containing the matching contact records.",
+  "cs": null,
+  "src": ["Screenshot 2026-07-02 112938.png", "Screenshot 2026-07-02 112943.png"]
+}

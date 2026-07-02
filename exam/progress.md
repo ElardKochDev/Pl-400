@@ -88,3 +88,6 @@ sub-preguntas (area 'casefiles').
 - [x] Q58 single  design-dataverse   (validar tax number desde forms+portal -> business rule scope Entity)  src 112846
 - [x] Q59 single  apps-powerfx       (varios ClearCollect en OnStart lento -> Concurrent)  src 112857
 - [x] Q60 match   apps-powerfx       (config=Collection / offline=SaveData / Google Maps=Launch / notas CRM=Patch / email adjuntos=Power Automate)  src 112909/112914
+- [x] Q61 single  extend-ux          (RibbonDiffXml mensaje en idioma del usuario -> CrmParameter = UserLcid)  src 112926
+- [x] Q62 order   extend-platform    (retrieve contacts C#: IOrganizationService -> QueryExpression -> ConditionExpression -> FilterExpression -> EntityCollection)  src 112938/112943
+- [x] Q63 multi   integrations-alm   (canvas solo Global admin gestiona users Entra -> Microsoft Graph API + Custom connector)  src 112955

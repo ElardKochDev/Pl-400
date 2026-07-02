@@ -1,0 +1,12 @@
+{
+  "n": 63,
+  "area": "integrations-alm",
+  "type": "multi",
+  "scenario": "You are designing a canvas app for a retail organization. You need to make sure that only the Global administrator is able to login to the app. The Global admin should also be able to manage (create/update/delete) the users in Microsoft Entra.",
+  "q": "Which of the following two components should you use to implement the requirement?",
+  "options": ["Microsoft Graph API", "Custom connector", "Microsoft Dataverse Web API", "Azure Logic Apps"],
+  "answer": ["Microsoft Graph API", "Custom connector"],
+  "why": "Managing (create/update/delete) users in Microsoft Entra ID is done through the Microsoft Graph API. Because a canvas app cannot call Graph directly, you expose the Graph calls through a Custom connector (which acts as a wrapper/middleware around the API) and call it from the app. The Dataverse Web API works with Dataverse data (not Entra users), and Azure Logic Apps is an integration/orchestration service that is not needed here.",
+  "cs": null,
+  "src": ["Screenshot 2026-07-02 112955.png"]
+}
