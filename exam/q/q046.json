@@ -1,0 +1,12 @@
+{
+  "n": 46,
+  "area": "extend-platform",
+  "type": "single",
+  "scenario": "You have written a custom web application that consumes the Dataverse Web API as an interactive user. Your application integrates Dataverse with another SaaS platform, performing hundreds of GET and POST operations per minute. The first time you test your application, you immediately receive an error from the Dataverse Web API.",
+  "q": "Which of the API limits has your application breached?",
+  "options": ["Number of concurrent requests", "Entitlement", "Execution time", "Number of requests"],
+  "answer": "Number of concurrent requests",
+  "why": "The error appears IMMEDIATELY on first test, which points to the service protection limit on the number of CONCURRENT requests per user - Dataverse allows only a limited number of simultaneous in-flight requests per user, and firing hundreds of parallel GET/POST calls breaches that instantly. The 'number of requests' and 'execution time' service-protection limits are measured over a 5-minute sliding window (they would not trip on the very first request), and 'entitlement' (API request allocation per license) is a daily limit, not an immediate error.",
+  "cs": null,
+  "src": ["Screenshot 2026-07-02 112521.png"]
+}

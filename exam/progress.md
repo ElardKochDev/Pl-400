@@ -72,3 +72,6 @@ sub-preguntas (area 'casefiles').
 - [x] Q42 single  integrations-alm   (custom connector test error 500 -> revisar Path and Host fields en swagger)  src 112436
 - [x] Q43 single  integrations-alm   (managed solution import falla, workflow en Loan table -> Published dependency)  src 112447
 - [x] Q44 multi   automation         (dividir flow en parent/child -> crear en solucion + instant trigger child + Response action child)  src 112458
+- [x] Q45 single  extend-platform    (plug-in sync timeout muchas ops -> Register pre and post entity images)  src 112510
+- [x] Q46 single  extend-platform    (cientos GET/POST concurrentes error inmediato -> Number of concurrent requests)  src 112521
+- [x] Q47 match   apps-powerfx       (SharePoint upload=Standard / Dataverse Notes=Premium / Entra guest user=Custom)  src 112532/112538

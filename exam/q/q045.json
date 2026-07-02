@@ -1,0 +1,12 @@
+{
+  "n": 45,
+  "area": "extend-platform",
+  "type": "single",
+  "scenario": "A company uses Microsoft Dataverse plug-ins to perform complex logic. A synchronous plug-in that performs many data operations generates a timeout. The plugin step is registered for the update message on a table with the PostOperation stage selected. You need to improve the performance of the plug-in.",
+  "q": "What should you do?",
+  "options": ["Use multi-threads to perform the data operations.", "Register pre and post entity images.", "Configure shared variables.", "Use batch requests to perform the data operations."],
+  "answer": "Register pre and post entity images.",
+  "why": "Register pre and post entity images so the plug-in can read the column values it needs directly from the image snapshots (context.PreEntityImages / PostEntityImages) instead of issuing extra Retrieve calls to the database. Removing those round-trips reduces the data operations and speeds up the plug-in, avoiding the timeout. Multi-threading is not supported/safe in the sandboxed plug-in pipeline, shared variables only pass data between plug-in stages, and batch requests apply to the Web API - none of them cut the redundant retrieves the way entity images do.",
+  "cs": null,
+  "src": ["Screenshot 2026-07-02 112510.png"]
+}

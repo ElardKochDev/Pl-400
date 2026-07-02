@@ -1,0 +1,17 @@
+{
+  "n": 47,
+  "area": "apps-powerfx",
+  "type": "match",
+  "scenario": "You are designing a canvas app for an automobile company. The company wants employees to be able to save data in SharePoint, Microsoft Dataverse, and Microsoft Entra ID through the canvas app. You need to use the appropriate connectors in the canvas app to meet the company's requirements.",
+  "q": "Which connectors should you use? Drag the appropriate connector to the correct requirement. Each connector may be used once, more than once, or not at all.",
+  "options": ["Custom Connector", "Premium Connector", "Standard Connector"],
+  "rows": ["To upload documents in SharePoint", "To create Notes in Microsoft Dataverse", "To create a guest user in Microsoft Entra ID"],
+  "answer": {
+    "To upload documents in SharePoint": "Standard Connector",
+    "To create Notes in Microsoft Dataverse": "Premium Connector",
+    "To create a guest user in Microsoft Entra ID": "Custom Connector"
+  },
+  "why": "Use the STANDARD SharePoint connector to upload documents to SharePoint. Use the PREMIUM Microsoft Dataverse connector to create Notes in Dataverse. Use a CUSTOM connector to create a guest user in Microsoft Entra ID, because that CRUD operation requires calling the Microsoft Graph API, and Graph can only be called from a canvas app through a custom connector. You only create a custom connector when Microsoft provides no standard/premium connector for the operation.",
+  "cs": null,
+  "src": ["Screenshot 2026-07-02 112532.png", "Screenshot 2026-07-02 112538.png"]
+}
