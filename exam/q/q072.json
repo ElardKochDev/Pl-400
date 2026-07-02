@@ -1,0 +1,15 @@
+{
+  "n": 72,
+  "area": "integrations-alm",
+  "type": "hotspot",
+  "scenario": "A company uses Microsoft Dataverse. You want to integrate with Microsoft Azure by calling an Azure Function that has an HTTP trigger. You need to pass a custom JSON payload synchronously to the Azure function when a row is created in a Dataverse table.",
+  "q": "How should you build the integration? Select the appropriate options from the drop-down menus.",
+  "rows": [
+    {"s": "To pass the data from Dataverse to Azure.", "a": "Build a Dataverse Plug-in", "options": ["Build a Dataverse Plug-in", "Define a Custom API", "Create a Power Automate flow"]},
+    {"s": "To define the endpoint and authentication details for the Azure Function.", "a": "Webhook", "options": ["Webhook", "Azure Service Bus", "Service endpoint"]},
+    {"s": "To connect to the endpoint in Azure.", "a": "IServiceEndpointNotificationService", "options": ["IServiceEndpointNotificationService", "IOrganizationService", "ITracingService"]}
+  ],
+  "why": "Build a Dataverse PLUG-IN that fires when a row is created; the plug-in passes a custom JSON payload to Azure synchronously. Use a WEBHOOK to define the Azure Function endpoint URL and its authentication (key/header). In the plug-in code, use the IServiceEndpointNotificationService interface to connect to the registered endpoint (webhook) and push the custom JSON object to the Azure Function. A Custom API is for calling INTO Dataverse, and Azure Service Bus is asynchronous - neither passes a synchronous custom payload out on a create event.",
+  "cs": null,
+  "src": ["Screenshot 2026-07-02 113307.png"]
+}

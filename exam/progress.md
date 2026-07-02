@@ -98,3 +98,5 @@ sub-preguntas (area 'casefiles').
 - [x] Q68 SOLUTION-EVAL cs5 casefiles  (Dataverse+website 3rd-party API, dev local+App Insights; Logic Apps=No / Power Automate=No / Azure Functions=Yes)  -> exam/cs/cs5.json DONE  src 113123..113207
 - [x] Q69 code    automation         (flow ExportEmail: apis/shared_office365 / ['body/body'] / @parameters('$authentication'))  src 113223/113229
 - [x] Q70 multi   design-dataverse   (support no actualiza cols transaccionales -> Column-level security + Role-based form)  src 113241
+- [x] Q71 single  extend-ux          (PCF avisa cambio de dato al form -> notifyOutputChanged)  src 113253
+- [x] Q72 hotspot integrations-alm   (JSON sync a Azure Function on create: Dataverse Plug-in / Webhook / IServiceEndpointNotificationService)  src 113307

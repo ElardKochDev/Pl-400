@@ -1,0 +1,12 @@
+{
+  "n": 71,
+  "area": "extend-ux",
+  "type": "single",
+  "scenario": "A company builds Power Apps component framework (PCF) controls for use in canvas and model-driven apps. You are building an interactive PCF code component. You need to let the host form know that the user changed data in the control.",
+  "q": "Which method should you call in the PCF code?",
+  "options": ["updateView", "setControlState", "notifyOutputChanged", "getOutputs"],
+  "answer": "notifyOutputChanged",
+  "why": "Call notifyOutputChanged when the data in the control changes. It informs the framework runtime that the control has new output values, prompting the runtime to call getOutputs to read them and push them back to the bound column on the host form. updateView is called BY the framework when data changes externally (you implement it, you don't call it), and getOutputs is what the framework calls to retrieve values - you don't call it directly to signal a change.",
+  "cs": null,
+  "src": ["Screenshot 2026-07-02 113253.png"]
+}
