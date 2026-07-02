@@ -1,0 +1,12 @@
+{
+  "n": 79,
+  "area": "extend-platform",
+  "type": "single",
+  "scenario": "Your company has a customer service department. Each employee has a specific method for dealing with customer requests. The department coordinator asks you to set a business process flow so that all employees handle customer requests in the same way. You create the required workflow and set a Yes/No column to trigger the workflow. You get an error message with the privileges that need to be monitored as shown in the exhibit. You need to find the required privileges in the given code.",
+  "q": "Which privileges should you monitor?",
+  "options": ["Create Activity, Read Activity", "Write Activity", "Create Activity, Read Activity, Write Activity, Delete Activity", "Write Activity, Delete Activity, Read Activity"],
+  "answer": "Create Activity, Read Activity, Write Activity, Delete Activity",
+  "why": "The workflow/business process flow performs the full set of operations on the activity (it creates, reads, updates and deletes activity records), so the security role running it must have all four privileges: Create Activity, Read Activity, Write Activity and Delete Activity. Monitoring only a subset (e.g. Create+Read, or Write) would miss the privileges the code actually requires, so the complete set is the correct answer.",
+  "cs": null,
+  "src": ["Screenshot 2026-07-02 113509.png"]
+}

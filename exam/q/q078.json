@@ -1,0 +1,12 @@
+{
+  "n": 78,
+  "area": "integrations-alm",
+  "type": "order",
+  "scenario": "You are working for a company that uses a model-driven app. The company plans to integrate an event management system that is built using Node JS. You need to provide the web development team with an authentication strategy that uses OAuth 2.0 with permissions on specific tables of Microsoft Dataverse.",
+  "q": "Which four actions should you perform in sequence? Move the appropriate actions from the list of possible actions and arrange them in the correct order.",
+  "options": ["Register an application in Microsoft Entra ID.", "Create a user-assigned managed identity.", "Navigate to the Keys area and add a new key, then copy the value of the secret and save it.", "Add permissions to the application to access to Dataverse.", "Create an application user in Dataverse and add the Application ID of the application from Microsoft Entra ID.", "Add a secret to Azure Key Vault."],
+  "answer": ["Register an application in Microsoft Entra ID.", "Add permissions to the application to access to Dataverse.", "Navigate to the Keys area and add a new key, then copy the value of the secret and save it.", "Create an application user in Dataverse and add the Application ID of the application from Microsoft Entra ID."],
+  "why": "First register an application in Microsoft Entra ID (so the Node.js app has an identity for OAuth 2.0). Add the Dataverse API permissions to that app registration. Navigate to the app's Keys/Certificates & secrets area, add a new client secret, and copy/save its value (needed to acquire tokens). Finally, create an application user in Dataverse linked to that app (via its Application ID) and assign it a security role, which grants access to the specific tables. This is the standard server-to-server (S2S) OAuth setup.",
+  "cs": null,
+  "src": ["Screenshot 2026-07-02 113445.png", "Screenshot 2026-07-02 113450.png"]
+}

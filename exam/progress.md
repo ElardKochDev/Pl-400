@@ -105,3 +105,5 @@ sub-preguntas (area 'casefiles').
 - [x] Q75 multi   integrations-alm   (429 errors: prevenir requests solapadas UI + agrupar requests en batches)  src 113353/113358
 - [x] Q76 single  integrations-alm   (custom connector Teams/Graph -> OAuth 2.0)  src 113410
 - [x] Q77 order   extend-platform    (Azure aware plugin: create function app+publish profile -> VS project import -> modify code+publish -> register webhook -> register step)  src 113425/113431
+- [x] Q78 order   integrations-alm   (S2S OAuth Node: register app Entra -> add Dataverse permissions -> add key/secret -> create application user con App ID)  src 113445/113450
+- [x] Q79 single  extend-platform    (privilegios workflow activity -> Create+Read+Write+Delete Activity)  src 113509
