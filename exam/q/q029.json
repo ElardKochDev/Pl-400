@@ -1,0 +1,12 @@
+{
+  "n": 29,
+  "area": "integrations-alm",
+  "type": "multi",
+  "scenario": "You are designing a single-page application for your business partners to give them limited access to Microsoft Dataverse data. You need to use the Web API to connect the application with Dataverse and perform operations.",
+  "q": "Which three actions should you perform to authenticate users through the Web API? Each correct answer presents part of the solution.",
+  "options": ["Generate a client ID and secret key.", "Assign an Environment Maker role to the user.", "Assign a System Administrator role to the user.", "Provide Dataverse user impersonation API permission and grant Admin consent.", "Assign a Power Platform license to the user.", "Create an application user."],
+  "answer": ["Generate a client ID and secret key.", "Provide Dataverse user impersonation API permission and grant Admin consent.", "Create an application user."],
+  "why": "To authenticate a server/single-page app to the Dataverse Web API using service principal (app) authentication: (1) Register the app in Microsoft Entra ID and generate a client ID and secret key so the app can request a token; (2) Provide the Dataverse user_impersonation API permission and grant Admin consent so the app is authorized to call the Web API on behalf of users; (3) Create an application user in the Dataverse environment (linked to the app registration) and give it a security role so the calls have the right data access. Assigning Environment Maker/System Administrator roles to a user, or assigning a Power Platform license, are not the steps required to authenticate the application through the Web API.",
+  "cs": null,
+  "src": ["Screenshot 2026-07-02 103537.png"]
+}

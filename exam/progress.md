@@ -54,3 +54,6 @@ sub-preguntas (area 'casefiles').
 - [x] Q24 single  integrations-alm   (feed nightly delta a ERP -> Track changes / change tracking)  src 102924
 - [x] Q25 CASE STUDY cs2 casefiles  (Environmental Assessments MDA/PCF/client scripting; 5 secciones + 7 sub-preguntas: openErrorDialog / yesno JS exhibit No-No-Si / feature-usage / CountRows>0 / web resource dependency / code manifest AssessmentMapControl-standard-read-only / OnLoad)  -> exam/cs/cs2.json DONE  src 102952..103221
 - [x] Q26 single  automation         (CRUD desde boton canvas via Power Automate -> Instant cloud flow)  src 103421
+- [x] Q27 match   integrations-alm   (sync 3rd-party API=Webhook / mensajes a web Azure=Service Bus / real-time Dataverse=Plug-in)  src 103434/103441
+- [x] Q28 single  automation         (RPA+organizar archivos+scrape a Excel+UI testing -> Desktop flow)  src 103459
+- [x] Q29 multi   integrations-alm   (auth Web API SPA: client ID+secret / Dataverse user impersonation+admin consent / application user)  src 103537/103546

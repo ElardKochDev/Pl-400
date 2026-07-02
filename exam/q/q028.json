@@ -1,0 +1,12 @@
+{
+  "n": 28,
+  "area": "automation",
+  "type": "single",
+  "scenario": "A company wants to use the following automation capabilities in its web application: Remote Process Automation; Organization of documents in specific files and folders; Extraction of data from the website and the storage of that data in an Excel file; Automation of User Interface (UI) testing. You need to recommend an appropriate solution.",
+  "q": "Which Power Automate flow should you recommend?",
+  "options": ["Instant flow", "Business process flow", "Desktop flow", "Scheduled flow", "Automated flow"],
+  "answer": "Desktop flow",
+  "why": "Recommend a desktop flow (Power Automate for desktop / RPA). Desktop flows automate the user interface of websites and desktop applications - they cover Robotic/Remote Process Automation, moving and organizing files and folders, screen-scraping/extracting data from a website into Excel, and automating UI testing. Cloud flows (instant, automated, scheduled) work with connectors/APIs and cannot drive the UI, and a business process flow only guides users through stages of a Dataverse process.",
+  "cs": null,
+  "src": ["Screenshot 2026-07-02 103459.png"]
+}

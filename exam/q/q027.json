@@ -1,0 +1,17 @@
+{
+  "n": 27,
+  "area": "integrations-alm",
+  "type": "match",
+  "scenario": "You are developing a model-driven application for CompanyA. The model-driven application will be integrated with several on-premises and cloud environments. As a Power Platform developer, you need to identify the method that should be used for each integration.",
+  "q": "Match the appropriate method to each integration. Each method may be used once, more than once, or not at all.",
+  "options": ["Webhook", "Plug-in", "Azure Service Bus", "Power Automate flow"],
+  "rows": ["To make synchronous calls to third-party APIs.", "To pass messages to and from a website hosted in Azure.", "To perform real-time updates on data in Microsoft Dataverse."],
+  "answer": {
+    "To make synchronous calls to third-party APIs.": "Webhook",
+    "To pass messages to and from a website hosted in Azure.": "Azure Service Bus",
+    "To perform real-time updates on data in Microsoft Dataverse.": "Plug-in"
+  },
+  "why": "Use WEBHOOKS to make synchronous calls to third-party APIs: webhooks let Dataverse send event data to custom code hosted on external services in real time (synchronously). Use AZURE SERVICE BUS to pass messages reliably to and from a website/line-of-business app hosted in Azure. Use PLUG-INS to perform real-time updates on data within Dataverse. Do not use a Power Automate flow - flows run asynchronously as background processes and are for connecting multiple data sources, not for synchronous API calls or real-time in-transaction updates.",
+  "cs": null,
+  "src": ["Screenshot 2026-07-02 103434.png", "Screenshot 2026-07-02 103441.png"]
+}
