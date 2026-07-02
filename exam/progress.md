@@ -109,3 +109,5 @@ sub-preguntas (area 'casefiles').
 - [x] Q79 single  extend-platform    (privilegios workflow activity -> Create+Read+Write+Delete Activity)  src 113509
 - [x] Q80 order   integrations-alm   (external app sin MFA a custom tables: App registration Entra -> API permissions -> application user -> custom security role)  src 113521/113527
 - [x] Q81 single  automation         (generar PDF invoice + email desde command button, min custom, monitoreable -> Power Automate cloud flow triggered con JavaScript)  src 113543
+- [x] Q82 single  apps-powerfx       (reusar componentes no-code entre apps con updates -> Component library)  src 113619
+- [x] Q83 order   apps-powerfx       (header como component library 6 pasos: +New library -> custom input+label -> save library -> new canvas app -> Get more components import -> insert header)  src 113632/113643

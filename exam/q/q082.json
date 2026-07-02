@@ -1,0 +1,12 @@
+{
+  "n": 82,
+  "area": "apps-powerfx",
+  "type": "single",
+  "scenario": "You are designing a Power Apps canvas app for a healthcare organization. The organization has no professional developers. You create low code/no code components in the canvas app such as a welcome screen, a header, and a footer. You need to reuse those components in other canvas apps, enabling the apps to easily update the components in the other apps when they are updated.",
+  "q": "Which feature should you use?",
+  "options": ["Component library", "Custom code component (PCF Control)", "Component", "IFrame"],
+  "answer": "Component library",
+  "why": "Use a Component library. A component library is a reusable, no-code collection of canvas components (like the welcome screen, header and footer) that can be shared across many canvas apps; when you publish an update to the library, the apps that use it are prompted to pick up the updated version - meeting the 'easily update in other apps' requirement. A plain Component lives inside a single app (not reusable across apps that way), a PCF control requires pro-code (there are no developers), and an IFrame just embeds external web content.",
+  "cs": null,
+  "src": ["Screenshot 2026-07-02 113619.png"]
+}

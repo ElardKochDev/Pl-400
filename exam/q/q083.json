@@ -1,0 +1,12 @@
+{
+  "n": 83,
+  "area": "apps-powerfx",
+  "type": "order",
+  "scenario": "You are designing a canvas app for the sales department of a tech company. The sales manager uses the app to track sales performance and approve or reject requests made by salespeople. Salespeople use this app to view their customers, daily appointments, and for capturing meeting notes. You are tasked with designing a header for this app that is common across all screens and that displays a dynamic message based on the input provided to the screen. The sales department also wants to publish the header as a reusable component in the organization so that it can be reused by the developers in other canvas apps as well. You need to design the header component for the app and use it in a new app.",
+  "q": "Which six steps should you perform in sequence? Move the appropriate actions from the list of possible actions to the answer area and arrange them in the correct order.",
+  "options": ["Save the component.", "Insert the header component in the app screen.", "Create a +New component library and rename the default component header.", "Publish the component.", "Click on +New component and rename the default component header.", "Click on Get more components and import the component.", "Add a custom text input property, add a label control, and set the label's text property to the input property.", "Save the component library.", "Create a new canvas app."],
+  "answer": ["Create a +New component library and rename the default component header.", "Add a custom text input property, add a label control, and set the label's text property to the input property.", "Save the component library.", "Create a new canvas app.", "Click on Get more components and import the component.", "Insert the header component in the app screen."],
+  "why": "Create a +New component LIBRARY (not a plain component) so the header can be reused across apps, and rename the default component to header. Add a custom text INPUT property and a Label control, setting the label's Text to the input property so the header shows a dynamic message from the passed parameter. Save the component library. Then create a new canvas app, use 'Get more components' to import the component from the library, and finally insert the header component onto the app screen.",
+  "cs": null,
+  "src": ["Screenshot 2026-07-02 113632.png", "Screenshot 2026-07-02 113643.png"]
+}
