@@ -31,3 +31,5 @@ el header "Question X of 103". Cada pregunta ocupa 2-3 capturas consecutivas.
 - [x] Q8  order   integrations-alm   (webhook a Azure function: Register New Web Hook -> ... -> step con filtering)  src 102019/102027
 - [x] Q9  hotspot integrations-alm   (App Insights: Azure portal / Maker portal / Azure portal)  src 102044/102050
 - [x] Q10 single  extend-platform    (validar email en create real-time -> pre-operation synchronous plug-in)  src 102107
+- [x] Q11 code    extend-platform    (Organization Service optimistic concurrency: UpdateRequest/IfRowVersionMatches/FaultException)  src 102129/102141/102146
+- [x] Q12 yesno   design-dataverse   (rollup + field security: Recalculate/read rollup value)  src 102204/102214/102221

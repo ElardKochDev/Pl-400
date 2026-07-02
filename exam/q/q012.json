@@ -1,0 +1,15 @@
+{
+  "n": 12,
+  "area": "design-dataverse",
+  "type": "yesno",
+  "scenario": "You are working on a model-driven app with the custom table Vehicle, which is related to the Territory table N:1. All users have organization-level read, write, append and append-to privileges to both the Territory and Vehicle tables. The Sale Price column is the only column enabled for field security.\n\nThree vehicle records related to the Asia Pacific Territory: Blue Ford / Asia Pacific / $1,000; Green Volkswagen / Asia Pacific / $2,000; Red Honda / Asia Pacific / $3,000.\n\nYou create a rollup column called Total Vehicle Sales on the Territory table, which sums the Sale Price of all related vehicle records.\n\nColumn Security Profiles: 'Sale Price' profile = Read access to Vehicle: Sale Price, assigned to team Managers and to Anthony. 'Standard' profile = No access to Vehicle: Sale Price, assigned to team Staff.\n\nTeam membership: Managers = Bobby, Mary. Staff = Tony, Anthony, Barbara, Susan, Tim.",
+  "q": "For each of the following statements, select Yes if the statement is true. Otherwise, select No.",
+  "rows": [
+    {"s": "Tony can use the Recalculate button under the Total Vehicle Sales column.", "v": true},
+    {"s": "Barbara can read the value in the Total Vehicle Sales column.", "v": true},
+    {"s": "Tim will see $0 in the Total Vehicle Sales column.", "v": false}
+  ],
+  "why": "Tony CAN use the Recalculate button: it only requires write privileges to the Territory table (which he has at organization level), not read access to the field-secured Sale Price column on Vehicle. The button just requests a recalculation (rollup jobs otherwise run on a scheduled job about every hour). Barbara CAN read the Total Vehicle Sales value ($6,000): rollup calculations run asynchronously under a system user with system administrator permissions, so the individual field-security read permissions of specific users are irrelevant to the value stored/displayed in the rollup column (the rollup column itself is not field-secured; only Sale Price is). Tim will NOT see $0 - he will see $6,000 for the same reason: his lack of read access to the source Sale Price column is irrelevant because the rollup aggregation is performed as a system administrator, and the rollup column is not secured.",
+  "cs": null,
+  "src": ["Screenshot 2026-07-02 102204.png", "Screenshot 2026-07-02 102214.png", "Screenshot 2026-07-02 102221.png"]
+}

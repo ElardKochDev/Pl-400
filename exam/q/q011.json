@@ -1,0 +1,16 @@
+{
+  "n": 11,
+  "area": "extend-platform",
+  "type": "code",
+  "scenario": "A company uses the Organization Service in a custom application to update data in the account table in Microsoft Dataverse. The table uses the status code column to manage business logic. The application uses different logic for each status code. You need to prevent users from changing the status code of a record if another user has edited and changed the status code of that record while using the app. You also need to show a message to the user when this happens.",
+  "q": "Which messages and properties should you use to complete the code? To answer, select the appropriate options from the drop-down menus.",
+  "code": "var retrievedAccount = svc.Retrieve(\"account\", accountid,\n    new ColumnSet(\"statuscode\"));\nvar changedAccount = new Account();\nchangedAccount.Id = retrievedAccount.Id;\nchangedAccount.RowVersion = retrievedAccount.RowVersion;\nchangedAccount.statuscode = new OptionSetValue(5);\nvar request = new [[1]]()\n{\n    Target = changedAccount,\n    ConcurrencyBehavior = ConcurrencyBehavior.[[2]]\n};\ntry\n{\n    svc.Execute(request);\n}\ncatch ([[3]] ex)\n{\n}",
+  "blanks": [
+    {"id": 1, "a": "UpdateRequest", "options": ["UpdateRequest", "Update", "Upsert"]},
+    {"id": 2, "a": "IfRowVersionMatches", "options": ["IfRowVersionMatches", "AlwaysOverwrite", "NewOrUpdated"]},
+    {"id": 3, "a": "FaultException<OrganizationServiceFault>", "options": ["FaultException<OrganizationServiceFault>", "System.Exception", "ArgumentException"]}
+  ],
+  "why": "Use the UpdateRequest message with optimistic concurrency: by setting RowVersion on the record and ConcurrencyBehavior = IfRowVersionMatches, Dataverse updates the row only if its RowVersion still matches the one you retrieved; if another user changed the row in the meantime, the versions differ and the update is rejected. Do NOT use a plain Update, which always overwrites and does not check whether the row changed. Set ConcurrencyBehavior to IfRowVersionMatches (not AlwaysOverwrite/Default) so the update is conditional on the row version. When the versions do not match, Dataverse throws a FaultException<OrganizationServiceFault> (concurrency error), so catch that type to detect the conflict and show a message to the user.",
+  "cs": null,
+  "src": ["Screenshot 2026-07-02 102129.png", "Screenshot 2026-07-02 102141.png"]
+}
