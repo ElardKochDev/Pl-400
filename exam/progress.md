@@ -122,3 +122,5 @@ sub-preguntas (area 'casefiles').
 - [x] Q92 order   extend-platform    (debug plugin profiler 6 pasos: install profiler -> start profiling -> trigger+download log -> Debug select profile -> attach PluginRegistration.exe VS -> browse DLL Start Execution)  src 114113/114119
 - [x] Q93 multi   design-dataverse   (elastic table: alto volumen read/write + datos semi-structured)  src 114132
 - [x] Q94 single  design-dataverse   (nuevos users ven asteriscos en col segura -> Add to second security profile)  src 114144
+- [x] Q95 single  integrations-alm   (policy template set query string en custom connector -> The GetWeather action)  src 114155
+- [x] Q96 single  extend-platform    (sync master data con alternate key min load -> Upsert)  src 114212

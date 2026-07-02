@@ -1,0 +1,12 @@
+{
+  "n": 96,
+  "area": "extend-platform",
+  "type": "single",
+  "scenario": "You use Microsoft Dataverse to hold product data in a custom table. The master product data is held on a separate database managed by a .NET application. An alternate key has been added to the custom table that references the unique row ID in the master table. The products on Dataverse must be kept in sync with the master data. New and updated master product data must be pushed to Dataverse while minimizing the load on Dataverse.",
+  "q": "Which Dataverse Organization Service method should you use?",
+  "options": ["Update", "Patch", "Upsert", "Create"],
+  "answer": "Upsert",
+  "why": "Use Upsert. Upsert lets the external application create OR update a row in a single call without knowing the Dataverse GUID and without first querying to check whether the row already exists. Combined with the alternate key (which references the master row ID), Upsert automatically detects if a matching row exists - updating it if so, or creating it if not. This minimizes load because it avoids the extra retrieve/exists query that separate Create and Update calls would require.",
+  "cs": null,
+  "src": ["Screenshot 2026-07-02 114212.png"]
+}

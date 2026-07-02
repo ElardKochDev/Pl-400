@@ -1,0 +1,12 @@
+{
+  "n": 95,
+  "area": "integrations-alm",
+  "type": "single",
+  "scenario": "You have a custom connector with the actions GetWeather (with City and Arrival Date parameters), ListCities, and ListWeatherTypes. Users in your company are consuming the GetWeather action via instant Power Automate cloud flows, inputting the name of the city they are traveling to and their arrival date. The action returns temperature, rainfall and humidity information. Users report errors running their flows. When you check the runs, you notice the meteorology service API is returning errors due to incorrectly formatted city names entered by users. City names require capitalization in order to be validated. To mitigate this issue, you need to implement the set query string parameter policy template in your connector to transform the City values entered by users.",
+  "q": "Where should you apply the policy template?",
+  "options": ["The flow trigger", "All actions", "The Operation ID parameter of the GetWeather action", "The GetWeather action"],
+  "answer": "The GetWeather action",
+  "why": "Policy templates in a custom connector are applied at the ACTION (operation) level. Since only the GetWeather action sends the City value to the meteorology API, apply the 'set query string parameter' policy to the GetWeather action so it transforms/capitalizes the City query string parameter before the request is sent. Applying it to all actions is unnecessary (ListCities/ListWeatherTypes don't take City), a flow trigger is not part of the connector, and the Operation ID is an identifier, not where a policy is applied.",
+  "cs": null,
+  "src": ["Screenshot 2026-07-02 114155.png"]
+}
