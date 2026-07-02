@@ -1,0 +1,16 @@
+{
+  "n": 97,
+  "area": "automation",
+  "type": "yesno",
+  "scenario": "You have created an automated cloud flow to synchronize Dataverse account records with an external system. The flow is triggered on creation of a new Account record. It constructs a JSON file with attribute values of the new Account and executes a PUT request against a third party REST API using the HTTP action. A Teams message is configured to alert you of a failure. The steps required for the HTTP request are located within a Scope block called 'HTTP - Try', and the Teams alert message is in the 'Catch' Scope block, which has run after configured for 'has failed'. The update of the account with the external ID is configured to run after the 'is skipped' section of the Catch block. You need to identify whether the flow owner will receive the Teams error message in each given scenario. (Yes = Teams message sent).",
+  "q": "For each scenario, select Yes if the Teams message is sent, otherwise No.",
+  "rows": [
+    {"s": "The third-party API returns a 401 error.", "v": true},
+    {"s": "The third-party API returns a 503 error.", "v": true},
+    {"s": "The request times out.", "v": false},
+    {"s": "The request succeeds.", "v": false}
+  ],
+  "why": "The Catch scope runs after the HTTP - Try scope 'has FAILED'. A 401 (client error) and a 503 (server error) both make the HTTP action FAIL, so the Try scope status is Failed and the Catch scope runs, sending the Teams message (Yes/Yes). A request that times out gives the action a 'TimedOut' status, not 'Failed', so the 'has failed' run-after condition is not met and the Catch does not run (No). When the request succeeds the Try scope succeeds, so the Catch is skipped and no Teams message is sent (No).",
+  "cs": null,
+  "src": ["Screenshot 2026-07-02 114226.png", "Screenshot 2026-07-02 114230.png"]
+}

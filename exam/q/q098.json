@@ -1,0 +1,16 @@
+{
+  "n": 98,
+  "area": "extend-platform",
+  "type": "code",
+  "scenario": "A company uses the Organization Service API to ingest large volumes of data into Microsoft Dataverse. You need to develop .NET custom code to bulk import data in batches. Some rows are invalid and fail to be created. The code should import as many rows as possible and only the rows that fail the import should be available for analysis in the response collection.",
+  "q": "Which messages and properties should you use to complete the code? Select the appropriate options from the drop-down menus.",
+  "code": "var batchrequest = new [[1]]()\n{\n    Settings = new ExecuteMultipleSettings()\n    {\n        [[2]] = true,\n        [[3]] = false\n    },\n    Requests = new OrganizationRequestCollection()\n};",
+  "blanks": [
+    {"id": 1, "a": "ExecuteMultipleRequest", "options": ["ExecuteMultipleRequest", "CreateMultipleRequest", "UpsertMultipleRequest"]},
+    {"id": 2, "a": "ContinueOnError", "options": ["ContinueOnError", "ReturnResponses"]},
+    {"id": 3, "a": "ReturnResponses", "options": ["ReturnResponses", "ContinueOnError"]}
+  ],
+  "why": "Use ExecuteMultipleRequest to send many organization requests in a single batch. Set ContinueOnError = true so that when an invalid row fails, the batch KEEPS processing the remaining rows (importing as many as possible instead of stopping). Set ReturnResponses = false so the ExecuteMultipleResponse returns only the FAULTS (the failed rows) and not the successful responses - giving you a response collection containing just the rows that failed, for analysis.",
+  "cs": null,
+  "src": ["Screenshot 2026-07-02 114315.png"]
+}
