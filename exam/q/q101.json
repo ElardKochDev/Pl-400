@@ -1,0 +1,12 @@
+{
+  "n": 101,
+  "area": "integrations-alm",
+  "type": "single",
+  "scenario": "You are designing a canvas app for an event management organization. The organization has its own security system that maintains the role of each user participating in the event. You need to ensure that these users see information in the canvas app based on the roles they have been assigned in the system.",
+  "q": "Which component should you use?",
+  "options": ["Microsoft Graph API", "Custom code component", "Plug-in", "Azure Function"],
+  "answer": "Azure Function",
+  "why": "Use an Azure Function. Write code in the Azure Function to communicate with the organization's OWN (external, custom) security system and read the role of the logged-in canvas app user; the canvas app calls the function (via a custom connector/custom API) and shows information based on that role. Microsoft Graph API only reads Microsoft Entra/365 roles (not the organization's own system), and plug-ins/PCF code components run in Dataverse/the client, not against the external security system.",
+  "cs": null,
+  "src": ["Screenshot 2026-07-02 114402.png"]
+}

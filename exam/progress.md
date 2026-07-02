@@ -128,3 +128,9 @@ sub-preguntas (area 'casefiles').
 - [x] Q98 code    extend-platform    (bulk import: ExecuteMultipleRequest / ContinueOnError=true / ReturnResponses=false)  src 114315
 - [x] Q99 multi   extend-ux          (optimizar form: controls en secondary tabs + async event handlers promise OnLoad)  src 114334
 - [x] Q100 order  extend-platform    (custom API como business event: Create Custom API message -> Create catalog -> Select Custom Business Events catalog -> Create catalog assignment)  src 114345/114350
+- [x] Q101 single integrations-alm   (canvas mostrar info segun rol de sistema externo -> Azure Function)  src 114402
+- [x] Q102 match  integrations-alm   (Web API error codes: Invalid Operation=405 / Unauthorized=401 / API limits=429 / Request too large=413 / Invalid Access Rights=403)  src 114428
+- [x] Q103 match  automation         (reducir flow runs: SharePoint item=Trigger condition / specific columns Dataverse=Column filter / row valor especifico=Row filter)  src 114446
+
+## COMPLETADO: 103/103 items (q001..q103 salvo q017/q025/q030/q031/q068/q084 que son casos = cs1..cs6)
+## Archivos de pregunta suelta: 97 (faltan los 6 nums que son case studies) + 6 case studies = 103 items totales.

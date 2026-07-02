@@ -1,0 +1,17 @@
+{
+  "n": 103,
+  "area": "automation",
+  "type": "match",
+  "scenario": "A company uses Power Automate cloud flows with Microsoft Dataverse and Microsoft SharePoint. The company policy is to not use expressions unless absolutely necessary. Flows are triggered on the update of rows and items and they run for every update. You need to reduce the number of flow runs.",
+  "q": "How should you configure the trigger for each requirement? Drag the appropriate property to each requirement. A property may be used once, more than once, or not at all.",
+  "options": ["Trigger condition", "Column filter", "Row filter"],
+  "rows": ["To restrict flow runs when a SharePoint List item is updated.", "To restrict flow runs when specific columns are updated on a Dataverse table.", "To restrict flow runs when a Dataverse table row has a specific value."],
+  "answer": {
+    "To restrict flow runs when a SharePoint List item is updated.": "Trigger condition",
+    "To restrict flow runs when specific columns are updated on a Dataverse table.": "Column filter",
+    "To restrict flow runs when a Dataverse table row has a specific value.": "Row filter"
+  },
+  "why": "For SharePoint (which has no built-in filter properties), use a Trigger condition to stop the flow from running unless the expression is true. For a Dataverse trigger, use the Column filter (Filter columns / 'Select columns') so the flow only runs when the specified columns change - avoiding an expression. Use the Row filter (Filter rows / OData) so the Dataverse trigger only fires when a row has a specific value. The Dataverse-specific Column and Row filters are preferred over expressions, matching the company's no-expressions-unless-necessary policy.",
+  "cs": null,
+  "src": ["Screenshot 2026-07-02 114446.png"]
+}

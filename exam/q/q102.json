@@ -1,0 +1,19 @@
+{
+  "n": 102,
+  "area": "integrations-alm",
+  "type": "match",
+  "scenario": "You are developing an application that uses the Microsoft Dataverse Web API to perform operations in Dataverse. You need to handle exceptions in your code by identifying the correct Web API error codes.",
+  "q": "Drag the appropriate error code to the correct code description. Each code may be used once, more than once, or not at all.",
+  "options": ["405", "401", "429", "413", "403"],
+  "rows": ["Invalid Operation", "Unauthorized Access", "API limits are exceeded", "Request length is too large", "Invalid Access Rights"],
+  "answer": {
+    "Invalid Operation": "405",
+    "Unauthorized Access": "401",
+    "API limits are exceeded": "429",
+    "Request length is too large": "413",
+    "Invalid Access Rights": "403"
+  },
+  "why": "405 Method Not Allowed = an invalid operation/HTTP method for the resource. 401 Unauthorized = the caller is not authenticated (unauthorized access). 429 Too Many Requests = the service protection API limits are exceeded (throttling). 413 Payload Too Large = the request length/body is too large. 403 Forbidden = the caller is authenticated but lacks the privileges (invalid access rights).",
+  "cs": null,
+  "src": ["Screenshot 2026-07-02 114428.png"]
+}
