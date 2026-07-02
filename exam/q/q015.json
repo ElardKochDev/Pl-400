@@ -1,0 +1,27 @@
+{
+  "n": 15,
+  "area": "integrations-alm",
+  "type": "order",
+  "scenario": "You are building a custom web portal using C# to generate leads for the sales department. The portal must allow users to create leads in Microsoft Dataverse without being logged in to the application. You need to authenticate the portal using the Dataverse Web API.",
+  "q": "Which five actions should you perform in sequence?",
+  "options": [
+    "Assign a Power Apps license to the application user.",
+    "Create an app and a user in Microsoft Entra ID.",
+    "Assign the system administrator role to the application user in Microsoft Dataverse.",
+    "Assign the global admin privilege to the application user in Microsoft Entra ID.",
+    "Create an application user in Microsoft Dataverse.",
+    "Add API permissions and grant admin consent.",
+    "Use Microsoft Authentication Library (MSAL) to generate a security access token in the code.",
+    "Assign only the required security role to the application user."
+  ],
+  "answer": [
+    "Create an app and a user in Microsoft Entra ID.",
+    "Add API permissions and grant admin consent.",
+    "Create an application user in Microsoft Dataverse.",
+    "Assign only the required security role to the application user.",
+    "Use Microsoft Authentication Library (MSAL) to generate a security access token in the code."
+  ],
+  "why": "This is server-to-server (S2S) authentication with an application user, so no interactive user login is needed. First register an app (and its identity) in Microsoft Entra ID. Then add the Dynamics CRM/Dataverse API permission and grant admin consent so the app can call the Web API. Next create an application user in Dataverse that is linked to the Entra app registration (by its Application/Client ID). Assign ONLY the required security role to that application user (least privilege) - do not give it System Administrator or an Entra global admin privilege, and application users do not need a Power Apps license. Finally, in the C# code use the Microsoft Authentication Library (MSAL) to acquire an OAuth access token for the app identity and call the Dataverse Web API with it.",
+  "cs": null,
+  "src": ["Screenshot 2026-07-02 102339.png", "Screenshot 2026-07-02 102347.png"]
+}
