@@ -1,0 +1,12 @@
+{
+  "n": 77,
+  "area": "extend-platform",
+  "type": "order",
+  "scenario": "You are integrating Microsoft Dataverse with a third-party application to display customer profile details. You need to use the Azure aware plug-in to send the customer details to the third-party application.",
+  "q": "Which five actions should you perform in sequence to perform the logic? Move the appropriate actions from the list of possible actions to the answer area and arrange them in the correct order.",
+  "options": ["Register a new webhook in the plug-in registration tool.", "Write plugin code to read customer data from Dataverse.", "Create an Azure Function project in Visual Studio and import the publish profile.", "Modify the Azure function code to read customer data from Dataverse and publish it.", "Call the Azure function in plug-in code.", "Create a function app in Azure and download its publish profile.", "Register a new account creation step."],
+  "answer": ["Create a function app in Azure and download its publish profile.", "Create an Azure Function project in Visual Studio and import the publish profile.", "Modify the Azure function code to read customer data from Dataverse and publish it.", "Register a new webhook in the plug-in registration tool.", "Register a new account creation step."],
+  "why": "First create the function app in Azure and download its publish profile. Create an Azure Function project in Visual Studio and import that publish profile. Modify the Azure function code to read the customer data from Dataverse and publish the function. Then, in the Plug-in Registration Tool, register a new WebHook pointing at the Azure Function endpoint (this is the 'Azure aware' registration). Finally register a new step (e.g. on account creation) so the webhook fires and sends the customer details to the Azure Function / third-party application.",
+  "cs": null,
+  "src": ["Screenshot 2026-07-02 113425.png", "Screenshot 2026-07-02 113431.png"]
+}

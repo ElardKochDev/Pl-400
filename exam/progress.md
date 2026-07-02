@@ -103,3 +103,5 @@ sub-preguntas (area 'casefiles').
 - [x] Q73 single  integrations-alm   (SPA auth Dataverse Web API OAuth -> MSAL)  src 113325
 - [x] Q74 single  extend-platform    (custom API Is Function=Yes -> GET)  src 113337
 - [x] Q75 multi   integrations-alm   (429 errors: prevenir requests solapadas UI + agrupar requests en batches)  src 113353/113358
+- [x] Q76 single  integrations-alm   (custom connector Teams/Graph -> OAuth 2.0)  src 113410
+- [x] Q77 order   extend-platform    (Azure aware plugin: create function app+publish profile -> VS project import -> modify code+publish -> register webhook -> register step)  src 113425/113431

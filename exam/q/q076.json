@@ -1,0 +1,12 @@
+{
+  "n": 76,
+  "area": "integrations-alm",
+  "type": "single",
+  "scenario": "You are designing a canvas app for an event management organization that organizes events online. You need to build a custom connector that would enable the organization to: Create a new team each time a new event is published; Send a Microsoft Teams invitation to all the participants; Add the event organizer as the Owner of the team; Add participants as members of the team.",
+  "q": "Which API authentication type should you use?",
+  "options": ["OAuth 2.0", "No authentication", "Basic authentication", "API key-based authentication"],
+  "answer": "OAuth 2.0",
+  "why": "These operations create Microsoft Teams and manage team owners/members, which are performed through the Microsoft Graph API. The Microsoft identity platform / Graph requires OAuth 2.0, so the custom connector's authentication type must be OAuth 2.0 (Microsoft Entra ID). No authentication and Basic authentication are not supported by Graph, and an API key is a static shared secret not used for Graph's delegated/app OAuth flows.",
+  "cs": null,
+  "src": ["Screenshot 2026-07-02 113410.png"]
+}
