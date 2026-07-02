@@ -1,0 +1,12 @@
+{
+  "n": 74,
+  "area": "extend-platform",
+  "type": "single",
+  "scenario": "You need to write a plugin to consume the custom API shown in the exhibit. The Custom API has been defined as a function (Is Function = Yes) with at least one response property.",
+  "q": "Which HTTP method should you use to call this custom API?",
+  "options": ["GET", "POST", "PUT", "PATCH"],
+  "answer": "GET",
+  "why": "Use GET. This Custom API is defined as a FUNCTION (Is Function = Yes), and functions are called with the GET method - GET calls retrieve information, so functions must return data via at least one response property. If the Custom API were defined as an ACTION (Is Function = No) it would be called with POST. PUT/PATCH are used to update/replace resources, not to call a Custom API function.",
+  "cs": null,
+  "src": ["Screenshot 2026-07-02 113337.png"]
+}

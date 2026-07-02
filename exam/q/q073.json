@@ -1,0 +1,12 @@
+{
+  "n": 73,
+  "area": "integrations-alm",
+  "type": "single",
+  "scenario": "You are developing a single-page web application that uses Microsoft Dataverse. The organization wants its users to submit lead data. You need to use the Dataverse Web API in order to authenticate your app using OAuth. The solution should follow Microsoft's recommendations.",
+  "q": "What should you use?",
+  "options": ["Microsoft Authentication Library (MSAL)", "Cross-Origin Resource Sharing (CORS)", "Active Directory Authentication Library (ADAL)", "Windows Communication Foundation (WCF)"],
+  "answer": "Microsoft Authentication Library (MSAL)",
+  "why": "Use the Microsoft Authentication Library (MSAL). MSAL lets developers acquire OAuth 2.0 access tokens from the Microsoft identity platform to authenticate users and call the Dataverse Web API. Since June 2020 Microsoft recommends MSAL over ADAL (ADAL is deprecated). CORS is a browser cross-origin mechanism (not an auth library), and WCF is a legacy communication framework - neither performs OAuth authentication.",
+  "cs": null,
+  "src": ["Screenshot 2026-07-02 113325.png"]
+}

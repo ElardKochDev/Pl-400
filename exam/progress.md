@@ -100,3 +100,6 @@ sub-preguntas (area 'casefiles').
 - [x] Q70 multi   design-dataverse   (support no actualiza cols transaccionales -> Column-level security + Role-based form)  src 113241
 - [x] Q71 single  extend-ux          (PCF avisa cambio de dato al form -> notifyOutputChanged)  src 113253
 - [x] Q72 hotspot integrations-alm   (JSON sync a Azure Function on create: Dataverse Plug-in / Webhook / IServiceEndpointNotificationService)  src 113307
+- [x] Q73 single  integrations-alm   (SPA auth Dataverse Web API OAuth -> MSAL)  src 113325
+- [x] Q74 single  extend-platform    (custom API Is Function=Yes -> GET)  src 113337
+- [x] Q75 multi   integrations-alm   (429 errors: prevenir requests solapadas UI + agrupar requests en batches)  src 113353/113358
