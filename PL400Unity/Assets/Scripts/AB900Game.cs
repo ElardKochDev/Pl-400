@@ -1072,9 +1072,45 @@ public sealed partial class AB900Game : MonoBehaviour
         if (area == "town" || IsHub(area)) return "town";
         if (area == "tower") return "tower";   // METAL desafiante del recorrido de la Torre del Gran Sabio
         if (area == "studytower") return "studytower";   // ROCK heroico de la Torre del Estudio
-        if (area == "final") return "final";
-        if (IsDungeon(area)) { int pt = PartOf(area); return pt <= 1 ? "d1" : pt == 2 ? "d2" : "d3"; }
+        // Torre del EXAMEN: la melodía del juego (himno del título) vuelve épica; aquí se juntan
+        // los mundos. Mismo tema para el overworld y para todos los combates (ver BattleTrack).
+        if (area == "final") return "exam";
+        // Cada mundo tiene su propio overworld (1-3 reutilizan d1/d2/d3; 4-6 tienen w4/w5/w6).
+        if (IsDungeon(area)) return WorldOverworldTrack(PartOf(area));
         return "town";
+    }
+
+    // Overworld propio de cada mundo (parte 1..6).
+    string WorldOverworldTrack(int pt)
+    {
+        switch (pt)
+        {
+            case 1: return "d1"; case 2: return "d2"; case 3: return "d3";
+            case 4: return "w4"; case 5: return "w5"; default: return "w6";
+        }
+    }
+
+    // Combate propio de cada mundo (parte 1..6); bat1 = pista de combate estándar.
+    string WorldBattleTrack(int pt)
+    {
+        switch (pt)
+        {
+            case 1: return "bat1"; case 2: return "bat2"; case 3: return "bat3";
+            case 4: return "bat4"; case 5: return "bat5"; default: return "bat6";
+        }
+    }
+
+    // Pista para un combate según el contexto. En la Torre del Examen (guardianes + Rey Demonio)
+    // suena la melodía ÉPICA del juego; los jefes de mazmorra conservan su tema; el resto usa
+    // el combate PROPIO del mundo donde ocurre la pelea.
+    string BattleTrack(bool boss)
+    {
+        if (battle != null && battle.tower) return "studybattle";
+        if (battle != null && battle.thingKey == "gransabio") return "gransabio";
+        if (save != null && save.area == "final") return "exam";
+        if (boss || (battle != null && battle.thingKey == "sabioguard")) return "boss";
+        int pt = (save != null && IsDungeon(save.area)) ? PartOf(save.area) : 1;
+        return WorldBattleTrack(pt);
     }
 
     // Sistema de persecución: a los 5 pasos (al entrar a la mazmorra o tras un combate)
@@ -3312,10 +3348,7 @@ public sealed partial class AB900Game : MonoBehaviour
         var accent = AccentC;
         // El Gran Sabio (piso 18) tiene su propia pista épica/aterradora; sus 4 guardianes
         // usan la pista de jefe; el resto, jefe normal o combate estándar.
-        PlayTrack(battle.tower ? "studybattle"
-                  : battle.thingKey == "gransabio" ? "gransabio"
-                  : (boss || battle.thingKey == "sabioguard") ? "boss"
-                  : "battle");
+        PlayTrack(BattleTrack(boss));
         AddBackdrop(BattleBackdrop(), 0.62f);
         var p = Panel(root, "Battle", ThemePanelBg, Anchor.Stretch, new Vector2(16, 12), new Vector2(-16, -12));
         var pol = p.gameObject.AddComponent<Outline>();
@@ -3448,7 +3481,7 @@ public sealed partial class AB900Game : MonoBehaviour
     {
         screen = "encounter";
         ClearRoot();
-        PlayTrack(battle != null && battle.tower ? "studybattle" : "battle");
+        PlayTrack(BattleTrack(false));
         AddBackdrop(BattleBackdrop(), 0.72f);
         var p = Panel(root, "EncounterAlert", new Color(.02f, .025f, .06f, .97f), Anchor.Stretch, new Vector2(18, 14), new Vector2(-18, -14));
         var col = ScrollColumn(p, 10, 22);
@@ -6387,7 +6420,14 @@ public sealed partial class AB900Game : MonoBehaviour
                 {
                     string pto = S(t, "to");
                     if (pto.Length == 2 && pto[0] == 'p' && char.IsDigit(pto[1]) && ContosoDone(pto[1] - '0') && LoadSprite("portal_check") != null) return "portal_check";
-                    return save.cleared.Contains(pto) && LoadSprite("portal_done") != null ? "portal_done" : "portal";
+                    // Superado -> portal dorado de victoria (si existe).
+                    if (save.cleared.Contains(pto) && LoadSprite("portal_done") != null) return "portal_done";
+                    // Cada portal tiene SU color: portal_p1..p6 por mundo destino, portal_final para el examen.
+                    string pc = pto == "final" ? "portal_final"
+                              : (pto.Length >= 2 && pto[0] == 'p' && char.IsDigit(pto[1])) ? "portal_p" + (pto[1] - '0')
+                              : null;
+                    if (pc != null && LoadSprite(pc) != null) return pc;
+                    return "portal";
                 }
             case "exit": return "exit";
             case "carriage": return LoadSprite("carriage") != null ? "carriage" : "exit";

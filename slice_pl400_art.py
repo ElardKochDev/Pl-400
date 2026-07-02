@@ -237,11 +237,20 @@ def do_bosses():
 
 
 def do_guardians():
-    # guardians_v2.png = 4 col x 2 filas (7 usadas + 1 vacía), fondo plano -> cutout.
+    # guardians_v3.png = 4 col x 2 filas (7 usadas + 1 vacía), fondo plano SIN aura -> cutout.
     print("Guardianes + jefe final:")
     names = ["guard_d1", "guard_d2", "guard_d3", "guard_d4",
              "guard_d5", "guard_d6", "boss_final", None]
-    slice_grid("guardians_v2.png", 2, 4, names, 220, bottom_label=False)
+    slice_grid("guardians_v3.png", 2, 4, names, 220, bottom_label=False)
+
+
+def do_portals():
+    # portales.png = 4 col x 2 filas (8 celdas): 6 portales de mundo + 1 descartado + final.
+    # Marco de piedra idéntico, cambia el color del vórtice; fondo plano -> cutout.
+    print("Portales:")
+    names = ["portal_p1", "portal_p2", "portal_p3", "portal_p4",
+             "portal_p5", "portal_p6", None, "portal_final"]
+    slice_grid("portales.png", 2, 4, names, 160, bottom_label=False)
 
 
 def do_backdrops():

@@ -268,6 +268,145 @@ public sealed partial class AB900Game
     static readonly int[] STB_HARM = Seq(sbA_h, sbB_h, sbA_h, sbC_h, sbD_h, sbB_h, sbC_h, sbD_h);
     static readonly int[] STB_DRUMS = Seq(sbDr, sbDr, sbDr, sbDr, sbDr, sbDr, sbDr, sbDr);
 
+    // ================= PL-400: melodía propia por MUNDO (overworld + combate) =================
+    // Mundos 1-3 reutilizan las pistas d1/d2/d3 y el combate bat1 (=BAT). Mundos 4-6 tienen
+    // overworld propio (w4/w5/w6) y cada mundo su combate (bat1..bat6). En el MUNDO DEL EXAMEN
+    // (torre final) todo (overworld y combate) suena al tema ÉPICO `exam`, que retoma la melodía
+    // del TÍTULO ("la melodía del juego") con orquestación de batalla: todo se junta al final.
+
+    // --- w4 Cripta del Servidor (ámbar/rojo): Do menor lento y ominoso, órgano grave ---
+    static readonly int[] w4A_l = { 60, 0, 63, 65, 63, 0, 62, 60, 58, 0, 60, 62, 60, 0, 0, 0 };
+    static readonly int[] w4B_l = { 63, 0, 65, 63, 62, 0, 60, 58, 55, 0, 58, 60, 58, 0, 0, 0 };
+    static readonly int[] w4C_l = { 67, 0, 68, 67, 65, 63, 62, 60, 62, 63, 65, 63, 62, 0, 60, 0 };
+    static readonly int[] w4A_b = { 36, 0, 43, 0, 36, 0, 43, 0, 32, 0, 39, 0, 36, 0, 0, 0 };
+    static readonly int[] w4B_b = { 32, 0, 39, 0, 34, 0, 41, 0, 31, 0, 38, 0, 36, 0, 0, 0 };
+    static readonly int[] w4C_b = { 41, 0, 48, 0, 43, 0, 39, 0, 44, 0, 39, 0, 36, 0, 36, 0 };
+    static readonly int[] w4A_h = { 60, 63, 67, 63, 60, 63, 67, 63, 56, 60, 63, 60, 55, 58, 63, 0 };
+    static readonly int[] w4B_h = { 63, 67, 70, 67, 62, 65, 68, 65, 55, 58, 63, 58, 55, 58, 63, 0 };
+    static readonly int[] w4C_h = { 65, 68, 72, 68, 60, 63, 67, 63, 56, 60, 63, 60, 55, 60, 63, 0 };
+    static readonly int[] W4_LEAD = Seq(w4A_l, w4B_l, w4A_l, w4C_l, w4A_l, w4B_l, w4C_l, w4A_l);
+    static readonly int[] W4_BASS = Seq(w4A_b, w4B_b, w4A_b, w4C_b, w4A_b, w4B_b, w4C_b, w4A_b);
+    static readonly int[] W4_HARM = Seq(w4A_h, w4B_h, w4A_h, w4C_h, w4A_h, w4B_h, w4C_h, w4A_h);
+    static readonly int[] W4_DRUMS = Seq(d1Dr, d1Dr, d1Dr, d1Dr, d1Dr, d1Dr, d1Dr, d1Dr);
+
+    // --- w5 Nexo de Azure (azul-cian eléctrico): Mi dórico brillante, arpegios, energético ---
+    static readonly int[] w5A_l = { 64, 66, 67, 69, 71, 0, 69, 67, 66, 0, 67, 69, 67, 0, 64, 0 };
+    static readonly int[] w5B_l = { 71, 0, 73, 74, 73, 71, 69, 67, 69, 0, 71, 69, 67, 66, 64, 0 };
+    static readonly int[] w5C_l = { 76, 0, 74, 73, 71, 0, 69, 71, 73, 74, 76, 74, 73, 71, 69, 0 };
+    static readonly int[] w5A_b = { 40, 47, 40, 47, 45, 52, 45, 52, 47, 54, 47, 54, 43, 50, 43, 50 };
+    static readonly int[] w5B_b = { 45, 52, 45, 52, 43, 50, 43, 50, 40, 47, 40, 47, 47, 54, 47, 47 };
+    static readonly int[] w5C_b = { 48, 55, 48, 55, 45, 52, 45, 52, 43, 50, 43, 50, 40, 47, 40, 40 };
+    static readonly int[] w5A_h = { 64, 67, 71, 67, 64, 69, 72, 69, 62, 66, 69, 66, 67, 71, 74, 0 };
+    static readonly int[] w5B_h = { 71, 74, 78, 74, 67, 71, 74, 71, 64, 67, 71, 67, 66, 69, 73, 0 };
+    static readonly int[] w5C_h = { 72, 76, 79, 76, 69, 72, 76, 72, 67, 71, 74, 71, 64, 67, 71, 0 };
+    static readonly int[] W5_LEAD = Seq(w5A_l, w5B_l, w5A_l, w5C_l, w5A_l, w5B_l, w5C_l, w5B_l);
+    static readonly int[] W5_BASS = Seq(w5A_b, w5B_b, w5A_b, w5C_b, w5A_b, w5B_b, w5C_b, w5B_b);
+    static readonly int[] W5_HARM = Seq(w5A_h, w5B_h, w5A_h, w5C_h, w5A_h, w5B_h, w5C_h, w5B_h);
+    static readonly int[] W5_DRUMS = Seq(d3Dr, d3Dr, d3Dr, d3Dr, d3Dr, d3Dr, d3Dr, d3Dr);
+
+    // --- w6 Ciudadela de Conectores y ALM (púrpura-dorado): Re menor con marcha regia, metales ---
+    static readonly int[] w6A_l = { 62, 0, 65, 0, 69, 0, 65, 62, 64, 0, 65, 64, 62, 0, 0, 0 };
+    static readonly int[] w6B_l = { 69, 0, 70, 69, 67, 0, 65, 64, 65, 0, 67, 65, 64, 0, 62, 0 };
+    static readonly int[] w6C_l = { 74, 0, 73, 74, 70, 0, 69, 65, 67, 69, 70, 69, 67, 65, 62, 0 };
+    static readonly int[] w6A_b = { 38, 0, 45, 0, 38, 0, 45, 0, 43, 0, 50, 0, 45, 0, 0, 0 };
+    static readonly int[] w6B_b = { 41, 0, 48, 0, 43, 0, 50, 0, 41, 0, 48, 0, 45, 0, 45, 0 };
+    static readonly int[] w6C_b = { 46, 0, 41, 0, 43, 0, 45, 0, 41, 0, 43, 0, 38, 0, 38, 0 };
+    static readonly int[] w6A_h = { 62, 65, 69, 65, 62, 65, 69, 65, 59, 62, 67, 62, 57, 62, 66, 0 };
+    static readonly int[] w6B_h = { 65, 69, 72, 69, 67, 70, 74, 70, 65, 69, 72, 69, 62, 66, 69, 0 };
+    static readonly int[] w6C_h = { 70, 74, 77, 74, 65, 69, 72, 69, 67, 70, 74, 70, 62, 66, 69, 0 };
+    static readonly int[] W6_LEAD = Seq(w6A_l, w6B_l, w6A_l, w6C_l, w6A_l, w6B_l, w6C_l, w6C_l);
+    static readonly int[] W6_BASS = Seq(w6A_b, w6B_b, w6A_b, w6C_b, w6A_b, w6B_b, w6C_b, w6C_b);
+    static readonly int[] W6_HARM = Seq(w6A_h, w6B_h, w6A_h, w6C_h, w6A_h, w6B_h, w6C_h, w6C_h);
+    static readonly int[] W6_DRUMS = Seq(fnDr, fnDr, fnDr, fnDr, fnDr, fnDr, fnDr, fnDr);
+
+    // --- Combate por mundo (bat1 = BAT reutilizado para el mundo 1) ---
+    // bat2 Mundo 2 (verde): Mi frigio agresivo
+    static readonly int[] b2A_l = { 76, 0, 77, 76, 72, 0, 71, 72, 74, 0, 72, 71, 69, 0, 67, 0 };
+    static readonly int[] b2B_l = { 79, 0, 77, 76, 74, 0, 72, 71, 72, 0, 74, 72, 71, 69, 67, 0 };
+    static readonly int[] b2C_l = { 81, 0, 80, 79, 77, 0, 76, 74, 72, 74, 76, 77, 76, 74, 72, 0 };
+    static readonly int[] b2A_b = { 40, 47, 40, 47, 41, 48, 41, 48, 43, 50, 43, 50, 40, 47, 40, 47 };
+    static readonly int[] b2B_b = { 45, 52, 45, 52, 43, 50, 43, 50, 41, 48, 41, 48, 40, 47, 40, 40 };
+    static readonly int[] b2C_b = { 48, 55, 48, 55, 41, 48, 41, 48, 43, 50, 43, 50, 40, 47, 40, 0 };
+    static readonly int[] b2A_h = { 71, 0, 76, 0, 72, 0, 77, 0, 71, 0, 74, 0, 67, 0, 71, 0 };
+    static readonly int[] b2B_h = { 74, 0, 79, 0, 71, 0, 76, 0, 67, 0, 72, 0, 64, 0, 67, 0 };
+    static readonly int[] b2C_h = { 76, 0, 81, 0, 72, 0, 77, 0, 74, 0, 79, 0, 67, 0, 71, 0 };
+    static readonly int[] B2_LEAD = Seq(b2A_l, b2B_l, b2A_l, b2C_l, b2A_l, b2B_l, b2C_l, b2B_l);
+    static readonly int[] B2_BASS = Seq(b2A_b, b2B_b, b2A_b, b2C_b, b2A_b, b2B_b, b2C_b, b2B_b);
+    static readonly int[] B2_HARM = Seq(b2A_h, b2B_h, b2A_h, b2C_h, b2A_h, b2B_h, b2C_h, b2B_h);
+    static readonly int[] B2_DRUMS = Seq(bDr, bDr, bDr, bDr, bDr, bDr, bDr, bDr);
+
+    // bat3 Mundo 3 (violeta): Re menor mecánico veloz
+    static readonly int[] b3A_l = { 74, 0, 77, 74, 72, 0, 74, 77, 76, 0, 74, 72, 70, 0, 72, 0 };
+    static readonly int[] b3B_l = { 81, 0, 79, 77, 76, 0, 77, 79, 77, 0, 76, 74, 72, 0, 74, 0 };
+    static readonly int[] b3C_l = { 86, 0, 84, 81, 79, 0, 81, 84, 86, 0, 84, 81, 79, 77, 74, 0 };
+    static readonly int[] b3A_b = { 38, 45, 38, 45, 36, 43, 36, 43, 41, 48, 41, 48, 40, 47, 40, 47 };
+    static readonly int[] b3B_b = { 41, 48, 41, 48, 43, 50, 43, 50, 38, 45, 38, 45, 40, 47, 40, 40 };
+    static readonly int[] b3C_b = { 46, 53, 46, 53, 41, 48, 41, 48, 43, 50, 43, 50, 38, 45, 38, 0 };
+    static readonly int[] b3A_h = { 69, 0, 74, 0, 65, 0, 69, 0, 72, 0, 77, 0, 64, 0, 69, 0 };
+    static readonly int[] b3B_h = { 72, 0, 77, 0, 74, 0, 79, 0, 69, 0, 74, 0, 64, 0, 67, 0 };
+    static readonly int[] b3C_h = { 77, 0, 81, 0, 72, 0, 77, 0, 74, 0, 79, 0, 64, 0, 69, 0 };
+    static readonly int[] B3_LEAD = Seq(b3A_l, b3B_l, b3A_l, b3C_l, b3A_l, b3B_l, b3C_l, b3C_l);
+    static readonly int[] B3_BASS = Seq(b3A_b, b3B_b, b3A_b, b3C_b, b3A_b, b3B_b, b3C_b, b3C_b);
+    static readonly int[] B3_HARM = Seq(b3A_h, b3B_h, b3A_h, b3C_h, b3A_h, b3B_h, b3C_h, b3C_h);
+    static readonly int[] B3_DRUMS = Seq(boDr, boDr, boDr, boDr, boDr, boDr, boDr, boDr);
+
+    // bat4 Mundo 4 (ámbar): Do menor oscuro
+    static readonly int[] b4A_l = { 72, 0, 75, 72, 70, 0, 72, 75, 74, 0, 72, 70, 68, 0, 70, 0 };
+    static readonly int[] b4B_l = { 79, 0, 77, 75, 74, 0, 75, 77, 75, 0, 74, 72, 70, 0, 72, 0 };
+    static readonly int[] b4C_l = { 84, 0, 82, 79, 77, 0, 79, 82, 84, 0, 82, 79, 77, 75, 72, 0 };
+    static readonly int[] b4A_b = { 36, 43, 36, 43, 32, 39, 32, 39, 41, 48, 41, 48, 36, 43, 36, 43 };
+    static readonly int[] b4B_b = { 39, 46, 39, 46, 41, 48, 41, 48, 36, 43, 36, 43, 32, 39, 32, 32 };
+    static readonly int[] b4C_b = { 44, 51, 44, 51, 39, 46, 39, 46, 41, 48, 41, 48, 36, 43, 36, 0 };
+    static readonly int[] b4A_h = { 67, 0, 72, 0, 63, 0, 68, 0, 65, 0, 70, 0, 60, 0, 63, 0 };
+    static readonly int[] b4B_h = { 70, 0, 75, 0, 67, 0, 72, 0, 63, 0, 68, 0, 60, 0, 67, 0 };
+    static readonly int[] b4C_h = { 75, 0, 79, 0, 67, 0, 72, 0, 68, 0, 72, 0, 60, 0, 63, 0 };
+    static readonly int[] B4_LEAD = Seq(b4A_l, b4B_l, b4A_l, b4C_l, b4A_l, b4B_l, b4C_l, b4B_l);
+    static readonly int[] B4_BASS = Seq(b4A_b, b4B_b, b4A_b, b4C_b, b4A_b, b4B_b, b4C_b, b4B_b);
+    static readonly int[] B4_HARM = Seq(b4A_h, b4B_h, b4A_h, b4C_h, b4A_h, b4B_h, b4C_h, b4B_h);
+    static readonly int[] B4_DRUMS = Seq(bDr, bDr, bDr, bDr, bDr, bDr, bDr, bDr);
+
+    // bat5 Mundo 5 (azul eléctrico): Mi menor rápido y brillante
+    static readonly int[] b5A_l = { 76, 0, 79, 76, 74, 0, 76, 79, 78, 0, 76, 74, 71, 0, 74, 0 };
+    static readonly int[] b5B_l = { 83, 0, 81, 79, 76, 0, 78, 79, 79, 0, 78, 76, 74, 0, 71, 0 };
+    static readonly int[] b5C_l = { 88, 0, 86, 83, 81, 0, 83, 86, 88, 0, 86, 83, 81, 79, 76, 0 };
+    static readonly int[] b5A_b = { 40, 47, 40, 47, 36, 43, 36, 43, 45, 52, 45, 52, 43, 50, 43, 50 };
+    static readonly int[] b5B_b = { 45, 52, 45, 52, 43, 50, 43, 50, 40, 47, 40, 47, 43, 50, 43, 43 };
+    static readonly int[] b5C_b = { 48, 55, 48, 55, 45, 52, 45, 52, 43, 50, 43, 50, 40, 47, 40, 0 };
+    static readonly int[] b5A_h = { 71, 0, 76, 0, 67, 0, 71, 0, 74, 0, 78, 0, 66, 0, 71, 0 };
+    static readonly int[] b5B_h = { 74, 0, 79, 0, 71, 0, 76, 0, 67, 0, 71, 0, 66, 0, 69, 0 };
+    static readonly int[] b5C_h = { 79, 0, 83, 0, 74, 0, 79, 0, 76, 0, 81, 0, 66, 0, 71, 0 };
+    static readonly int[] B5_LEAD = Seq(b5A_l, b5B_l, b5A_l, b5C_l, b5A_l, b5B_l, b5C_l, b5B_l);
+    static readonly int[] B5_BASS = Seq(b5A_b, b5B_b, b5A_b, b5C_b, b5A_b, b5B_b, b5C_b, b5B_b);
+    static readonly int[] B5_HARM = Seq(b5A_h, b5B_h, b5A_h, b5C_h, b5A_h, b5B_h, b5C_h, b5B_h);
+    static readonly int[] B5_DRUMS = Seq(d3Dr, d3Dr, d3Dr, d3Dr, d3Dr, d3Dr, d3Dr, d3Dr);
+
+    // bat6 Mundo 6 (púrpura-dorado): Re menor regio y feroz
+    static readonly int[] b6A_l = { 74, 0, 74, 77, 76, 0, 74, 72, 69, 0, 70, 69, 74, 0, 0, 0 };
+    static readonly int[] b6B_l = { 81, 0, 80, 81, 77, 0, 76, 74, 72, 0, 74, 72, 69, 0, 74, 0 };
+    static readonly int[] b6C_l = { 86, 0, 84, 81, 82, 0, 81, 77, 79, 81, 82, 81, 77, 74, 74, 0 };
+    static readonly int[] b6A_b = { 38, 45, 38, 45, 41, 48, 41, 48, 43, 50, 43, 50, 38, 45, 38, 45 };
+    static readonly int[] b6B_b = { 41, 48, 41, 48, 43, 50, 43, 50, 46, 53, 46, 53, 45, 52, 45, 45 };
+    static readonly int[] b6C_b = { 46, 53, 46, 53, 41, 48, 41, 48, 43, 50, 43, 50, 38, 45, 38, 0 };
+    static readonly int[] b6A_h = { 69, 0, 74, 0, 65, 0, 69, 0, 66, 0, 69, 0, 62, 0, 69, 0 };
+    static readonly int[] b6B_h = { 72, 0, 77, 0, 69, 0, 74, 0, 70, 0, 74, 0, 69, 0, 72, 0 };
+    static readonly int[] b6C_h = { 77, 0, 82, 0, 72, 0, 77, 0, 74, 0, 79, 0, 66, 0, 69, 0 };
+    static readonly int[] B6_LEAD = Seq(b6A_l, b6B_l, b6A_l, b6C_l, b6A_l, b6B_l, b6C_l, b6C_l);
+    static readonly int[] B6_BASS = Seq(b6A_b, b6B_b, b6A_b, b6C_b, b6A_b, b6B_b, b6C_b, b6C_b);
+    static readonly int[] B6_HARM = Seq(b6A_h, b6B_h, b6A_h, b6C_h, b6A_h, b6B_h, b6C_h, b6C_h);
+    static readonly int[] B6_DRUMS = Seq(boDr, boDr, boDr, boDr, boDr, boDr, boDr, boDr);
+
+    // --- EXAMEN (torre final): la MELODÍA DEL JUEGO (himno del título) vuelve ÉPICA. Overworld
+    //     y TODO combate del examen la comparten: aquí "se juntan" los mundos. Lead = motivos del
+    //     título (tA/tB/tC_l) + armonía del título; bajo galopante y batería épica con platillos. ---
+    static readonly int[] exA_b = { 36, 43, 48, 43, 55, 50, 43, 50, 36, 43, 48, 43, 55, 50, 43, 0 };
+    static readonly int[] exB_b = { 45, 52, 57, 52, 41, 48, 53, 48, 45, 52, 57, 52, 41, 48, 53, 0 };
+    static readonly int[] exC_b = { 41, 48, 53, 48, 43, 50, 55, 50, 36, 43, 48, 43, 36, 48, 36, 0 };
+    static readonly int[] exDr = { Crash, 0, Kick, Hat, Snare, 0, Kick, Hat, Kick, Kick, Snare, Hat, Kick, Snare, Crash, Hat };
+    static readonly int[] EXAM_LEAD = Seq(tA_l, tB_l, tA_l, tC_l, tA_l, tB_l, tC_l, tC_l);
+    static readonly int[] EXAM_BASS = Seq(exA_b, exB_b, exA_b, exC_b, exA_b, exB_b, exC_b, exC_b);
+    static readonly int[] EXAM_HARM = Seq(tA_h, tB_h, tA_h, tC_h, tA_h, tB_h, tC_h, tC_h);
+    static readonly int[] EXAM_DRUMS = Seq(exDr, exDr, exDr, exDr, exDr, exDr, exDr, exDr);
+
     enum WaveShape { Pulse, Triangle, Sine }
 
     // SFX del overworld/acciones (sintetizados por código, cada uno con su carácter).
@@ -365,6 +504,19 @@ public sealed partial class AB900Game
             case "d3": return BuildMusic("d3", D3_LEAD, D3_BASS, D3_HARM, D3_DRUMS, 0.145f);
             case "final": return BuildMusic("final", FIN_LEAD, FIN_BASS, FIN_HARM, FIN_DRUMS, 0.13f);
             case "battle": return BuildMusic("battle", BAT_LEAD, BAT_BASS, BAT_HARM, BAT_DRUMS, 0.115f);
+            // Overworld propio de los mundos 4-6 (1-3 reutilizan d1/d2/d3).
+            case "w4": return BuildMusic("w4", W4_LEAD, W4_BASS, W4_HARM, W4_DRUMS, 0.175f);
+            case "w5": return BuildMusic("w5", W5_LEAD, W5_BASS, W5_HARM, W5_DRUMS, 0.15f);
+            case "w6": return BuildMusic("w6", W6_LEAD, W6_BASS, W6_HARM, W6_DRUMS, 0.16f);
+            // Combate propio por mundo (bat1 reutiliza la pista de combate estándar).
+            case "bat1": return BuildMusic("bat1", BAT_LEAD, BAT_BASS, BAT_HARM, BAT_DRUMS, 0.115f);
+            case "bat2": return BuildMusic("bat2", B2_LEAD, B2_BASS, B2_HARM, B2_DRUMS, 0.11f);
+            case "bat3": return BuildMusic("bat3", B3_LEAD, B3_BASS, B3_HARM, B3_DRUMS, 0.108f);
+            case "bat4": return BuildMusic("bat4", B4_LEAD, B4_BASS, B4_HARM, B4_DRUMS, 0.112f);
+            case "bat5": return BuildMusic("bat5", B5_LEAD, B5_BASS, B5_HARM, B5_DRUMS, 0.105f);
+            case "bat6": return BuildMusic("bat6", B6_LEAD, B6_BASS, B6_HARM, B6_DRUMS, 0.11f);
+            // Examen (torre final): la melodía del juego, épica. Overworld y combate la comparten.
+            case "exam": return BuildMusic("exam", EXAM_LEAD, EXAM_BASS, EXAM_HARM, EXAM_DRUMS, 0.13f);
             case "boss": return BuildMusic("boss", BOSS_LEAD, BOSS_BASS, BOSS_HARM, BOSS_DRUMS, 0.125f);
             case "sage": return BuildMusic("sage", SAGE_LEAD, SAGE_BASS, SAGE_HARM, SAGE_DRUMS, 0.155f);
             // Lectura serena (piano suave, sin batería): la comparten los tomos, los súper tomos
