@@ -1,0 +1,12 @@
+{
+  "n": 64,
+  "area": "automation",
+  "type": "single",
+  "scenario": "You work as a developer for a company. You are using Power Automate to automatically create a lead in Microsoft Dataverse when a new lead gets registered on the company website. While creating the lead in Power Automate, you experience the issue shown in the exhibit (the create action fails because a value being set does not resolve to an existing related record). You need to determine the possible root cause of this issue.",
+  "q": "Which column should you check to identify the issue's root cause?",
+  "options": ["Choices", "Currency", "Lookup", "Choice"],
+  "answer": "Lookup",
+  "why": "Check the Lookup column. A lookup stores a reference (GUID) to a row in a related table, so when the flow sets a lookup it must bind to an existing related record (using the correct 'value@odata.bind' / record id). If the provided value does not match an existing related row, the create fails - that is the typical root cause when a Power Automate create-row action errors. Choice/Choices (option sets) and Currency columns store simple values and would not cause this relationship-binding failure.",
+  "cs": null,
+  "src": ["Screenshot 2026-07-02 113007.png"]
+}

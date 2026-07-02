@@ -1,0 +1,15 @@
+{
+  "n": 65,
+  "area": "integrations-alm",
+  "type": "hotspot",
+  "scenario": "A company uses Microsoft Dataverse and Microsoft Azure. You need to design inbound and outbound integrations between Dataverse and Azure services.",
+  "q": "Which integration method should you use for each scenario? Select the appropriate options from the drop-down menus.",
+  "rows": [
+    {"s": "To enable an external system to read and write data in Microsoft Dataverse", "a": "Custom API", "options": ["Custom API", "Webhook", "Azure Relay"]},
+    {"s": "To perform processing synchronously in an Azure Function when a record is updated in Dataverse", "a": "Webhook", "options": ["Webhook", "Azure Service Bus", "Custom API"]},
+    {"s": "To securely integrate Dataverse with an on-premise application", "a": "Azure Relay", "options": ["Azure Relay", "Webhook", "Azure Service Bus"]}
+  ],
+  "why": "Use a Custom API to let an external system read and write Dataverse data (inbound): you define the API and the external system calls it to operate on Dataverse. Use a Webhook to process synchronously in an Azure Function when a row is updated (outbound): a webhook can run synchronously on the Dataverse event and call an HTTP-triggered Azure Function. Use Azure Relay to securely integrate Dataverse with an on-premises application behind a firewall without opening inbound ports.",
+  "cs": null,
+  "src": ["Screenshot 2026-07-02 113018.png"]
+}

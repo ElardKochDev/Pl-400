@@ -1,0 +1,15 @@
+{
+  "n": 66,
+  "area": "automation",
+  "type": "yesno",
+  "scenario": "A company uses Power Automate cloud flows. Flows run in the context of a user with the System Administrator security role. An action in the flow returns confidential data from a Microsoft Dataverse table. You need to prevent this confidential data from being visible in the flow run history logs.",
+  "q": "For each statement, select Yes if it is true, otherwise No.",
+  "rows": [
+    {"s": "Marking the output variable as sensitive hides the data in the logs.", "v": false},
+    {"s": "Adding a masking rule to the columns in the Dataverse table hides the data in the logs.", "v": false},
+    {"s": "Turning on the Secure Outputs property on the action hides the data in the logs.", "v": true}
+  ],
+  "why": "Marking a variable as sensitive is a DESKTOP-flow feature, not a cloud-flow feature, so it does not hide data in a cloud flow's run history (statement 1 = No). Column masking rules apply a regex to obfuscate data only for UNAUTHORIZED users; because the flow runs as a System Administrator it reads the unmasked value and stores it in the logs (statement 2 = No). Turning on the Secure Outputs (Secure Inputs/Outputs) property on the action prevents the action's output from being stored/shown in the flow run history, hiding the confidential data (statement 3 = Yes).",
+  "cs": null,
+  "src": ["Screenshot 2026-07-02 113030.png"]
+}

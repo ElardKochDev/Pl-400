@@ -91,3 +91,6 @@ sub-preguntas (area 'casefiles').
 - [x] Q61 single  extend-ux          (RibbonDiffXml mensaje en idioma del usuario -> CrmParameter = UserLcid)  src 112926
 - [x] Q62 order   extend-platform    (retrieve contacts C#: IOrganizationService -> QueryExpression -> ConditionExpression -> FilterExpression -> EntityCollection)  src 112938/112943
 - [x] Q63 multi   integrations-alm   (canvas solo Global admin gestiona users Entra -> Microsoft Graph API + Custom connector)  src 112955
+- [x] Q64 single  automation         (Power Automate create lead falla -> revisar columna Lookup)  src 113007
+- [x] Q65 hotspot integrations-alm   (external read/write=Custom API / sync Azure Function on update=Webhook / on-prem seguro=Azure Relay)  src 113018
+- [x] Q66 yesno   automation         (ocultar datos confidenciales en logs: mark sensitive=No / masking rule=No / Secure Outputs=Si)  src 113030
