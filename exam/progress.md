@@ -112,3 +112,6 @@ sub-preguntas (area 'casefiles').
 - [x] Q82 single  apps-powerfx       (reusar componentes no-code entre apps con updates -> Component library)  src 113619
 - [x] Q83 order   apps-powerfx       (header como component library 6 pasos: +New library -> custom input+label -> save library -> new canvas app -> Get more components import -> insert header)  src 113632/113643
 - [x] Q84 CASE STUDY cs6 casefiles  (FastNQuick Shipping fusion dev; 3 secciones+tablas + 3 sub: Office admin org read Process table / recommendation al abrir+guardar account sin contactos / code entity+statecode)  -> exam/cs/cs6.json DONE  src 113655..113813
+- [x] Q85 single  automation         (Azure function diario 12AM -> CRON 0 0 0 * * *)  src 113826
+- [x] Q86 code    extend-platform    (change tracking RetrieveEntityChanges: token / EntityChanges.Changes / ChangeType.NewOrUpdated)  src 113841/113850
+- [x] Q87 multi   apps-powerfx       (delegation warning DateAdd -> Set(DateDuration,DateAdd...) + Filter(Orders,ShippingDate<=DateDuration))  src 113918/113922

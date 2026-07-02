@@ -1,0 +1,12 @@
+{
+  "n": 87,
+  "area": "apps-powerfx",
+  "type": "multi",
+  "scenario": "You are developing a canvas app for CompanyA. Orders are being displayed on the main gallery, and you want to filter the gallery to show all orders that are scheduled to be shipped in the next seven days. You select the item property of the gallery and write the following expression to filter records, which gives a delegation warning in the app checker: Filter(Orders, 'Shipping Date' <= DateAdd(Today(),7, Days)). You need to resolve the issue to rectify the delegation warning.",
+  "q": "What two options should you use? Each correct answer presents part of the solution.",
+  "options": ["LookUp(Orders, 'Shipping Date' = DateDuration)", "Filter(Orders, 'Shipping Date' <= DateDuration)", "Set(DateDuration, DateAdd(Today(),7, Days));", "Set(DateDuration, DateDiff(Now(), Today(), Minutes));"],
+  "answer": ["Filter(Orders, 'Shipping Date' <= DateDuration)", "Set(DateDuration, DateAdd(Today(),7, Days));"],
+  "why": "The delegation warning appears because the filter uses the non-delegable DateAdd function inline. Move the calculation out: first Set(DateDuration, DateAdd(Today(),7, Days)) to store the target date in a variable, then use Filter(Orders, 'Shipping Date' <= DateDuration). Comparing a column against a variable IS delegable, so the warning is removed. DateDiff(Now(), Today(), Minutes) computes the wrong value, and LookUp returns a single record whereas a gallery needs a list of records.",
+  "cs": null,
+  "src": ["Screenshot 2026-07-02 113918.png", "Screenshot 2026-07-02 113922.png"]
+}

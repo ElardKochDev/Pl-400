@@ -1,0 +1,16 @@
+{
+  "n": 86,
+  "area": "extend-platform",
+  "type": "code",
+  "scenario": "You use Microsoft Dataverse to hold master product data in a custom table. Master products are never deleted. You have other applications that need to receive changes from Dataverse. You create an Azure Service Bus topic, changequeue, where the IDs of the changed records will be posted. The other applications can subscribe to the topics. You enable change tracking on the custom table and create a .NET program that runs every 12 hours.",
+  "q": "How should you complete the code? Select the appropriate options from the drop-down menus.",
+  "code": "01. private static string ProcessAccountChanges(IOrganizationService orgservice, string token, CloudQueue changequeue)\n02. {\n03.   var request = new RetrieveEntityChangesRequest();\n04.   request.EntityName = \"pl_productmaster\";\n05.   request.Columns = new ColumnSet(false);\n06.   request.DataVersion = [[1]];\n07.   RetrieveEntityChangesResponse response = (RetrieveEntityChangesResponse)orgservice.Execute(request);\n08.   foreach (var change in response.[[2]])\n09.   {\n10.     if (change.Type == ChangeType.[[3]])\n11.     {\n12.       var changedItem = (NewOrUpdatedItem)change;\n13.       Entity newOrChangedEntity = (Entity)changedItem.NewOrUpdatedEntity;\n14.       CloudQueueMessage changemessage = new CloudQueueMessage(newOrChangedEntity.Id.ToString());\n15.       changequeue.AddMessage(changemessage);\n16.     }\n17.   }\n18.   return response.EntityChanges.DataToken;\n19. }",
+  "blanks": [
+    {"id": 1, "a": "token", "options": ["token", "null", "deltaLink"]},
+    {"id": 2, "a": "EntityChanges.Changes", "options": ["EntityChanges.Changes", "EntityCollection.Entities", "Results"]},
+    {"id": 3, "a": "NewOrUpdated", "options": ["NewOrUpdated", "Active", "ManagedProperty"]}
+  ],
+  "why": "DataVersion = token: the token is a string representing the last time changes were retrieved; change tracking returns all rows changed since that token, and a new token is produced each run (using null would retrieve ALL rows; deltaLink is for the Web API, not the Organization Service). Iterate response.EntityChanges.Changes - RetrieveEntityChangesResponse returns EntityChanges whose Changes is the list of changed rows (EntityCollection.Entities comes from RetrieveMultiple; Results holds response parameters). Check ChangeType.NewOrUpdated when processing each change (each item is either NewOrUpdated or RemoveOrDeleted; Active and ManagedProperty are not used with EntityChanges).",
+  "cs": null,
+  "src": ["Screenshot 2026-07-02 113841.png", "Screenshot 2026-07-02 113850.png"]
+}

@@ -1,0 +1,12 @@
+{
+  "n": 85,
+  "area": "automation",
+  "type": "single",
+  "scenario": "CompanyA is using a model-driven application that uses Dataverse. CompanyA wants to send out emails to customers who do not pay their invoices. You need to use C# code to dynamically replace the custom email tags. You plan to implement an Azure function that is triggered on a daily basis.",
+  "q": "How should you define the CRON expression so that emails are sent every day at 12:00 AM?",
+  "options": ["0 0 0-12 * * *", "0 0 */12 * * *", "0 */12 * * * *", "0 0 0 * * *"],
+  "answer": "0 0 0 * * *",
+  "why": "An Azure Functions timer trigger uses a 6-field CRON expression: {second} {minute} {hour} {day} {month} {day-of-week}. To run once every day at 12:00 AM (00:00:00) you use '0 0 0 * * *' - second 0, minute 0, hour 0, every day, every month, every day of week. '0 0 */12 * * *' and '0 0 0-12 * * *' would run multiple times a day (every 12 hours / hours 0-12), and '0 */12 * * * *' runs every 12 minutes. Five-character CRON expressions are not supported in Azure.",
+  "cs": null,
+  "src": ["Screenshot 2026-07-02 113826.png"]
+}
