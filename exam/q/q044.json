@@ -1,0 +1,12 @@
+{
+  "n": 44,
+  "area": "automation",
+  "type": "multi",
+  "scenario": "A company uses Power Automate cloud flows. One of these cloud flows is complex with hundreds of steps and is hard to edit. You need to break the flow into a parent flow and multiple child flows.",
+  "q": "Which three actions should you perform? Each correct answer presents part of the solution.",
+  "options": ["Create the parent and child flows in a solution.", "Use an instant trigger for the child flows.", "Share the child flows with run-only permissions with the connection provided by a run-only user.", "Use an instant trigger for the parent flow.", "Add a Response action to the child flows."],
+  "answer": ["Create the parent and child flows in a solution.", "Use an instant trigger for the child flows.", "Add a Response action to the child flows."],
+  "why": "To call child flows from a parent flow, create the parent and child flows in the same solution (child flows must be solution-aware). Each child flow must use an instant trigger ('When a flow is called from another flow / Manually trigger a flow') so the parent can invoke it. And each child flow must include a Response action to return results back to the parent flow. You do not need an instant trigger for the PARENT flow (it can use any trigger), and sharing child flows with run-only permissions/connection references is not required for the parent-child pattern.",
+  "cs": null,
+  "src": ["Screenshot 2026-07-02 112458.png"]
+}

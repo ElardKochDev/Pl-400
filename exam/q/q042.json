@@ -1,0 +1,12 @@
+{
+  "n": 42,
+  "area": "integrations-alm",
+  "type": "single",
+  "scenario": "You are creating a custom connector for an API. You reach the last step of the process during which you need to test the connector. An error message that says operation failed (500) is displayed. You need to identify the cause of the error and correctly create the custom connector.",
+  "q": "Which field or fields should you review in the swagger to solve the problem?",
+  "options": ["Path and Host fields", "Schemes field", "Definitions field", "Consumes field"],
+  "answer": "Path and Host fields",
+  "why": "A 500/operation-failed error when testing usually means the request is being sent to the wrong endpoint. Review the Host and Path (basePath) fields in the swagger/OpenAPI definition - the Host must be the correct API domain and the Path must point to the correct operation route; if either is wrong the call is misrouted and fails. Schemes (http/https), Definitions (data models), and Consumes (accepted content types) do not control the endpoint the request is sent to, so they would not fix a mis-addressed call.",
+  "cs": null,
+  "src": ["Screenshot 2026-07-02 112436.png"]
+}

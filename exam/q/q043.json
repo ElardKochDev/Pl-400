@@ -1,0 +1,12 @@
+{
+  "n": 43,
+  "area": "integrations-alm",
+  "type": "single",
+  "scenario": "You have created a managed solution that includes a classic workflow, which triggers on when records are created in a custom table called Loan. You attempt to import your solution to another environment. The import fails as the Loan table is not included in your solution. You need to identify which type of dependency the classic workflow has on the Loan table, if applicable, in order to rectify the issue.",
+  "q": "Which dependency type should you identify?",
+  "options": ["Solution internal", "None", "Unpublished", "Published"],
+  "answer": "Published",
+  "why": "The classic workflow triggers on the Loan table, so it has a PUBLISHED dependency on that table - a published dependency is a hard dependency between two solution components that already exist (are published) in the source environment. Because of this published dependency, the import fails when the required Loan table is missing from the target; you must add the Loan table to the solution. 'Unpublished' dependencies apply to components not yet published, 'Solution internal' is a system-managed dependency, and 'None' would mean no dependency exists (which is not the case here).",
+  "cs": null,
+  "src": ["Screenshot 2026-07-02 112447.png"]
+}

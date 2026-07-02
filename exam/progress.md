@@ -69,3 +69,6 @@ sub-preguntas (area 'casefiles').
 - [x] Q39 single  extend-ux          (Monitor form onload script error; flags DisableFormHandlers/DisableFormLibraries -> culpable travel_AccountJS)  src 112200..112228
 - [x] Q40 yesno   extend-platform    (Web API crear savedquery; Si/No/Si - Prefer return=representation, no @odata.context, query option en URL)  src 112249
 - [x] Q41 order   extend-ux          (empezar PCF: mkdir -> cd -> pac pcf init -template field -> npm install)  src 112348/112354
+- [x] Q42 single  integrations-alm   (custom connector test error 500 -> revisar Path and Host fields en swagger)  src 112436
+- [x] Q43 single  integrations-alm   (managed solution import falla, workflow en Loan table -> Published dependency)  src 112447
+- [x] Q44 multi   automation         (dividir flow en parent/child -> crear en solucion + instant trigger child + Response action child)  src 112458
